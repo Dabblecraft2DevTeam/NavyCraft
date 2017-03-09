@@ -1,103 +1,97 @@
-/*    */ package com.maximuspayne.navycraft;
-/*    */ 
-/*    */ import java.io.BufferedWriter;
-/*    */ import java.io.File;
-/*    */ import java.io.IOException;
-/*    */ import java.io.PrintStream;
-/*    */ import java.util.HashMap;
-/*    */ import java.util.Set;
-/*    */ 
-/*    */ public class Benchmarker
-/*    */ {
-/* 12 */   public HashMap<String, Long> breaks = new HashMap();
-/* 13 */   public long lastTime = 0L;
-/*    */   
-/*    */   public Benchmarker() {
-/* 16 */     this.lastTime = System.currentTimeMillis();
-/*    */   }
-/*    */   
-/*    */   public boolean addBreak(String name) {
-/* 20 */     if (this.breaks.containsKey(name)) {
-/* 21 */       return false;
-/*    */     }
-/*    */     
-/* 24 */     long nowTime = System.currentTimeMillis();
-/* 25 */     long breakTime = nowTime - this.lastTime;
-/* 26 */     this.lastTime = nowTime;
-/*    */     
-/* 28 */     this.breaks.put(name, Long.valueOf(breakTime));
-/* 29 */     return true;
-/*    */   }
-/*    */   
-/*    */   public void addBreak() {
-/* 33 */     String breakName = "break " + this.breaks.size();
-/*    */     
-/* 35 */     addBreak(breakName);
-/*    */   }
-/*    */   
-/*    */   public void echoToConsole() { Object[] arrayOfObject;
-/* 39 */     int j = (arrayOfObject = this.breaks.keySet().toArray()).length; for (int i = 0; i < j; i++) { Object breakPoints = arrayOfObject[i];
-/* 40 */       String breakNames = (String)breakPoints;
-/* 41 */       System.out.println(breakNames + "=" + this.breaks.get(breakNames));
-/*    */     }
-/*    */   }
-/*    */   
-/*    */   public void writeToFile(String fileName) {
-/* 46 */     if (fileName == "") {
-/* 47 */       fileName = "MoveCraft-BenchMark.txt";
-/*    */     }
-/*    */     
-/* 50 */     File benchmarkFile = new File(NavyCraft.instance.getDataFolder(), fileName);
-/* 51 */     if (!benchmarkFile.exists()) {
-/* 52 */       return;
-/*    */     }
-/*    */     try
-/*    */     {
-/* 56 */       BufferedWriter bw = new BufferedWriter(new java.io.FileWriter(benchmarkFile));
-/*    */       Object[] arrayOfObject;
-/* 58 */       int j = (arrayOfObject = this.breaks.keySet().toArray()).length; for (int i = 0; i < j; i++) { Object breakPoints = arrayOfObject[i];
-/* 59 */         String breakNames = (String)breakPoints;
-/* 60 */         bw.write(breakNames + "=" + this.breaks.get(breakNames) + System.getProperty("line.separator"));
-/*    */       }
-/* 62 */       bw.close();
-/*    */     }
-/*    */     catch (IOException localIOException) {}
-/*    */   }
-/*    */   
-/*    */ 
-/*    */   public void echoSysInfo()
-/*    */   {
-/* 70 */     System.out.println("Available processors (cores): " + 
-/* 71 */       Runtime.getRuntime().availableProcessors());
-/*    */     
-/*    */ 
-/* 74 */     System.out.println("Free memory (bytes): " + 
-/* 75 */       Runtime.getRuntime().freeMemory());
-/*    */     
-/*    */ 
-/* 78 */     long maxMemory = Runtime.getRuntime().maxMemory();
-/*    */     
-/* 80 */     System.out.println("Maximum memory (bytes): " + (
-/* 81 */       maxMemory == Long.MAX_VALUE ? "no limit" : Long.valueOf(maxMemory)));
-/*    */     
-/*    */ 
-/* 84 */     System.out.println("Total memory (bytes): " + 
-/* 85 */       Runtime.getRuntime().totalMemory());
-/*    */     
-/* 87 */     System.getProperties().list(System.out);
-/*    */     
-/*    */ 
-/*    */     try
-/*    */     {
-/* 92 */       Runtime.getRuntime().exec("notepad.exe");
-/*    */     } catch (IOException e) {
-/* 94 */       e.printStackTrace();
-/*    */     }
-/*    */   }
-/*    */ }
+package com.maximuspayne.navycraft;
 
+//import com.sun.servicetag.SystemEnvironment;
 
-/* Location:              C:\Users\keough99\Desktop\jd-gui-windows-1.4.0\Navalstuff.jar!\com\maximuspayne\navycraft\Benchmarker.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       0.7.1
- */
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+
+public class Benchmarker {
+	public HashMap<String, Long> breaks = new HashMap<String, Long>();
+	public long lastTime = 0;
+	
+	public Benchmarker() {
+		lastTime = System.currentTimeMillis();
+	}
+	
+	public boolean addBreak(String name) {
+		if(breaks.containsKey(name)) {
+			return false;
+		}
+		
+		long nowTime = System.currentTimeMillis();
+		long breakTime = nowTime - lastTime;
+		lastTime = nowTime;
+		
+		breaks.put(name, breakTime);
+		return true;
+	}
+	
+	public void addBreak() {		
+		String breakName = "break " + breaks.size();
+		
+		addBreak(breakName);
+	}
+	
+	public void echoToConsole() {
+		for(Object breakPoints : breaks.keySet().toArray()) {
+			String breakNames = (String) breakPoints;
+			System.out.println(breakNames + "=" + breaks.get(breakNames));
+		}
+	}
+	
+	public void writeToFile(String fileName) {
+		if (fileName == "") {
+			fileName = "MoveCraft-BenchMark.txt";
+		}
+		
+		File benchmarkFile = new File(NavyCraft.instance.getDataFolder(), fileName);
+		if (!benchmarkFile.exists()) {
+			return;
+		}
+		
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(benchmarkFile));
+
+			for(Object breakPoints : breaks.keySet().toArray()) {
+				String breakNames = (String) breakPoints;
+				bw.write(breakNames + "=" + breaks.get(breakNames) + System.getProperty("line.separator"));
+			}
+			bw.close();
+		}
+		catch (IOException ex) {
+		}	
+	}
+	
+	public void echoSysInfo() {
+		 /* Total number of processors or cores available to the JVM */
+	    System.out.println("Available processors (cores): " + 
+	        Runtime.getRuntime().availableProcessors());
+
+	    /* Total amount of free memory available to the JVM */
+	    System.out.println("Free memory (bytes): " + 
+	        Runtime.getRuntime().freeMemory());
+
+	    /* This will return Long.MAX_VALUE if there is no preset limit */
+	    long maxMemory = Runtime.getRuntime().maxMemory();
+	    /* Maximum amount of memory the JVM will attempt to use */
+	    System.out.println("Maximum memory (bytes): " + 
+	        (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory));
+
+	    /* Total memory currently in use by the JVM */
+	    System.out.println("Total memory (bytes): " + 
+	        Runtime.getRuntime().totalMemory());
+	    
+	    System.getProperties().list(System.out);
+	    
+	    //SystemEnvironment se = SystemEnvironment.getSystemEnvironment();
+	    
+	    try {
+			Runtime.getRuntime().exec("notepad.exe");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
