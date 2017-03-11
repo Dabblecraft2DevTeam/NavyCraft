@@ -377,7 +377,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("warworld1") &&  !loc.getWorld().getName().equalsIgnoreCase("warworld2") &&  !loc.getWorld().getName().equalsIgnoreCase("warworld3") )
+    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") &&  !loc.getWorld().getName().equalsIgnoreCase("admintest") &&  !loc.getWorld().getName().equalsIgnoreCase("build") )
     		{
     			return 0;
     		}
@@ -412,7 +412,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("warworld1") )
+    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") )
     		{
     			return false;
     		}
@@ -442,7 +442,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("warworld1") && !loc.getWorld().getName().equalsIgnoreCase("warworld2") )
+    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("admintest") )
     		{
     			return false;
     		}
@@ -472,7 +472,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("warworld1") && !loc.getWorld().getName().equalsIgnoreCase("warworld2") )
+    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("admintest") )
     		{
     			return false;
     		}
@@ -502,7 +502,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("warworld1") )
+    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") )
     		{
     			return false;
     		}
@@ -532,7 +532,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("warworld1") && !loc.getWorld().getName().equalsIgnoreCase("warworld2") )
+    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("admintest") )
     		{
     			return false;
     		}
@@ -562,7 +562,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("warworld1") && !loc.getWorld().getName().equalsIgnoreCase("warworld2") )
+    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("admintest") )
     		{
     			return false;
     		}

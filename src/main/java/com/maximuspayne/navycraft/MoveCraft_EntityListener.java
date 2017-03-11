@@ -73,7 +73,7 @@ public class MoveCraft_EntityListener implements Listener {
             event.setCancelled(true);
         if (event.getSpawnReason() == SpawnReason.EGG) {
             event.setCancelled(false);*/
-    	if( event.getEntity().getWorld().getName().equalsIgnoreCase("warworld1") )
+    	if( event.getEntity().getWorld().getName().equalsIgnoreCase("alatyr (main)") )
     	{
     		/*if( event.getEntity().getWorld().getBiome(event.getEntity().getLocation().getBlockX(), event.getEntity().getLocation().getBlockZ()) == Biome.OCEAN 
     				|| event.getEntity().getWorld().getBiome(event.getEntity().getLocation().getBlockX(), event.getEntity().getLocation().getBlockZ()) == Biome.FROZEN_OCEAN )
@@ -137,7 +137,7 @@ public class MoveCraft_EntityListener implements Listener {
     				
     		}
     		
-    		if( player.getWorld().getName().equalsIgnoreCase("warworld2") )
+    		if( player.getWorld().getName().equalsIgnoreCase("admintest") )
     		{
     			if ( event instanceof EntityDamageByEntityEvent ) 
     			{

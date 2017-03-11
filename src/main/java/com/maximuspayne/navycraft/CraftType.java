@@ -20,7 +20,7 @@ import com.maximuspayne.navycraft.plugins.PermissionInterface;
 public class CraftType {
 	
 	public String name = "";
-	public String driveCommand = "pilot";
+	public String driveCommand = "drive";
 
 	int minBlocks = 9;
 	int maxBlocks = 500;
@@ -109,7 +109,7 @@ public class CraftType {
 	}
 
 	public Boolean canUse(Player player){
-		if(PermissionInterface.CheckPermission(player, "movecraft." + name.toLowerCase() + "." + driveCommand))
+		if(PermissionInterface.CheckPermission(player, "seacraft." + name.toLowerCase() + "." + driveCommand))
 			return true;
 		else
 			return false;
@@ -122,8 +122,8 @@ public class CraftType {
 			craftTypes.add(CraftType.getDefaultCraftType("boat"));
 		if (CraftType.getCraftType("ship") == null)
 			craftTypes.add(CraftType.getDefaultCraftType("ship"));
-		// if(CraftType.getCraftType("icebreaker")==null)
-		// craftTypes.add(CraftType.getDefaultCraftType("icebreaker"));
+		if(CraftType.getCraftType("icebreaker")==null)
+		    craftTypes.add(CraftType.getDefaultCraftType("icebreaker"));
 		if (CraftType.getCraftType("bomber") == null)
 			craftTypes.add(CraftType.getDefaultCraftType("bomber"));
 		if (CraftType.getCraftType("aircraft") == null)

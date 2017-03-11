@@ -1899,7 +1899,7 @@ public class MoveCraft_BlockListener implements Listener {
 					 * + "You do not have permission to use this sign"); return; } }
 					 */
 
-					if (!player.hasPermission("movecraft." + testCraft.type.name + ".takeover") && !player.isOp()) {
+					if (!player.hasPermission("seacraft." + testCraft.type.name + ".takeover") && !player.isOp()) {
 						player.sendMessage(ChatColor.RED + "You do not have permission to takeover this vehicle.");
 						return;
 					}
@@ -2068,7 +2068,7 @@ public class MoveCraft_BlockListener implements Listener {
 				 * "You do not have permission to use this sign"); return; } }
 				 */
 
-				if (!player.hasPermission("movecraft." + craftType.name + ".start") && !player.isOp()) {
+				if (!player.hasPermission("seacraft." + craftType.name + ".start") && !player.isOp()) {
 					player.sendMessage(ChatColor.RED + "You do not have permission to initialize this type of vehicle.");
 					return;
 				}
@@ -2213,7 +2213,7 @@ public class MoveCraft_BlockListener implements Listener {
 		// if the first line of the sign is a craft type, get the matching craft type.
 		CraftType craftType = CraftType.getCraftType(craftTypeName);
 
-		if (!player.isOp() && (((craftType != null) || craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("select") || craftTypeName.equalsIgnoreCase("claim") || craftTypeName.equalsIgnoreCase("spawn") || craftTypeName.equalsIgnoreCase("recall") || craftTypeName.equalsIgnoreCase("target") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")) && !PermissionInterface.CheckPermission(player, "movecraft." + craftTypeName + ".create"))) {
+		if (!player.isOp() && (((craftType != null) || craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("select") || craftTypeName.equalsIgnoreCase("claim") || craftTypeName.equalsIgnoreCase("spawn") || craftTypeName.equalsIgnoreCase("recall") || craftTypeName.equalsIgnoreCase("target") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")) && !PermissionInterface.CheckPermission(player, "seacraft." + craftTypeName + ".create"))) {
 			player.sendMessage("You don't have permission to create this type of sign!");
 			event.setCancelled(true);
 		}
@@ -2246,7 +2246,7 @@ public class MoveCraft_BlockListener implements Listener {
 		}
 		// }
 
-		if ((player.getWorld().getName().equalsIgnoreCase("warworld1") || player.getWorld().getName().equalsIgnoreCase("warworld3")) && ((craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")))) {
+		if ((player.getWorld().getName().equalsIgnoreCase("alatyr (main)") || player.getWorld().getName().equalsIgnoreCase("warworld3")) && ((craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")))) {
 			int cost = 0;
 			if (craftTypeName.equalsIgnoreCase("controls")) {
 				cost = 50;
@@ -2437,7 +2437,7 @@ public class MoveCraft_BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockBreak(BlockBreakEvent event) {
 		Player p = event.getPlayer();
-		if (p.getWorld().getName().equalsIgnoreCase("warworld2") && (p.getGameMode() != GameMode.CREATIVE)) {
+		if (p.getWorld().getName().equalsIgnoreCase("admintest") && (p.getGameMode() != GameMode.CREATIVE)) {
 			if (MoveCraft_PlayerListener.checkForTarget(event.getBlock())) {
 				p.sendMessage(ChatColor.RED + "This sign can only be destroyed by an explosive!");
 				event.setCancelled(true);
@@ -2469,7 +2469,7 @@ public class MoveCraft_BlockListener implements Listener {
 					return;
 				}
 			}
-		} else if (p.getWorld().getName().equalsIgnoreCase("warworld1")) {
+		} else if (p.getWorld().getName().equalsIgnoreCase("alatyr (main)")) {
 			Block checkBlock;
 			checkBlock = event.getBlock();
 			int craftBlockId = checkBlock.getTypeId();
@@ -2660,7 +2660,7 @@ public class MoveCraft_BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void inventoryClickEvent(final InventoryClickEvent event) {
 		if (!event.isCancelled()) {
-			if (event.getWhoClicked().getWorld().getName().equalsIgnoreCase("warworld1") || event.getWhoClicked().getWorld().getName().equalsIgnoreCase("warworld3")) {
+			if (event.getWhoClicked().getWorld().getName().equalsIgnoreCase("alatyr (main)") || event.getWhoClicked().getWorld().getName().equalsIgnoreCase("warworld3")) {
 				if ((event.getInventory().getType() == InventoryType.DISPENSER) && (event.getRawSlot() == 4) && ((event.getCurrentItem().getTypeId() == 388) || (event.getCursor().getTypeId() == 388))) {
 					event.setCancelled(true);
 				}
@@ -2670,11 +2670,11 @@ public class MoveCraft_BlockListener implements Listener {
 	}
 
 	public static void autoSpawnSign(Block spawnSignBlock, String routeID) {
-		if (plugin.getServer().getWorld("warworld1").getPlayers().isEmpty()) {
+		if (plugin.getServer().getWorld("alatyr (main)").getPlayers().isEmpty()) {
 			// System.out.println("Autospawn:No players detected in ww1");
 			return;
 		}
-		Player player = plugin.getServer().getWorld("warworld1").getPlayers().get(0);
+		Player player = plugin.getServer().getWorld("alatyr (main)").getPlayers().get(0);
 
 		int spawnType = 0;
 		if (spawnSignBlock == null) {
@@ -2683,7 +2683,7 @@ public class MoveCraft_BlockListener implements Listener {
 				double rand = Math.random();
 				if (rand < 0.15) {
 					newLastSpawn = 0;
-					spawnSignBlock = plugin.getServer().getWorld("warworld1").getBlockAt(-1490, 64, 1525);
+					spawnSignBlock = plugin.getServer().getWorld("alatyr (main)").getBlockAt(-1490, 64, 1525);
 					if (rand < 0.05) {
 						routeID = "AB1";
 					} else if (rand < 0.10) {
@@ -2693,7 +2693,7 @@ public class MoveCraft_BlockListener implements Listener {
 					}
 				} else if (rand < 0.30) {
 					newLastSpawn = 0;
-					spawnSignBlock = plugin.getServer().getWorld("warworld1").getBlockAt(-1490, 64, 1525);
+					spawnSignBlock = plugin.getServer().getWorld("alatyr (main)").getBlockAt(-1490, 64, 1525);
 					if (rand < 0.20) {
 						routeID = "AC1";
 					} else if (rand < 0.25) {
@@ -2703,7 +2703,7 @@ public class MoveCraft_BlockListener implements Listener {
 					}
 				} else if (rand < 0.45) {
 					newLastSpawn = 1;
-					spawnSignBlock = plugin.getServer().getWorld("warworld1").getBlockAt(1857, 64, -779);
+					spawnSignBlock = plugin.getServer().getWorld("alatyr (main)").getBlockAt(1857, 64, -779);
 					if (rand < 0.38) {
 						routeID = "CB1";
 					} else {
@@ -2711,7 +2711,7 @@ public class MoveCraft_BlockListener implements Listener {
 					}
 				} else if (rand < 0.60) {
 					newLastSpawn = 1;
-					spawnSignBlock = plugin.getServer().getWorld("warworld1").getBlockAt(1857, 64, -779);
+					spawnSignBlock = plugin.getServer().getWorld("alatyr (main)").getBlockAt(1857, 64, -779);
 					if (rand < 0.53) {
 						routeID = "CA1";
 					} else {
@@ -2719,7 +2719,7 @@ public class MoveCraft_BlockListener implements Listener {
 					}
 				} else if (rand < 0.75) {
 					newLastSpawn = 2;
-					spawnSignBlock = plugin.getServer().getWorld("warworld1").getBlockAt(-19, 64, -1661);
+					spawnSignBlock = plugin.getServer().getWorld("alatyr (main)").getBlockAt(-19, 64, -1661);
 					if (rand < 0.68) {
 						routeID = "BC1";
 					} else {
@@ -2727,7 +2727,7 @@ public class MoveCraft_BlockListener implements Listener {
 					}
 				} else if (rand < 0.90) {
 					newLastSpawn = 3;
-					spawnSignBlock = plugin.getServer().getWorld("warworld1").getBlockAt(1476, 64, 1920);
+					spawnSignBlock = plugin.getServer().getWorld("alatyr (main)").getBlockAt(1476, 64, 1920);
 					if (rand < 0.80) {
 						routeID = "D1";
 					} else if (rand < 0.85) {
@@ -2737,7 +2737,7 @@ public class MoveCraft_BlockListener implements Listener {
 					}
 				} else {
 					newLastSpawn = 2;
-					spawnSignBlock = plugin.getServer().getWorld("warworld1").getBlockAt(-19, 64, -1661);
+					spawnSignBlock = plugin.getServer().getWorld("alatyr (main)").getBlockAt(-19, 64, -1661);
 					if (rand < 0.95) {
 						routeID = "BA1";
 					} else {
@@ -2819,15 +2819,15 @@ public class MoveCraft_BlockListener implements Listener {
 			int value = 0;
 			double rand = Math.random();
 			if (rand < 0.6) {
-				selectSignBlock = plugin.getServer().getWorld("warworld1").getBlockAt(-78, 66, 157);
+				selectSignBlock = plugin.getServer().getWorld("alatyr (main)").getBlockAt(-78, 66, 157);
 				spawnType = 0;
 				value = 400 + (int) (Math.random() * 400);
 			} else if (rand < 0.7) {
-				selectSignBlock = plugin.getServer().getWorld("warworld1").getBlockAt(-108, 66, 157);
+				selectSignBlock = plugin.getServer().getWorld("alatyr (main)").getBlockAt(-108, 66, 157);
 				spawnType = 1;
 				value = 1000 + (int) (Math.random() * 1000);
 			} else {
-				selectSignBlock = plugin.getServer().getWorld("warworld1").getBlockAt(-96, 66, 157);
+				selectSignBlock = plugin.getServer().getWorld("alatyr (main)").getBlockAt(-96, 66, 157);
 				spawnType = 2;
 				value = 700 + (int) (Math.random() * 500);
 			}
@@ -3949,7 +3949,7 @@ public class MoveCraft_BlockListener implements Listener {
 			}
 			GroupManager gm = (GroupManager) groupPlugin;
 			WorldsHolder wd = gm.getWorldsHolder();
-			groupName = wd.getWorldData("warworld1").getUser(player).getGroupName();
+			groupName = wd.getWorldData("alatyr (main)").getUser(player).getGroupName();
 
 			if (groupName.equalsIgnoreCase("Default")) {
 				NavyCraft.playerDDRewards.put(player, 1);
@@ -4072,7 +4072,7 @@ public class MoveCraft_BlockListener implements Listener {
 				NavyCraft.playerHANGAR2Rewards.put(player, 4);
 			}
 
-			groupName = wd.getWorldData("warworld2").getUser(player).getGroupName();
+			groupName = wd.getWorldData("admintest").getUser(player).getGroupName();
 
 			if (groupName.equalsIgnoreCase("Default")) {
 				if (NavyCraft.playerDDRewards.containsKey(player)) {
@@ -4406,7 +4406,7 @@ public class MoveCraft_BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockDispense(final BlockDispenseEvent event) {
 		if (!event.isCancelled()) {
-			if (event.getBlock().getWorld().getName().equalsIgnoreCase("warworld1") && (event.getItem().getType() == Material.EMERALD)) {
+			if (event.getBlock().getWorld().getName().equalsIgnoreCase("alatyr (main)") && (event.getItem().getType() == Material.EMERALD)) {
 				event.setCancelled(true);
 			}
 

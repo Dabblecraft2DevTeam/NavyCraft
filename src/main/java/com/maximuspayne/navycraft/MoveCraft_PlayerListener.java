@@ -141,7 +141,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				}
 				GroupManager gm = (GroupManager) groupPlugin;
 				WorldsHolder wd = gm.getWorldsHolder();
-				groupName = wd.getWorldData("warworld1").getUser(player.getName()).getGroupName();
+				groupName = wd.getWorldData("alatyr (main)").getUser(player.getName()).getGroupName();
 
 				if (groupName.equalsIgnoreCase("Default")) {
 					playerPay = 1000;
@@ -192,7 +192,7 @@ public class MoveCraft_PlayerListener implements Listener {
 	}
 
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-		if (event.getPlayer().getWorld().getName().equalsIgnoreCase("warworld2")) {
+		if (event.getPlayer().getWorld().getName().equalsIgnoreCase("admintest")) {
 			if (Craft.playerClipboards.containsKey(event.getPlayer())) {
 				Craft.playerClipboards.remove(event.getPlayer());
 			}
@@ -203,7 +203,7 @@ public class MoveCraft_PlayerListener implements Listener {
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		String deathMsg = event.getDeathMessage();
 
-		if ((NavyCraft.battleMode > 0) && event.getEntity().getLocation().getWorld().getName().equalsIgnoreCase("warworld2")) {
+		if ((NavyCraft.battleMode > 0) && event.getEntity().getLocation().getWorld().getName().equalsIgnoreCase("admintest")) {
 			CraftMover.battleLogger(deathMsg);
 		}
 
@@ -211,7 +211,7 @@ public class MoveCraft_PlayerListener implements Listener {
 		if (msgWords.length == 5) {
 			if (msgWords[1].equalsIgnoreCase("was") && msgWords[3].equalsIgnoreCase("by")) {
 				Player p = plugin.getServer().getPlayer(msgWords[4]);
-				if ((p != null) && p.getWorld().getName().equalsIgnoreCase("warworld1")) {
+				if ((p != null) && p.getWorld().getName().equalsIgnoreCase("alatyr (main)")) {
 					int newExp = 100;
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + p.getName() + " receives " + ChatColor.YELLOW + newExp + ChatColor.GREEN + " rank points!");
 					if (NavyCraft.playerScoresWW1.containsKey(p.getName())) {
@@ -225,7 +225,7 @@ public class MoveCraft_PlayerListener implements Listener {
 					NavyCraft.saveExperience();
 				}
 
-				if ((p != null) && p.getWorld().getName().equalsIgnoreCase("warworld2") && (NavyCraft.battleMode > 0)) {
+				if ((p != null) && p.getWorld().getName().equalsIgnoreCase("admintest") && (NavyCraft.battleMode > 0)) {
 					if ((!NavyCraft.redPlayers.contains(event.getEntity().getName()) && !NavyCraft.bluePlayers.contains(event.getEntity().getName())) || (!NavyCraft.redPlayers.contains(p.getName()) && !NavyCraft.bluePlayers.contains(p.getName())) || (NavyCraft.redPlayers.contains(p.getName()) && !NavyCraft.bluePlayers.contains(event.getEntity().getName())) || (NavyCraft.bluePlayers.contains(p.getName()) && !NavyCraft.redPlayers.contains(event.getEntity().getName()))) { return; }
 					int newExp = 100;
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + p.getName() + " receives " + ChatColor.YELLOW + newExp + ChatColor.GREEN + " rank points!");
@@ -262,7 +262,7 @@ public class MoveCraft_PlayerListener implements Listener {
 
 		Craft craft = Craft.getPlayerCraft(player);
 
-		if ((NavyCraft.checkSafeDockRegion(player.getLocation()) && !player.getWorld().getName().equalsIgnoreCase("warworld2")) || (!player.getWorld().getName().equalsIgnoreCase("warworld1") && !player.getWorld().getName().equalsIgnoreCase("warworld2"))) {
+		if ((NavyCraft.checkSafeDockRegion(player.getLocation()) && !player.getWorld().getName().equalsIgnoreCase("admintest")) || (!player.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !player.getWorld().getName().equalsIgnoreCase("admintest"))) {
 			if (NavyCraft.playerChatRegions.containsKey(player.getName())) {
 				if (NavyCraft.playerChatRegions.get(player.getName()) != 0) {
 					player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Joining [Global] channel...");
@@ -939,7 +939,7 @@ public class MoveCraft_PlayerListener implements Listener {
 			Player player = event.getPlayer();
 			Craft craft = Craft.getPlayerCraft(player);
 
-			if ((player.getItemInHand().getType() == Material.FLINT_AND_STEEL) && NavyCraft.cleanupPlayers.contains(player.getName()) && (player.getWorld().getName().equalsIgnoreCase("warworld1") || player.getWorld().getName().equalsIgnoreCase("warworld2"))) {
+			if ((player.getItemInHand().getType() == Material.FLINT_AND_STEEL) && NavyCraft.cleanupPlayers.contains(player.getName()) && (player.getWorld().getName().equalsIgnoreCase("alatyr (main)") || player.getWorld().getName().equalsIgnoreCase("admintest"))) {
 				Set<Material> transp = new HashSet<>();
 				transp.add(Material.AIR);
 				transp.add(Material.STATIONARY_WATER);
@@ -1005,7 +1005,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				}
 				return;
 			}
-			if ((player.getItemInHand().getType() == Material.SHEARS) && NavyCraft.cleanupPlayers.contains(player.getName()) && (player.getWorld().getName().equalsIgnoreCase("warworld1") || player.getWorld().getName().equalsIgnoreCase("warworld2")) && !NavyCraft.checkSafeDockRegion(player.getLocation())) {
+			if ((player.getItemInHand().getType() == Material.SHEARS) && NavyCraft.cleanupPlayers.contains(player.getName()) && (player.getWorld().getName().equalsIgnoreCase("alatyr (main)") || player.getWorld().getName().equalsIgnoreCase("admintest")) && !NavyCraft.checkSafeDockRegion(player.getLocation())) {
 				HashSet<Byte> hs = new HashSet<>();
 				hs.add((byte) 0x0);
 				Block block = player.getTargetBlock(hs, 200);
@@ -1033,7 +1033,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				}
 				return;
 			}
-			if ((player.getItemInHand().getType() == Material.GOLD_SPADE) && NavyCraft.cleanupPlayers.contains(player.getName()) && (player.getWorld().getName().equalsIgnoreCase("warworld1") || player.getWorld().getName().equalsIgnoreCase("warworld2")) && !NavyCraft.checkSafeDockRegion(player.getLocation())) {
+			if ((player.getItemInHand().getType() == Material.GOLD_SPADE) && NavyCraft.cleanupPlayers.contains(player.getName()) && (player.getWorld().getName().equalsIgnoreCase("alatyr (main)") || player.getWorld().getName().equalsIgnoreCase("admintest")) && !NavyCraft.checkSafeDockRegion(player.getLocation())) {
 				HashSet<Byte> hs = new HashSet<>();
 				hs.add((byte) 0x0);
 				hs.add((byte) 0x8);
@@ -1167,7 +1167,7 @@ public class MoveCraft_PlayerListener implements Listener {
 		}
 
 		if (split[0].equalsIgnoreCase("movecraft") || split[0].equalsIgnoreCase("navycraft") || split[0].equalsIgnoreCase("nc")) {
-			if (!PermissionInterface.CheckPermission(player, "movecraft." + event.getMessage().substring(1))) { return; }
+			if (!PermissionInterface.CheckPermission(player, "seacraft." + event.getMessage().substring(1))) { return; }
 
 			if (split.length >= 2) {
 				if (split[1].equalsIgnoreCase("types")) {
@@ -1247,8 +1247,8 @@ public class MoveCraft_PlayerListener implements Listener {
 						 * plugin.getServer().getPluginManager().enablePlugin(groupPlugin); } GroupManager gm =
 						 * (GroupManager) groupPlugin; WorldsHolder wd = gm.getWorldsHolder(); Group g = new
 						 * Group("Cleanup");
-						 * wd.getWorldData("warworld1").getUser(player.getName()).addPermission("worldedit.superpickaxe"
-						 * ); wd.getWorldData("warworld1").getUser(player.getName()).addPermission(
+						 * wd.getWorldData("alatyr (main)").getUser(player.getName()).addPermission("worldedit.superpickaxe"
+						 * ); wd.getWorldData("alatyr (main)").getUser(player.getName()).addPermission(
 						 * "worldedit.superpickaxe.area"); }
 						 */
 
@@ -1447,7 +1447,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				split[0] = craft.type.name;
 				split[1] = "remote";
 
-				if (!PermissionInterface.CheckPermission(player, "movecraft." + event.getMessage().substring(1))) {
+				if (!PermissionInterface.CheckPermission(player, "seacraft." + event.getMessage().substring(1))) {
 					event.setCancelled(true);
 					return;
 				}
@@ -1626,7 +1626,7 @@ public class MoveCraft_PlayerListener implements Listener {
 			} else if (craftName.equalsIgnoreCase("shipyard")) {
 				if (split.length > 1) {
 					if (split[1].equalsIgnoreCase("reward")) {
-						if (!PermissionInterface.CheckPermission(player, "movecraft.reward") && !player.isOp()) {
+						if (!PermissionInterface.CheckPermission(player, "seacraft.reward") && !player.isOp()) {
 							player.sendMessage(ChatColor.RED + "You do not have permission to reward plots.");
 							event.setCancelled(true);
 							return;
@@ -2313,7 +2313,7 @@ public class MoveCraft_PlayerListener implements Listener {
 						player.sendMessage("/shipyard private <id> - Allows only you and your members to select your vehicle");
 						player.sendMessage("/shipyard plist <player> - List the given player's plots");
 						player.sendMessage("/shipyard ptp <player> <id> - Teleport to the player's plot id");
-						if (PermissionInterface.CheckPermission(player, "movecraft.reward") || player.isOp()) {
+						if (PermissionInterface.CheckPermission(player, "seacraft.reward") || player.isOp()) {
 							player.sendMessage("/shipyard player <player> - View a players plot status");
 							player.sendMessage("/shipyard reward <player> <type> <reason> - Rewards the specified plot type to the player");
 						}
@@ -2430,22 +2430,22 @@ public class MoveCraft_PlayerListener implements Listener {
 						msgString += split[i] + " ";
 					}
 
-					if ((!player.getWorld().getName().equalsIgnoreCase("warworld1") && !player.getWorld().getName().equalsIgnoreCase("warworld2")) || (NavyCraft.checkSafeDockRegion(player.getLocation()) && !player.getWorld().getName().equalsIgnoreCase("warworld2"))) {
+					if ((!player.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !player.getWorld().getName().equalsIgnoreCase("admintest")) || (NavyCraft.checkSafeDockRegion(player.getLocation()) && !player.getWorld().getName().equalsIgnoreCase("admintest"))) {
 						for (Player p : plugin.getServer().getOnlinePlayers()) {
-							if (NavyCraft.checkSafeDockRegion(p.getLocation()) || !p.getWorld().getName().equalsIgnoreCase("warworld1") || ((p.isOp() || p.hasPermission("movecraft.hidden")) && !NavyCraft.disableHiddenChats.contains(p.getName()))) {
+							if (NavyCraft.checkSafeDockRegion(p.getLocation()) || !p.getWorld().getName().equalsIgnoreCase("alatyr (main)") || ((p.isOp() || p.hasPermission("movecraft.hidden")) && !NavyCraft.disableHiddenChats.contains(p.getName()))) {
 								p.sendMessage(msgString);
 							}
 						}
 					} else {
 						for (Player p : plugin.getServer().getOnlinePlayers()) {
-							if (p.getWorld().getName().equalsIgnoreCase("warworld1") && player.getWorld().getName().equalsIgnoreCase("warworld1")) {
+							if (p.getWorld().getName().equalsIgnoreCase("alatyr (main)") && player.getWorld().getName().equalsIgnoreCase("alatyr (main)")) {
 								double dist = p.getLocation().distance(player.getLocation());
-								if ((dist <= 50) || ((p.isOp() || p.hasPermission("movecraft.hidden")) && !NavyCraft.disableHiddenChats.contains(p.getName()))) {
+								if ((dist <= 50) || ((p.isOp() || p.hasPermission("seacraft.hidden")) && !NavyCraft.disableHiddenChats.contains(p.getName()))) {
 									p.sendMessage(msgString);
 								}
-							} else if (p.getWorld().getName().equalsIgnoreCase("warworld2") && player.getWorld().getName().equalsIgnoreCase("warworld2")) {
+							} else if (p.getWorld().getName().equalsIgnoreCase("admintest") && player.getWorld().getName().equalsIgnoreCase("admintest")) {
 								double dist = p.getLocation().distance(player.getLocation());
-								if ((dist <= 50) || ((p.isOp() || p.hasPermission("movecraft.hidden")) && !NavyCraft.disableHiddenChats.contains(p.getName()))) {
+								if ((dist <= 50) || ((p.isOp() || p.hasPermission("seacraft.hidden")) && !NavyCraft.disableHiddenChats.contains(p.getName()))) {
 									p.sendMessage(msgString);
 								}
 							}
@@ -2570,8 +2570,8 @@ public class MoveCraft_PlayerListener implements Listener {
 				event.setCancelled(true);
 				return;
 			} else if (craftName.equalsIgnoreCase("sailor")) {
-				if (player.getWorld().getName().equalsIgnoreCase("WarWorld1") || player.getWorld().getName().equalsIgnoreCase("WarWorld2")) {
-					if (player.getWorld().getName().equalsIgnoreCase("WarWorld2") && (NavyCraft.battleMode > 0)) {
+				if (player.getWorld().getName().equalsIgnoreCase("alatyr (main)") || player.getWorld().getName().equalsIgnoreCase("admintest")) {
+					if (player.getWorld().getName().equalsIgnoreCase("admintest") && (NavyCraft.battleMode > 0)) {
 						if (!NavyCraft.playerKits.contains(player.getName())) {
 							player.sendMessage("Anchors Aweigh!");
 							player.getInventory().addItem(new ItemStack(Material.IRON_SWORD, 1));
@@ -2593,7 +2593,7 @@ public class MoveCraft_PlayerListener implements Listener {
 						} else {
 							player.sendMessage("You only get one sailor kit per life!");
 						}
-					} else if (player.getWorld().getName().equalsIgnoreCase("WarWorld1")) {
+					} else if (player.getWorld().getName().equalsIgnoreCase("alatyr (main)")) {
 						player.sendMessage("Command retired...use the Kit sign at a Safe Dock instead.");
 					} else {
 						player.sendMessage("You can't use that kit right now");
@@ -2838,8 +2838,8 @@ public class MoveCraft_PlayerListener implements Listener {
 
 					} else if (split[1].equalsIgnoreCase("exit")) {
 						if (!NavyCraft.redPlayers.contains(player.getName()) && !NavyCraft.bluePlayers.contains(player.getName()) && !NavyCraft.anyPlayers.contains(player.getName())) {
-							if (player.getWorld().getName().equalsIgnoreCase("warworld2")) {
-								Location spawnLoc = plugin.getServer().getWorld("warworld1").getSpawnLocation();
+							if (player.getWorld().getName().equalsIgnoreCase("admintest")) {
+								Location spawnLoc = plugin.getServer().getWorld("alatyr (main)").getSpawnLocation();
 								player.teleport(spawnLoc);
 							}
 							player.sendMessage("You are not on a team.");
@@ -2858,8 +2858,8 @@ public class MoveCraft_PlayerListener implements Listener {
 						}
 						plugin.getServer().broadcastMessage(ChatColor.YELLOW + player.getName() + " has quit the battle!");
 
-						if (player.getWorld().getName().equalsIgnoreCase("warworld2")) {
-							Location spawnLoc = plugin.getServer().getWorld("warworld1").getSpawnLocation();
+						if (player.getWorld().getName().equalsIgnoreCase("admintest")) {
+							Location spawnLoc = plugin.getServer().getWorld("alatyr (main)").getSpawnLocation();
 							player.teleport(spawnLoc);
 						}
 					} else if (split[1].equalsIgnoreCase("kick")) {
@@ -2884,8 +2884,8 @@ public class MoveCraft_PlayerListener implements Listener {
 							} else if (NavyCraft.anyPlayers.contains(testPlayer.getName())) {
 								NavyCraft.anyPlayers.remove(testPlayer.getName());
 							} else {
-								if (testPlayer.getWorld().getName().equalsIgnoreCase("warworld2")) {
-									Location spawnLoc = plugin.getServer().getWorld("warworld1").getSpawnLocation();
+								if (testPlayer.getWorld().getName().equalsIgnoreCase("admintest")) {
+									Location spawnLoc = plugin.getServer().getWorld("alatyr (main)").getSpawnLocation();
 									testPlayer.teleport(spawnLoc);
 								}
 								player.sendMessage("Player is not on a team.");
@@ -2893,8 +2893,8 @@ public class MoveCraft_PlayerListener implements Listener {
 								return;
 							}
 							plugin.getServer().broadcastMessage(ChatColor.YELLOW + testPlayer.getName() + " was kicked from the battle!");
-							if (testPlayer.getWorld().getName().equalsIgnoreCase("warworld2")) {
-								Location spawnLoc = plugin.getServer().getWorld("warworld1").getSpawnLocation();
+							if (testPlayer.getWorld().getName().equalsIgnoreCase("admintest")) {
+								Location spawnLoc = plugin.getServer().getWorld("alatyr (main)").getSpawnLocation();
 								testPlayer.teleport(spawnLoc);
 							}
 
@@ -2923,8 +2923,8 @@ public class MoveCraft_PlayerListener implements Listener {
 							return;
 						}
 
-						List<Player> ww2Players = plugin.getServer().getWorld("warworld2").getPlayers();
-						Location spawnLoc = plugin.getServer().getWorld("warworld1").getSpawnLocation();
+						List<Player> ww2Players = plugin.getServer().getWorld("admintest").getPlayers();
+						Location spawnLoc = plugin.getServer().getWorld("alatyr (main)").getSpawnLocation();
 						for (Player p : ww2Players) {
 							if (p != player) {
 								p.teleport(spawnLoc);
@@ -3116,29 +3116,29 @@ public class MoveCraft_PlayerListener implements Listener {
 							}
 
 							/// battle types
-							NavyCraft.redSpawn = new Location(plugin.getServer().getWorld("warworld2"), 100, 64, 100);
-							NavyCraft.blueSpawn = new Location(plugin.getServer().getWorld("warworld2"), 200, 64, 200);
+							NavyCraft.redSpawn = new Location(plugin.getServer().getWorld("admintest"), 100, 64, 100);
+							NavyCraft.blueSpawn = new Location(plugin.getServer().getWorld("admintest"), 200, 64, 200);
 							String redWelcomeStr = "";
 							String blueWelcomeStr = "";
 							String logStr = "";
 							if (NavyCraft.battleType == 1) {
-								NavyCraft.redSpawn = new Location(plugin.getServer().getWorld("warworld2"), -356, 69, 1114);
-								NavyCraft.blueSpawn = new Location(plugin.getServer().getWorld("warworld2"), -650, 67, 1485);
+								NavyCraft.redSpawn = new Location(plugin.getServer().getWorld("admintest"), -356, 69, 1114);
+								NavyCraft.blueSpawn = new Location(plugin.getServer().getWorld("admintest"), -650, 67, 1485);
 								redWelcomeStr = ChatColor.RED + "Welcome to Tunisia : Red Team Base!";
 								blueWelcomeStr = ChatColor.BLUE + "Welcome to Tunisia : Blue Team Base!";
 								logStr = "Battlezone: Tunisia";
 								NavyCraft.battleLength = 1800000;
 								// MoveCraft.battleLength = 330000;
 							} else if (NavyCraft.battleType == 2) {
-								NavyCraft.redSpawn = new Location(plugin.getServer().getWorld("warworld2"), 199, 60, -1065);
-								NavyCraft.blueSpawn = new Location(plugin.getServer().getWorld("warworld2"), -322, 75, -1166);
+								NavyCraft.redSpawn = new Location(plugin.getServer().getWorld("admintest"), 199, 60, -1065);
+								NavyCraft.blueSpawn = new Location(plugin.getServer().getWorld("admintest"), -322, 75, -1166);
 								redWelcomeStr = ChatColor.RED + "Welcome to Tarawa : Red Team Base!";
 								blueWelcomeStr = ChatColor.BLUE + "Welcome to Tarawa : Blue Team Fleet!";
 								logStr = "Battlezone: Tarawa";
 								NavyCraft.battleLength = 1800000;
 							} else if (NavyCraft.battleType == 3) {
-								NavyCraft.redSpawn = new Location(plugin.getServer().getWorld("warworld2"), -614.5, 64, -712.5);
-								NavyCraft.blueSpawn = new Location(plugin.getServer().getWorld("warworld2"), -629.5, 64, 106.5);
+								NavyCraft.redSpawn = new Location(plugin.getServer().getWorld("admintest"), -614.5, 64, -712.5);
+								NavyCraft.blueSpawn = new Location(plugin.getServer().getWorld("admintest"), -629.5, 64, 106.5);
 								redWelcomeStr = ChatColor.RED + "Welcome to the North Sea : Red Team Fleet!";
 								blueWelcomeStr = ChatColor.BLUE + "Welcome to the North Sea : Blue Team Fleet!";
 								logStr = "Battlezone: North Sea";
@@ -3328,13 +3328,13 @@ public class MoveCraft_PlayerListener implements Listener {
 						groupName = "Moderator";
 					}
 
-					if (player.getWorld().getName().equalsIgnoreCase("warworld1")) {
+					if (player.getWorld().getName().equalsIgnoreCase("alatyr (main)")) {
 						int exp = 0;
 						if (NavyCraft.playerScoresWW1.containsKey(player.getName())) {
 							exp = NavyCraft.playerScoresWW1.get(player.getName());
 						}
 						player.sendMessage(ChatColor.GRAY + "Your WW1 rank is " + ChatColor.WHITE + groupName + ChatColor.GRAY + " and you have " + ChatColor.WHITE + exp + "/" + nextRankXP + ChatColor.GRAY + " rank points.");
-					} else if (player.getWorld().getName().equalsIgnoreCase("warworld2")) {
+					} else if (player.getWorld().getName().equalsIgnoreCase("admintest")) {
 						int exp = 0;
 						if (NavyCraft.playerScoresWW2.containsKey(player.getName())) {
 							exp = NavyCraft.playerScoresWW2.get(player.getName());
@@ -3350,7 +3350,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				event.setCancelled(true);
 
 			} else if (craftType != null) {
-				// if (!PermissionInterface.CheckPermission(player, "movecraft." + event.getMessage().substring(1))) {
+				// if (!PermissionInterface.CheckPermission(player, "seacraft." + event.getMessage().substring(1))) {
 				// event.setCancelled(true);
 				// return;
 				// }
@@ -3368,7 +3368,7 @@ public class MoveCraft_PlayerListener implements Listener {
 					String tmpName = split[0];
 					// build out tmpName with 0 + i
 					if (tmpName.equalsIgnoreCase(craft.name)) {
-						// if (!PermissionInterface.CheckPermission(player, "movecraft." +
+						// if (!PermissionInterface.CheckPermission(player, "seacraft." +
 						// event.getMessage().substring(1))) {
 						// event.setCancelled(true);
 						// return;
@@ -3481,7 +3481,7 @@ public class MoveCraft_PlayerListener implements Listener {
 
 				return true;
 
-			} else if (split[1].equalsIgnoreCase("release") && (player.hasPermission("movecraft." + craftType.name + ".release") || player.isOp())) {
+			} else if (split[1].equalsIgnoreCase("release") && (player.hasPermission("seacraft." + craftType.name + ".release") || player.isOp())) {
 				// MoveCraft.instance.releaseCraft(player, craft);
 				if (craft != null) {
 					if ((craft.captainName == player.getName()) || player.isOp()) {
@@ -3496,7 +3496,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				}
 				return true;
 
-			} else if (split[1].equalsIgnoreCase("reload") && (player.hasPermission("movecraft." + craftType.name + ".reload") || player.isOp())) {
+			} else if (split[1].equalsIgnoreCase("reload") && (player.hasPermission("seacraft." + craftType.name + ".reload") || player.isOp())) {
 
 				// if( Craft.playerShipList.containsKey(player) )
 				// {
@@ -3519,7 +3519,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				return true;
 
 			} /*
-				 * else if (split[1].equalsIgnoreCase("store") && (player.hasPermission("movecraft." + craftType.name +
+				 * else if (split[1].equalsIgnoreCase("store") && (player.hasPermission("seacraft." + craftType.name +
 				 * ".store") || player.isOp()) ) { if( craft != null ) { if( player.getName() == craft.captainName ) {
 				 * if( MoveCraft.checkStorageRegion(craft.getLocation()) || player.isOp() ) { try { wep =
 				 * (WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit"); if( wep == null ) {
@@ -3567,7 +3567,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				 * player.sendMessage(ChatColor.YELLOW + "You are not in a storage area."); } }else {
 				 * player.sendMessage(ChatColor.YELLOW + "This is not your vehicle."); } }else {
 				 * player.sendMessage(ChatColor.YELLOW + "No vehicle detected."); } return true; }else if
-				 * (split[1].equalsIgnoreCase("repair") && (player.hasPermission("movecraft." + craftType.name +
+				 * (split[1].equalsIgnoreCase("repair") && (player.hasPermission("seacraft." + craftType.name +
 				 * ".repair") || player.isOp()) ) { if( craft != null ) { if(
 				 * MoveCraft.checkRepairRegion(craft.getLocation()) || player.isOp() ) { if( player.getName() ==
 				 * craft.captainName ) { wep = (WorldEditPlugin)
@@ -3593,7 +3593,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				 *
 				 * }else { player.sendMessage(ChatColor.YELLOW + "You are not in a repair dock region."); } }else {
 				 * player.sendMessage(ChatColor.YELLOW + "No vehicle detected."); } return true; }else if
-				 * (split[1].equalsIgnoreCase("recall") && (player.hasPermission("movecraft." + craftType.name +
+				 * (split[1].equalsIgnoreCase("recall") && (player.hasPermission("seacraft." + craftType.name +
 				 * ".recall") || player.isOp()) ) { if( MoveCraft.checkRecallRegion(player.getLocation()) ||
 				 * player.isOp() ) { wep = (WorldEditPlugin)
 				 * plugin.getServer().getPluginManager().getPlugin("WorldEdit"); if( wep == null ) {
@@ -3631,7 +3631,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				 * player.sendMessage("No stored vehicle found."); //e.printStackTrace(); }
 				 * es.setBlockChangeLimit(oldLimit); }else { player.sendMessage(ChatColor.YELLOW +
 				 * "You are not in a recall region."); } return true; }
-				 */else if (split[1].equalsIgnoreCase("drive") && (player.hasPermission("movecraft." + craftType.name + ".drive") || player.isOp())) {
+				 */else if (split[1].equalsIgnoreCase("drive") && (player.hasPermission("seacraft." + craftType.name + ".drive") || player.isOp())) {
 				if (player.getItemInHand().getTypeId() > 0) {
 					player.sendMessage(ChatColor.RED + "Have nothing in your hand before using this.");
 					return true;
@@ -3645,7 +3645,7 @@ public class MoveCraft_PlayerListener implements Listener {
 
 				return true;
 
-			} else if (split[1].equalsIgnoreCase("info") && (player.hasPermission("movecraft." + craftType.name + ".info") || player.isOp())) {
+			} else if (split[1].equalsIgnoreCase("info") && (player.hasPermission("seacraft." + craftType.name + ".info") || player.isOp())) {
 
 				player.sendMessage(ChatColor.WHITE + craftType.name);
 				if (craft != null) {
@@ -3746,7 +3746,7 @@ public class MoveCraft_PlayerListener implements Listener {
 					player.sendMessage(ChatColor.YELLOW + "No vehicle detected.");
 				}
 				return true;
-			} else if (split[1].equalsIgnoreCase("command") && (player.hasPermission("movecraft." + craftType.name + ".command") || player.isOp())) {
+			} else if (split[1].equalsIgnoreCase("command") && (player.hasPermission("seacraft." + craftType.name + ".command") || player.isOp())) {
 				Craft testCraft = Craft.getCraft(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ());
 				if (testCraft != null) {
 					if (craft != null)// && playerCraft.type == craftType) {
@@ -3821,7 +3821,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				return true;
 			} else if (split[1].equalsIgnoreCase("destroy")) {
 
-				if (player.hasPermission("movecraft." + craftType.name + ".destroy") || player.isOp()) {
+				if (player.hasPermission("seacraft." + craftType.name + ".destroy") || player.isOp()) {
 					if (craft != null) {
 						if ((craft.captainName == player.getName()) || player.isOp()) {
 							if (checkProtectedRegion(player, craft.getLocation()) || player.isOp() || player.hasPermission("movecraft.ship.command")) {
@@ -3845,7 +3845,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				}
 				return true;
 			} else if (split[1].equalsIgnoreCase("sink")) {
-				if (player.hasPermission("movecraft." + craftType.name + ".sink") || player.isOp()) {
+				if (player.hasPermission("seacraft." + craftType.name + ".sink") || player.isOp()) {
 					if (craft != null) {
 						if (!craft.sinking) {
 							if (craft.captainName == player.getName()) {
@@ -3877,7 +3877,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				}
 				return true;
 			} else if (split[1].equalsIgnoreCase("update")) {
-				if (player.hasPermission("movecraft." + craftType.name + ".update") || player.isOp()) {
+				if (player.hasPermission("seacraft." + craftType.name + ".update") || player.isOp()) {
 					CraftPlayer cp;
 					EntityPlayer ep;
 					Chunk checkChunk = player.getLocation().getChunk();
@@ -3900,10 +3900,10 @@ public class MoveCraft_PlayerListener implements Listener {
 					// {
 					/*
 					 * ProtocolManager manager = ProtocolLibrary.getProtocolManager(); CommonEntity ce; for( Entity e :
-					 * plugin.getServer().getWorld("WarWorld1").getEntities() ) { if( !(e instanceof Player) ) { ce =
+					 * plugin.getServer().getWorld("alatyr (main)").getEntities() ) { if( !(e instanceof Player) ) { ce =
 					 * CommonEntity.get(e); ce.getNetworkController().makeVisible(
 					 * plugin.getServer().getPlayer("Maximuspayne")); manager.updateEntity(e,
-					 * plugin.getServer().getWorld("WarWorld1").getPlayers()); } }
+					 * plugin.getServer().getWorld("alatyr (main)").getPlayers()); } }
 					 * plugin.getServer().broadcastMessage("manual update");
 					 */
 					// }
@@ -4394,7 +4394,7 @@ public class MoveCraft_PlayerListener implements Listener {
 		if ((player != null) && (loc != null)) {
 			wgp = (WorldGuardPlugin) plugin.getServer().getPluginManager().getPlugin("WorldGuard");
 			if (wgp != null) {
-				if (!loc.getWorld().getName().equalsIgnoreCase("warworld1") && !loc.getWorld().getName().equalsIgnoreCase("warworld2") && !loc.getWorld().getName().equalsIgnoreCase("warworld3")) { return true; }
+				if (!loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("admintest") && !loc.getWorld().getName().equalsIgnoreCase("warworld3")) { return true; }
 				RegionManager regionManager = wgp.getRegionManager(player.getWorld());
 
 				ApplicableRegionSet set = regionManager.getApplicableRegions(loc);
@@ -4417,60 +4417,60 @@ public class MoveCraft_PlayerListener implements Listener {
 
 	public void endTunisia() {
 		int blueTargetPoints = 0;
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-263, 63, 1066))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-263, 63, 1066))) {
 			blueTargetPoints += 200;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-274, 63, 1065))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-274, 63, 1065))) {
 			blueTargetPoints += 200;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-299, 63, 1076))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-299, 63, 1076))) {
 			blueTargetPoints += 200;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-316, 67, 1072))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-316, 67, 1072))) {
 			blueTargetPoints += 200;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-332, 67, 1072))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-332, 67, 1072))) {
 			blueTargetPoints += 200;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-371, 70, 1065))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-371, 70, 1065))) {
 			blueTargetPoints += 500;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-344, 63, 1101))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-344, 63, 1101))) {
 			blueTargetPoints += 200;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-344, 84, 1184))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-344, 84, 1184))) {
 			blueTargetPoints += 500;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-367, 77, 1178))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-367, 77, 1178))) {
 			blueTargetPoints += 200;
 		}
 
 		int redTargetPoints = 0;
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-611, 64, 1529))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-611, 64, 1529))) {
 			redTargetPoints += 200;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-631, 64, 1539))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-631, 64, 1539))) {
 			redTargetPoints += 200;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-642, 64, 1539))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-642, 64, 1539))) {
 			redTargetPoints += 200;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-664, 68, 1537))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-664, 68, 1537))) {
 			redTargetPoints += 200;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-677, 68, 1537))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-677, 68, 1537))) {
 			redTargetPoints += 200;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-699, 71, 1489))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-699, 71, 1489))) {
 			redTargetPoints += 500;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-695, 64, 1522))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-695, 64, 1522))) {
 			redTargetPoints += 200;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-609, 75, 1478))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-609, 75, 1478))) {
 			redTargetPoints += 500;
 		}
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-633, 68, 1468))) {
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-633, 68, 1468))) {
 			redTargetPoints += 200;
 		}
 		int playerNewExp = 0;
@@ -4639,7 +4639,7 @@ public class MoveCraft_PlayerListener implements Listener {
 			}
 			GroupManager gm = (GroupManager) groupPlugin;
 			WorldsHolder wd = gm.getWorldsHolder();
-			groupName = wd.getWorldData("warworld2").getUser(player.getName()).getGroupName();
+			groupName = wd.getWorldData("admintest").getUser(player.getName()).getGroupName();
 
 			if (groupName.equalsIgnoreCase("Default")) {
 				playerPay = 1000;
@@ -4683,70 +4683,70 @@ public class MoveCraft_PlayerListener implements Listener {
 		int redTargetPoints = 0;
 
 		// shore battiers
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(194, 66, -1180))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(194, 66, -1180))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
 
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(179, 66, -1110))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(179, 66, -1110))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(163, 66, -1064))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(163, 66, -1064))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(125, 66, -1023))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(125, 66, -1023))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(82, 66, -977))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(82, 66, -977))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(171, 66, -867))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(171, 66, -867))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
 
 		// buildings
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(186, 65, -1079))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(186, 65, -1079))) {
 			redTargetPoints += 300;
 		} else {
 			blueTargetPoints += 300;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(167, 66, -1086))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(167, 66, -1086))) {
 			redTargetPoints += 300;
 		} else {
 			blueTargetPoints += 300;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(197, 60, -1066))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(197, 60, -1066))) {
 			redTargetPoints += 500;
 		} else {
 			blueTargetPoints += 500;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(201, 66, -1156))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(201, 66, -1156))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(201, 79, -1149))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(201, 79, -1149))) {
 			redTargetPoints += 150;
 		} else {
 			blueTargetPoints += 150;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(220, 79, -977))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(220, 79, -977))) {
 			redTargetPoints += 150;
 		} else {
 			blueTargetPoints += 150;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(220, 66, -984))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(220, 66, -984))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
@@ -4761,70 +4761,70 @@ public class MoveCraft_PlayerListener implements Listener {
 		int redTargetPoints = 0;
 
 		// shore battiers
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(194, 66, -1180))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(194, 66, -1180))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
 
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(179, 66, -1110))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(179, 66, -1110))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(163, 66, -1064))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(163, 66, -1064))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(125, 66, -1023))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(125, 66, -1023))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(82, 66, -977))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(82, 66, -977))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(171, 66, -867))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(171, 66, -867))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
 
 		// buildings
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(186, 65, -1079))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(186, 65, -1079))) {
 			redTargetPoints += 300;
 		} else {
 			blueTargetPoints += 300;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(167, 66, -1086))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(167, 66, -1086))) {
 			redTargetPoints += 300;
 		} else {
 			blueTargetPoints += 300;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(197, 60, -1066))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(197, 60, -1066))) {
 			redTargetPoints += 500;
 		} else {
 			blueTargetPoints += 500;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(201, 66, -1156))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(201, 66, -1156))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(201, 79, -1149))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(201, 79, -1149))) {
 			redTargetPoints += 150;
 		} else {
 			blueTargetPoints += 150;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(220, 79, -977))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(220, 79, -977))) {
 			redTargetPoints += 150;
 		} else {
 			blueTargetPoints += 150;
 		}
-		if (checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(220, 66, -984))) {
+		if (checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(220, 66, -984))) {
 			redTargetPoints += 200;
 		} else {
 			blueTargetPoints += 200;
@@ -5086,45 +5086,45 @@ public class MoveCraft_PlayerListener implements Listener {
 
 	public boolean checkTunisia() {
 		// red
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-263, 63, 1066))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-274, 63, 1065))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-299, 63, 1076))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-316, 67, 1072))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-332, 67, 1072))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-371, 70, 1065))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-344, 63, 1101))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-344, 84, 1184))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-367, 77, 1178))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-263, 63, 1066))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-274, 63, 1065))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-299, 63, 1076))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-316, 67, 1072))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-332, 67, 1072))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-371, 70, 1065))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-344, 63, 1101))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-344, 84, 1184))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-367, 77, 1178))) { return false; }
 		// blue
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-611, 64, 1529))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-631, 64, 1539))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-642, 64, 1539))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-664, 68, 1537))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-677, 68, 1537))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-699, 71, 1489))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-695, 64, 1522))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-609, 75, 1478))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(-633, 68, 1468))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-611, 64, 1529))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-631, 64, 1539))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-642, 64, 1539))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-664, 68, 1537))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-677, 68, 1537))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-699, 71, 1489))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-695, 64, 1522))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-609, 75, 1478))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(-633, 68, 1468))) { return false; }
 		return true;
 	}
 
 	public boolean checkTarawa() {
 		// shore battiers
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(194, 66, -1180))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(179, 66, -1110))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(163, 66, -1064))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(125, 66, -1023))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(82, 66, -977))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(171, 66, -867))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(194, 66, -1180))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(179, 66, -1110))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(163, 66, -1064))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(125, 66, -1023))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(82, 66, -977))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(171, 66, -867))) { return false; }
 
 		// buildings
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(186, 65, -1079))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(167, 66, -1086))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(197, 60, -1066))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(201, 66, -1156))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(201, 79, -1149))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(220, 79, -977))) { return false; }
-		if (!checkForTarget(plugin.getServer().getWorld("warworld2").getBlockAt(220, 66, -984))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(186, 65, -1079))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(167, 66, -1086))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(197, 60, -1066))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(201, 66, -1156))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(201, 79, -1149))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(220, 79, -977))) { return false; }
+		if (!checkForTarget(plugin.getServer().getWorld("admintest").getBlockAt(220, 66, -984))) { return false; }
 		return true;
 	}
 
@@ -5287,25 +5287,25 @@ public class MoveCraft_PlayerListener implements Listener {
 	 *
 	 * if( !event.isCancelled() ) { Player player = event.getPlayer(); ArrayList<Player> removePlayers = new
 	 * ArrayList<Player>(); if(
-	 * !(player.getWorld().getName().equalsIgnoreCase("warworld1")||player.getWorld().getName().equalsIgnoreCase(
-	 * "warworld2")) ||
-	 * (NavyCraft.checkSafeDockRegion(player.getLocation())&&!player.getWorld().getName().equalsIgnoreCase("warworld2"))
+	 * !(player.getWorld().getName().equalsIgnoreCase("alatyr (main)")||player.getWorld().getName().equalsIgnoreCase(
+	 * "admintest")) ||
+	 * (NavyCraft.checkSafeDockRegion(player.getLocation())&&!player.getWorld().getName().equalsIgnoreCase("admintest"))
 	 * ) { for( Player p: event.getRecipients() ) { if( (!NavyCraft.checkSafeDockRegion(p.getLocation()) &&
-	 * p.getWorld().getName().equalsIgnoreCase("warworld1")) || p.getWorld().getName().equalsIgnoreCase("warworld2") ) {
+	 * p.getWorld().getName().equalsIgnoreCase("alatyr (main)")) || p.getWorld().getName().equalsIgnoreCase("admintest") ) {
 	 * if( (p.isOp() || p.hasPermission("movecraft.hidden")) && !NavyCraft.disableHiddenChats.contains(p.getName()) )
 	 * p.sendMessage(ChatColor.GRAY + "" + ChatColor.BOLD + "*Hidden Chat*"); else removePlayers.add(p); } }
 	 * event.setMessage(ChatColor.AQUA + "[Global] " + ChatColor.WHITE + event.getMessage()); }else if(
-	 * player.getWorld().getName().equalsIgnoreCase("warworld1") ||
-	 * player.getWorld().getName().equalsIgnoreCase("warworld2") ) { for( Player p: event.getRecipients() ) { if(
-	 * player.getWorld().getName().equalsIgnoreCase("warworld1") ) { if(
-	 * !p.getWorld().getName().equalsIgnoreCase("warworld1") ) { if( (p.isOp() || p.hasPermission("movecraft.hidden"))
+	 * player.getWorld().getName().equalsIgnoreCase("alatyr (main)") ||
+	 * player.getWorld().getName().equalsIgnoreCase("admintest") ) { for( Player p: event.getRecipients() ) { if(
+	 * player.getWorld().getName().equalsIgnoreCase("alatyr (main)") ) { if(
+	 * !p.getWorld().getName().equalsIgnoreCase("alatyr (main)") ) { if( (p.isOp() || p.hasPermission("movecraft.hidden"))
 	 * && !NavyCraft.disableHiddenChats.contains(p.getName()) ) p.sendMessage(ChatColor.GRAY + "" + ChatColor.BOLD +
 	 * "*Hidden Chat*"); else removePlayers.add(p);
 	 *
 	 * }else { double dist = p.getLocation().distance(player.getLocation()); if( dist > 50 ) { if( (p.isOp() ||
 	 * p.hasPermission("movecraft.hidden")) && !NavyCraft.disableHiddenChats.contains(p.getName()) )
 	 * p.sendMessage(ChatColor.GRAY + "" + ChatColor.BOLD + "*Hidden Chat*"); else removePlayers.add(p); } } }else //ww2
-	 * { if( !p.getWorld().getName().equalsIgnoreCase("warworld2") ) { if( (p.isOp() ||
+	 * { if( !p.getWorld().getName().equalsIgnoreCase("admintest") ) { if( (p.isOp() ||
 	 * p.hasPermission("movecraft.hidden")) && !NavyCraft.disableHiddenChats.contains(p.getName()) )
 	 * p.sendMessage(ChatColor.GRAY + "" + ChatColor.BOLD + "*Hidden Chat*"); else removePlayers.add(p);
 	 *
