@@ -2766,7 +2766,7 @@ public class CraftMover {
 			sign.setLine(2, line2);
 			sign.setLine(3, line3);
 			sign.update();
-		} else if (craftTypeName.equalsIgnoreCase("helm")) {
+		} else if (craftTypeName.equalsIgnoreCase("controls")) {
 			if (craft.signLoc == null) {
 				craft.signLoc = sign.getBlock().getLocation();
 			}
@@ -5205,7 +5205,7 @@ public class CraftMover {
 
 		if (craft.doCost) {
 			int cost = 0;
-			if (craftTypeName.equalsIgnoreCase("helm")) {
+			if (craftTypeName.equalsIgnoreCase("controls")) {
 				cost = 50;
 			} else if (craftTypeName.equalsIgnoreCase("nav")) {
 				cost = 50;

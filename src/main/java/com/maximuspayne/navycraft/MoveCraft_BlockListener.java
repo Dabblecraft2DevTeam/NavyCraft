@@ -1883,7 +1883,7 @@ public class MoveCraft_BlockListener implements Listener {
 			CraftType craftType = CraftType.getCraftType(craftTypeName);
 
 			// it is a registred craft type !
-			if ((craftType != null) || craftTypeName.equalsIgnoreCase("helm")) {
+			if ((craftType != null) || craftTypeName.equalsIgnoreCase("controls")) {
 
 				if (NavyCraft.checkNoDriveRegion(player.getLocation())) {
 					player.sendMessage(ChatColor.RED + "You do not have permission to drive vehicles in this area. Please use a spawner.");
@@ -1891,7 +1891,7 @@ public class MoveCraft_BlockListener implements Listener {
 				}
 				Craft testCraft = Craft.getCraft(block.getX(), block.getY(), block.getZ());
 				// if(playerCraft == null && testCraft != null && testCraft.player == null )
-				if ((testCraft != null) && ((testCraft.captainName == null) || testCraft.abandoned || (testCraft.captainAbandoned && !craftTypeName.equalsIgnoreCase("helm")))) {
+				if ((testCraft != null) && ((testCraft.captainName == null) || testCraft.abandoned || (testCraft.captainAbandoned && !craftTypeName.equalsIgnoreCase("Controls")))) {
 					// check restrictions
 					/*
 					 * String restriction = sign.getLine(2).trim(); if(!restriction.equals("") && restriction != null) {
@@ -1913,7 +1913,7 @@ public class MoveCraft_BlockListener implements Listener {
 						return;
 					}
 
-					if (craftTypeName.equalsIgnoreCase("helm")) {
+					if (craftTypeName.equalsIgnoreCase("controls")) {
 						player.sendMessage("There is no captain. Use main vehicle sign.");
 						return;
 					}
@@ -2008,7 +2008,7 @@ public class MoveCraft_BlockListener implements Listener {
 						}
 
 						if (!testCraft.isDressed(player)) { return; }
-						if ((testCraft.type != craftType) && !craftTypeName.equalsIgnoreCase("helm")) {
+						if ((testCraft.type != craftType) && !craftTypeName.equalsIgnoreCase("controls")) {
 							player.sendMessage(ChatColor.RED + "Vehicle sign differs from class...try /ship remove?");
 							return;
 						}
@@ -2047,7 +2047,7 @@ public class MoveCraft_BlockListener implements Listener {
 					return;
 				} else if (testCraft != null) // launcher is on
 				{
-					if ((craftType == testCraft.type) || craftTypeName.equalsIgnoreCase("helm")) {
+					if ((craftType == testCraft.type) || craftTypeName.equalsIgnoreCase("controls")) {
 						player.sendMessage("Cannot use main vehicle sign, helm sign, or sign of same type while launcher is armed.");
 						return;
 					} else if (testCraft.speed != 0) {
@@ -2055,7 +2055,7 @@ public class MoveCraft_BlockListener implements Listener {
 						return;
 					}
 					/// continue below to launch new vehicle!
-				} else if (craftTypeName.equalsIgnoreCase("helm")) {
+				} else if (craftTypeName.equalsIgnoreCase("controls")) {
 					player.sendMessage("Start the craft first. Use main vehicle sign.");
 					return;
 				}
@@ -2213,7 +2213,7 @@ public class MoveCraft_BlockListener implements Listener {
 		// if the first line of the sign is a craft type, get the matching craft type.
 		CraftType craftType = CraftType.getCraftType(craftTypeName);
 
-		if (!player.isOp() && (((craftType != null) || craftTypeName.equalsIgnoreCase("helm") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("select") || craftTypeName.equalsIgnoreCase("claim") || craftTypeName.equalsIgnoreCase("spawn") || craftTypeName.equalsIgnoreCase("recall") || craftTypeName.equalsIgnoreCase("target") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")) && !PermissionInterface.CheckPermission(player, "movecraft." + craftTypeName + ".create"))) {
+		if (!player.isOp() && (((craftType != null) || craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("select") || craftTypeName.equalsIgnoreCase("claim") || craftTypeName.equalsIgnoreCase("spawn") || craftTypeName.equalsIgnoreCase("recall") || craftTypeName.equalsIgnoreCase("target") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")) && !PermissionInterface.CheckPermission(player, "movecraft." + craftTypeName + ".create"))) {
 			player.sendMessage("You don't have permission to create this type of sign!");
 			event.setCancelled(true);
 		}
@@ -2238,7 +2238,7 @@ public class MoveCraft_BlockListener implements Listener {
 		 */
 		theCraft = Craft.getCraft(event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ());
 		if (theCraft != null) {
-			if (!player.isOp() && ((craftTypeName.equalsIgnoreCase("helm") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("select") || craftTypeName.equalsIgnoreCase("spawn") || craftTypeName.equalsIgnoreCase("recall") || craftTypeName.equalsIgnoreCase("target") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")))) {
+			if (!player.isOp() && ((craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("select") || craftTypeName.equalsIgnoreCase("spawn") || craftTypeName.equalsIgnoreCase("recall") || craftTypeName.equalsIgnoreCase("target") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")))) {
 				player.sendMessage("You cannot create this sign on a running vehicle");
 				event.setCancelled(true);
 				return;
@@ -2246,9 +2246,9 @@ public class MoveCraft_BlockListener implements Listener {
 		}
 		// }
 
-		if ((player.getWorld().getName().equalsIgnoreCase("warworld1") || player.getWorld().getName().equalsIgnoreCase("warworld3")) && ((craftTypeName.equalsIgnoreCase("helm") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")))) {
+		if ((player.getWorld().getName().equalsIgnoreCase("warworld1") || player.getWorld().getName().equalsIgnoreCase("warworld3")) && ((craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")))) {
 			int cost = 0;
-			if (craftTypeName.equalsIgnoreCase("helm")) {
+			if (craftTypeName.equalsIgnoreCase("controls")) {
 				cost = 50;
 			} else if (craftTypeName.equalsIgnoreCase("nav")) {
 				cost = 50;
