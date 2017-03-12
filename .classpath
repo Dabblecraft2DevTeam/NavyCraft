@@ -32,14 +32,15 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/keough99/Documents/GitHub/Naval-stuff/Naval-Stuff/jars/AimCannonNC.jar"/>
-	<classpathentry kind="lib" path="C:/Users/keough99/Documents/GitHub/Naval-stuff/Naval-Stuff/jars/BKCommonLib.jar"/>
-	<classpathentry kind="lib" path="C:/Users/keough99/Documents/GitHub/Naval-stuff/Naval-Stuff/jars/craftbukkit-1.10.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/keough99/Documents/GitHub/Naval-stuff/Naval-Stuff/jars/Essentials-2.x-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="C:/Users/keough99/Documents/GitHub/Naval-stuff/Naval-Stuff/jars/EssentialsGroupManager2.14.57.jar"/>
-	<classpathentry kind="lib" path="C:/Users/keough99/Documents/GitHub/Naval-stuff/Naval-Stuff/jars/ProtocolLib.jar"/>
-	<classpathentry kind="lib" path="C:/Users/keough99/Documents/GitHub/Naval-stuff/Naval-Stuff/jars/spigot-1.10.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/keough99/Documents/GitHub/Naval-stuff/Naval-Stuff/jars/worldedit-bukkit-6.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/keough99/Documents/GitHub/Naval-stuff/Naval-Stuff/jars/worldguard-6.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keough99/workspace/NavyCraft/jars/AimCannonNC.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keough99/workspace/NavyCraft/jars/BKCommonLib.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keough99/workspace/NavyCraft/jars/craftbukkit-1.10.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keough99/workspace/NavyCraft/jars/Essentials-2.x-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keough99/workspace/NavyCraft/jars/EssentialsGroupManager2.14.57.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keough99/workspace/NavyCraft/jars/Navycraft.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keough99/workspace/NavyCraft/jars/ProtocolLib.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keough99/workspace/NavyCraft/jars/spigot-1.10.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keough99/workspace/NavyCraft/jars/worldedit-bukkit-6.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keough99/workspace/NavyCraft/jars/worldguard-6.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
