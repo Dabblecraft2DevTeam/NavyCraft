@@ -46,3 +46,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 /target/
+
+*.class
+target/classes/com/maximuspayne/navycraft/Craft_Hyperspace.class
