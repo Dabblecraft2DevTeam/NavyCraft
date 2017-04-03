@@ -50,7 +50,7 @@ public class MoveCraft_InventoryListener implements Listener {
     			Player p = (Player)event.getWhoClicked();
     			p.sendMessage("Sorry, you are not allowed to craft this item. Purchase it from a Safe Dock instead.");
     		}
-    		event.setCancelled(true);
+    		event.setCancelled(false);
     	}
  
     }
