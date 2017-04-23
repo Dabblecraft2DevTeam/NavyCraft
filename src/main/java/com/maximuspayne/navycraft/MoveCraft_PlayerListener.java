@@ -19,7 +19,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -53,7 +53,7 @@ import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import net.ess3.api.MaxMoneyException;
-import net.minecraft.server.v1_10_R1.EntityPlayer;
+import net.minecraft.server.v1_11_R1.EntityPlayer;
 
 public class MoveCraft_PlayerListener implements Listener {
 
@@ -1432,7 +1432,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				player.sendMessage(ChatColor.YELLOW + "/[craft type] " + " : " + ChatColor.WHITE + "commands specific to the craft type");
 			}
 			event.setCancelled(true);
-		} else if (split[0].equalsIgnoreCase("release")) {
+		} else if (split[0].equalsIgnoreCase("park")) {
 			// MoveCraft.instance.releaseCraft(player, Craft.getPlayerCraft(player));
 			Craft c = Craft.getPlayerCraft(player);
 			if ((c != null) && (c.captainName == player.getName())) {
@@ -2505,7 +2505,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				}
 
 			} else if (craftName.equalsIgnoreCase("team")) {
-				if (!NavyCraft.redPlayers.contains(player.getName()) && !NavyCraft.bluePlayers.contains(player.getName()) && !NavyCraft.anyPlayers.contains(player.getName()) && !PermissionInterface.CheckQuietPermission(player, "movecraft.battle") && !player.isOp()) {
+				if (!NavyCraft.redPlayers.contains(player.getName()) && !NavyCraft.bluePlayers.contains(player.getName()) && !NavyCraft.anyPlayers.contains(player.getName()) && !PermissionInterface.CheckQuietPermission(player, "seacraft.battle") && !player.isOp()) {
 					player.sendMessage("You are not on a team!");
 					event.setCancelled(true);
 					return;
@@ -2606,7 +2606,7 @@ public class MoveCraft_PlayerListener implements Listener {
 				if (split.length == 1) {
 					if (NavyCraft.battleMode == -1) {
 						player.sendMessage("No active battle.");
-						if (PermissionInterface.CheckQuietPermission(player, "movecraft.battle") || player.isOp()) {
+						if (PermissionInterface.CheckQuietPermission(player, "seacraft.battle") || player.isOp()) {
 							player.sendMessage("Use /battle new to start new battle");
 						}
 					} else if (NavyCraft.battleMode == 0) {
@@ -2642,7 +2642,7 @@ public class MoveCraft_PlayerListener implements Listener {
 
 						player.sendMessage("Type \"/battle red|blue|any\" to queue!");
 						player.sendMessage("There are " + ChatColor.RED + NavyCraft.redPlayers.size() + " red " + ChatColor.WHITE + "and " + ChatColor.BLUE + NavyCraft.bluePlayers.size() + " blue " + ChatColor.WHITE + " and " + NavyCraft.anyPlayers.size() + " unassigned.");
-						if (PermissionInterface.CheckQuietPermission(player, "movecraft.battle") || player.isOp()) {
+						if (PermissionInterface.CheckQuietPermission(player, "seacraft.battle") || player.isOp()) {
 							player.sendMessage("Use /battle start to start battle");
 						}
 					} else /// active battle
@@ -2863,7 +2863,7 @@ public class MoveCraft_PlayerListener implements Listener {
 							player.teleport(spawnLoc);
 						}
 					} else if (split[1].equalsIgnoreCase("kick")) {
-						if (!PermissionInterface.CheckPermission(player, "movecraft.battle") && !player.isOp()) {
+						if (!PermissionInterface.CheckPermission(player, "seacraft.battle") && !player.isOp()) {
 							player.sendMessage("You do not have permission to start battles");
 							event.setCancelled(true);
 							return;
@@ -2917,7 +2917,7 @@ public class MoveCraft_PlayerListener implements Listener {
 						}
 
 					} else if (split[1].equalsIgnoreCase("kickall")) {
-						if (!PermissionInterface.CheckPermission(player, "movecraft.battle") && !player.isOp()) {
+						if (!PermissionInterface.CheckPermission(player, "seacraft.battle") && !player.isOp()) {
 							player.sendMessage("You do not have permission to start battles");
 							event.setCancelled(true);
 							return;
@@ -2933,7 +2933,7 @@ public class MoveCraft_PlayerListener implements Listener {
 						plugin.getServer().broadcastMessage(ChatColor.YELLOW + player.getName() + " evicts everyone from WarWorld2!");
 
 					} else if (split[1].equalsIgnoreCase("cancel")) {
-						if (!PermissionInterface.CheckPermission(player, "movecraft.battle") && !player.isOp()) {
+						if (!PermissionInterface.CheckPermission(player, "seacraft.battle") && !player.isOp()) {
 							player.sendMessage("You do not have permission to start battles");
 							event.setCancelled(true);
 							return;
@@ -2960,7 +2960,7 @@ public class MoveCraft_PlayerListener implements Listener {
 							NavyCraft.blueMerchant = false;
 						}
 					} else if (split[1].equalsIgnoreCase("new")) {
-						if (!PermissionInterface.CheckPermission(player, "movecraft.battle") && !player.isOp()) {
+						if (!PermissionInterface.CheckPermission(player, "seacraft.battle") && !player.isOp()) {
 							player.sendMessage("You do not have permission to start battles");
 							event.setCancelled(true);
 							return;
@@ -3049,7 +3049,7 @@ public class MoveCraft_PlayerListener implements Listener {
 							NavyCraft.blueMerchant = false;
 						}
 					} else if (split[1].equalsIgnoreCase("spam")) {
-						if (!PermissionInterface.CheckPermission(player, "movecraft.battle") && !player.isOp()) {
+						if (!PermissionInterface.CheckPermission(player, "seacraft.battle") && !player.isOp()) {
 							player.sendMessage("You do not have permission to start battles");
 							event.setCancelled(true);
 							return;
@@ -3085,7 +3085,7 @@ public class MoveCraft_PlayerListener implements Listener {
 						plugin.getServer().broadcastMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "***Type \"/battle red|blue|any\" to queue!***");
 
 					} else if (split[1].equalsIgnoreCase("start")) {
-						if (!PermissionInterface.CheckPermission(player, "movecraft.battle") && !player.isOp()) {
+						if (!PermissionInterface.CheckPermission(player, "seacraft.battle") && !player.isOp()) {
 							player.sendMessage("You do not have permission to start battles");
 							event.setCancelled(true);
 							return;
@@ -3168,7 +3168,7 @@ public class MoveCraft_PlayerListener implements Listener {
 							NavyCraft.battleStartTime = System.currentTimeMillis();
 						}
 					} else if (split[1].equalsIgnoreCase("end")) {
-						if (!PermissionInterface.CheckPermission(player, "movecraft.battle") && !player.isOp()) {
+						if (!PermissionInterface.CheckPermission(player, "seacraft.battle") && !player.isOp()) {
 							player.sendMessage("You do not have permission to start battles");
 							event.setCancelled(true);
 							return;
@@ -3219,7 +3219,7 @@ public class MoveCraft_PlayerListener implements Listener {
 							NavyCraft.blueMerchant = false;
 						}
 					} else if (split[1].equalsIgnoreCase("lock") && (NavyCraft.battleMode >= 0)) {
-						if (!PermissionInterface.CheckPermission(player, "movecraft.battle") && !player.isOp()) {
+						if (!PermissionInterface.CheckPermission(player, "seacraft.battle") && !player.isOp()) {
 							player.sendMessage("You do not have permission to start battles");
 							event.setCancelled(true);
 							return;
