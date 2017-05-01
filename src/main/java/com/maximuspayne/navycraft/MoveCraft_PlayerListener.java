@@ -262,7 +262,7 @@ public class MoveCraft_PlayerListener implements Listener {
 
 		Craft craft = Craft.getPlayerCraft(player);
 
-		if ((NavyCraft.checkSafeDockRegion(player.getLocation()) && !player.getWorld().getName().equalsIgnoreCase("admintest")) || (!player.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !player.getWorld().getName().equalsIgnoreCase("admintest"))) {
+		if ((NavyCraft.checkSafeDockRegion(player.getLocation()) && !player.getWorld().getName().equalsIgnoreCase("admintest")) || (!player.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !player.getWorld().getName().equalsIgnoreCase("build"))) {
 			if (NavyCraft.playerChatRegions.containsKey(player.getName())) {
 				if (NavyCraft.playerChatRegions.get(player.getName()) != 0) {
 					player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Joining [Global] channel...");
