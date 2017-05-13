@@ -5552,7 +5552,7 @@ public class CraftMover {
 
 		wgp = (WorldGuardPlugin) plugin.getServer().getPluginManager().getPlugin("WorldGuard");
 		if ((wgp != null) && (loc != null)) {
-			if (!loc.getWorld().getName().equalsIgnoreCase("admintest") && !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("warworld3")) { return true; }
+			if (!loc.getWorld().getName().equalsIgnoreCase("admintest") && !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("build")) { return true; }
 			RegionManager regionManager = wgp.getRegionManager(craft.world);
 
 			ApplicableRegionSet set = regionManager.getApplicableRegions(loc);
