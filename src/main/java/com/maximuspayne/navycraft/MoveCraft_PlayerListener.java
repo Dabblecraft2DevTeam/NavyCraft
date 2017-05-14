@@ -1949,7 +1949,7 @@ public class MoveCraft_PlayerListener implements Listener {
 								if (foundSign != null) {
 									wgp = (WorldGuardPlugin) plugin.getServer().getPluginManager().getPlugin("WorldGuard");
 									if (wgp != null) {
-										RegionManager regionManager = wgp.getRegionManager(plugin.getServer().getWorld("shipyard"));
+										RegionManager regionManager = wgp.getRegionManager(plugin.getServer().getWorld("ShipYard"));
 										String regionName = "--" + player.getName() + "-" + tpId;
 
 										int startX = regionManager.getRegion(regionName).getMinimumPoint().getBlockX();
@@ -1962,7 +1962,7 @@ public class MoveCraft_PlayerListener implements Listener {
 										for (int x = startX; x <= endX; x++) {
 											for (int z = startZ; z <= endZ; z++) {
 												for (int y = startY; y <= 62; y++) {
-													plugin.getServer().getWorld("shipyard").getBlockAt(x, y, z).setType(Material.WATER);
+													plugin.getServer().getWorld("ShipYard").getBlockAt(x, y, z).setType(Material.WATER);
 
 												}
 												int startYy;
@@ -1972,7 +1972,7 @@ public class MoveCraft_PlayerListener implements Listener {
 													startYy = 63;
 												}
 												for (int y = startYy; y <= endY; y++) {
-													plugin.getServer().getWorld("shipyard").getBlockAt(x, y, z).setType(Material.AIR);
+													plugin.getServer().getWorld("ShipYard").getBlockAt(x, y, z).setType(Material.AIR);
 												}
 											}
 										}
@@ -3137,8 +3137,8 @@ public class MoveCraft_PlayerListener implements Listener {
 								logStr = "Battlezone: Tarawa";
 								NavyCraft.battleLength = 1800000;
 							} else if (NavyCraft.battleType == 3) {
-								NavyCraft.redSpawn = new Location(plugin.getServer().getWorld("admintest"), -614.5, 64, -712.5);
-								NavyCraft.blueSpawn = new Location(plugin.getServer().getWorld("admintest"), -629.5, 64, 106.5);
+								NavyCraft.redSpawn = new Location(plugin.getServer().getWorld("admintest"), -461.5, 64, -1418.5);
+								NavyCraft.blueSpawn = new Location(plugin.getServer().getWorld("admintest"), -495.5, 64, -661.5);
 								redWelcomeStr = ChatColor.RED + "Welcome to the North Sea : Red Team Fleet!";
 								blueWelcomeStr = ChatColor.BLUE + "Welcome to the North Sea : Blue Team Fleet!";
 								logStr = "Battlezone: North Sea";
