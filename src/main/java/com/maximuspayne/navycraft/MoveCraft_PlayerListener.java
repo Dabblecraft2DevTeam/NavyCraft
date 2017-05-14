@@ -4394,7 +4394,7 @@ public class MoveCraft_PlayerListener implements Listener {
 		if ((player != null) && (loc != null)) {
 			wgp = (WorldGuardPlugin) plugin.getServer().getPluginManager().getPlugin("WorldGuard");
 			if (wgp != null) {
-				if (!loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("admintest") && !loc.getWorld().getName().equalsIgnoreCase("warworld3")) { return true; }
+				if (!loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("admintest") && !loc.getWorld().getName().equalsIgnoreCase("build")) { return true; }
 				RegionManager regionManager = wgp.getRegionManager(player.getWorld());
 
 				ApplicableRegionSet set = regionManager.getApplicableRegions(loc);

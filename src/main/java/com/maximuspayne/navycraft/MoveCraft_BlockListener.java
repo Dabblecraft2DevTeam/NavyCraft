@@ -2246,7 +2246,7 @@ public class MoveCraft_BlockListener implements Listener {
 		}
 		// }
 
-		if ((player.getWorld().getName().equalsIgnoreCase("alatyr (main)") || player.getWorld().getName().equalsIgnoreCase("warworld3")) && ((craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")))) {
+		if ((player.getWorld().getName().equalsIgnoreCase("alatyr (main)") || player.getWorld().getName().equalsIgnoreCase("build")) && ((craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")))) {
 			int cost = 0;
 			if (craftTypeName.equalsIgnoreCase("controls")) {
 				cost = 50;
@@ -2660,7 +2660,7 @@ public class MoveCraft_BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void inventoryClickEvent(final InventoryClickEvent event) {
 		if (!event.isCancelled()) {
-			if (event.getWhoClicked().getWorld().getName().equalsIgnoreCase("alatyr (main)") || event.getWhoClicked().getWorld().getName().equalsIgnoreCase("warworld3")) {
+			if (event.getWhoClicked().getWorld().getName().equalsIgnoreCase("alatyr (main)") || event.getWhoClicked().getWorld().getName().equalsIgnoreCase("build")) {
 				if ((event.getInventory().getType() == InventoryType.DISPENSER) && (event.getRawSlot() == 4) && ((event.getCurrentItem().getTypeId() == 388) || (event.getCursor().getTypeId() == 388))) {
 					event.setCancelled(true);
 				}
