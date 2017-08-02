@@ -13,8 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
-import com.maximuspayne.AimCannonNC.AimCannon;
-import com.maximuspayne.AimCannonNC.OneCannon;
+import com.maximuspayne.aimcannon.AimCannon;
+import com.maximuspayne.aimcannon.OneCannon;
 
 public class CraftRotator {
 	public Plugin plugin;
@@ -1023,7 +1023,7 @@ public class CraftRotator {
 				Block theBlock = getWorldBlock(dx + dataBlock.x, dy + dataBlock.y, dz + dataBlock.z);
 				if( theBlock.getTypeId() == 23)
 				{
-					OneCannon oc = new OneCannon(theBlock.getLocation(), plugin);
+					OneCannon oc = new OneCannon(theBlock.getLocation(), NavyCraft.instance);
 					if (oc.isValidCannon(theBlock)) 
 					{
 						for (OneCannon onec : AimCannon.getCannons()) 

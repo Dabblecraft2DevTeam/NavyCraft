@@ -20,6 +20,8 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.plugin.Plugin;
 
+import com.maximuspayne.navycraft.plugins.PermissionInterface;
+
 public class MoveCraft_EntityListener implements Listener {
     private static Plugin plugin;
 
@@ -69,11 +71,11 @@ public class MoveCraft_EntityListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onCreatureSpawn(CreatureSpawnEvent event)
     {
-    /*    if (event.getSpawnReason() == SpawnReason.EGG) {
-            event.setCancelled(true);
-        if (event.getSpawnReason() == SpawnReason.EGG) {
+        /*if (event.getSpawnReason() == SpawnReason.EGG) {
+            event.setCancelled(true);*/
+        /*if (event.getSpawnReason() == SpawnReason.EGG) {
             event.setCancelled(false);*/
-    	if( event.getEntity().getWorld().getName().equalsIgnoreCase("alatyr (main)") )
+    	if( PermissionInterface.CheckEnabledWorld(event.getEntity().getLocation()) )
     	{
     		/*if( event.getEntity().getWorld().getBiome(event.getEntity().getLocation().getBlockX(), event.getEntity().getLocation().getBlockZ()) == Biome.OCEAN 
     				|| event.getEntity().getWorld().getBiome(event.getEntity().getLocation().getBlockX(), event.getEntity().getLocation().getBlockZ()) == Biome.FROZEN_OCEAN )
@@ -137,7 +139,7 @@ public class MoveCraft_EntityListener implements Listener {
     				
     		}
     		
-    		if( player.getWorld().getName().equalsIgnoreCase("admintest") )
+    		if( PermissionInterface.CheckBattleWorld(player.getLocation()) )
     		{
     			if ( event instanceof EntityDamageByEntityEvent ) 
     			{

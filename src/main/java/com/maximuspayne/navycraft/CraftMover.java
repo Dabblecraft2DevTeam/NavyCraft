@@ -46,8 +46,9 @@ import com.comphenix.protocol.ProtocolManager;
 //import com.comphenix.protocol.reflect.FuzzyReflection;
 //import com.comphenix.protocol.utility.MinecraftReflection;
 import com.earth2me.essentials.Essentials;
-import com.maximuspayne.AimCannonNC.AimCannon;
-import com.maximuspayne.AimCannonNC.OneCannon;
+import com.maximuspayne.aimcannon.AimCannon;
+import com.maximuspayne.aimcannon.OneCannon;
+import com.maximuspayne.navycraft.plugins.PermissionInterface;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -62,7 +63,6 @@ import net.minecraft.server.v1_11_R1.WorldServer;
 public class CraftMover {
 	private Craft craft;
 	public static Plugin plugin;
-	public AimCannon ac;
 	public WorldGuardPlugin wgp;
 
 	volatile boolean sinkUpdate = false;
@@ -77,8 +77,6 @@ public class CraftMover {
 	public CraftMover(Craft c, Plugin p) {
 		craft = c;
 		plugin = p;
-
-		ac = (AimCannon) plugin.getServer().getPluginManager().getPlugin("AimCannon");
 	}
 
 	public void setBlock(int id, Block block) {
@@ -217,7 +215,7 @@ public class CraftMover {
 					}
 
 					if (!stopSearch) {
-						OneCannon oc = new OneCannon(theBlock.getLocation(), plugin);
+						OneCannon oc = new OneCannon(theBlock.getLocation(), NavyCraft.instance);
 						if (oc.isValidCannon(theBlock)) {
 
 							for (OneCannon onec : AimCannon.getCannons()) {
@@ -1825,7 +1823,7 @@ public class CraftMover {
 
 		if (!craft.leftSafeDock && !NavyCraft.checkSpawnRegion(new Location(craft.world, craft.minX, craft.minY, craft.minZ)) && !NavyCraft.checkSpawnRegion(new Location(craft.world, craft.maxX, craft.maxY, craft.maxZ))) {
 			craft.leftSafeDock = true;
-			if (craft.world.getName().equalsIgnoreCase("alatyr (main)") && !craft.doCost) {
+			if (PermissionInterface.CheckEnabledWorld(craft.getLocation()) && !craft.doCost) {
 				if (craft.captainName != null) {
 					Player p = plugin.getServer().getPlayer(craft.captainName);
 					if ((p != null) && craft.isNameOnBoard.get(craft.captainName)) {
@@ -1885,7 +1883,7 @@ public class CraftMover {
 							NavyCraft.playerScoresWW2.put(p.getName(), playerNewExp);
 						}
 						p.sendMessage(ChatColor.GRAY + "You now have " + ChatColor.WHITE + playerNewExp + ChatColor.GRAY + " rank points.");
-						CraftMover.checkRankWW2(p, playerNewExp);
+						CraftMover.checkRankWorld(p, playerNewExp, craft.world);
 					}
 				}
 				NavyCraft.saveExperience();
@@ -1914,7 +1912,7 @@ public class CraftMover {
 							NavyCraft.playerScoresWW2.put(p.getName(), playerNewExp);
 						}
 						p.sendMessage(ChatColor.GRAY + "You now have " + ChatColor.WHITE + playerNewExp + ChatColor.GRAY + " rank points.");
-						CraftMover.checkRankWW2(p, playerNewExp);
+						CraftMover.checkRankWorld(p, playerNewExp, craft.world);
 					}
 				}
 				NavyCraft.saveExperience();
@@ -2112,7 +2110,7 @@ public class CraftMover {
 						} // end if sign
 
 						if (craft.doCost && (blockId == 23)) {
-							OneCannon oc = new OneCannon(newBlock.getLocation(), plugin);
+							OneCannon oc = new OneCannon(newBlock.getLocation(), NavyCraft.instance);
 
 							Dispenser dispenser = (Dispenser) newBlock.getState();
 							Inventory inventory = dispenser.getInventory();
@@ -2667,7 +2665,7 @@ public class CraftMover {
 			String line3 = "Fathometer:" + dukString;
 
 			String line1 = "Grid: ";
-			if (craft.world.getName().equalsIgnoreCase("alatyr (main)")) {
+			if (PermissionInterface.CheckEnabledWorld(craft.getLocation())) {
 				for (int i = 0; i < 2; i++) {
 					int cord = 0;
 					if (i == 0) {
@@ -5307,7 +5305,9 @@ public class CraftMover {
 	public void removeSupportBlocks() {
 		short blockId;
 		Block block;
-
+		if( craft.matrix == null )
+			return;
+		
 		for (int x = 0; x < craft.sizeX; x++) {
 			for (int z = 0; z < craft.sizeZ; z++) {
 				for (int y = craft.sizeY - 1; y > -1; y--) {
@@ -5552,7 +5552,7 @@ public class CraftMover {
 
 		wgp = (WorldGuardPlugin) plugin.getServer().getPluginManager().getPlugin("WorldGuard");
 		if ((wgp != null) && (loc != null)) {
-			if (!loc.getWorld().getName().equalsIgnoreCase("admintest") && !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("build")) { return true; }
+			if ( !PermissionInterface.CheckEnabledWorld(loc) ) { return true; }
 			RegionManager regionManager = wgp.getRegionManager(craft.world);
 
 			ApplicableRegionSet set = regionManager.getApplicableRegions(loc);
@@ -7165,12 +7165,12 @@ public class CraftMover {
 		}
 
 		plugin.getServer().broadcastMessage(broadcastMsg);
-		if ((NavyCraft.battleMode > 0) && craft.world.getName().equalsIgnoreCase("admintest")) {
+		if ((NavyCraft.battleMode > 0) && PermissionInterface.CheckBattleWorld(craft.getLocation())) {
 			battleLogger(logEntry);
 		}
 
 		if (craft.damagers.isEmpty()) {
-			if ((NavyCraft.battleMode > 0) && craft.world.getName().equalsIgnoreCase("admintest")) {
+			if ((NavyCraft.battleMode > 0) && PermissionInterface.CheckBattleWorld(craft.getLocation())) {
 				logEntry = "Unknown damage=" + craft.uncreditedDamage;
 				battleLogger(logEntry);
 			}
@@ -7238,7 +7238,7 @@ public class CraftMover {
 					}
 
 					plugin.getServer().broadcastMessage(broadcastMsg);
-					if ((NavyCraft.battleMode > 0) && craft.world.getName().equalsIgnoreCase("admintest")) {
+					if ((NavyCraft.battleMode > 0) && PermissionInterface.CheckBattleWorld(craft.getLocation())) {
 						battleLogger(logEntry);
 					}
 				}
@@ -7266,7 +7266,7 @@ public class CraftMover {
 					logEntry += p.getName();
 
 					plugin.getServer().broadcastMessage(broadcastMsg);
-					if ((NavyCraft.battleMode > 0) && craft.world.getName().equalsIgnoreCase("admintest")) {
+					if ((NavyCraft.battleMode > 0) && PermissionInterface.CheckBattleWorld(craft.getLocation())) {
 						battleLogger(logEntry);
 					}
 				}
@@ -7285,7 +7285,7 @@ public class CraftMover {
 				broadcastMsg += "Unknown damage";
 				logEntry += "Unknown damage";
 				plugin.getServer().broadcastMessage(broadcastMsg);
-				if ((NavyCraft.battleMode > 0) && craft.world.getName().equalsIgnoreCase("admintest")) {
+				if ((NavyCraft.battleMode > 0) && PermissionInterface.CheckBattleWorld(craft.getLocation())) {
 					battleLogger(logEntry);
 				}
 			}
@@ -7328,7 +7328,7 @@ public class CraftMover {
 				}
 			}
 
-			if (craft.world.getName().equalsIgnoreCase("alatyr (main)") && (!craft.crewNames.isEmpty() || (((System.currentTimeMillis() - craft.abandonTime) / 1000) < 180) || craft.isAutoCraft)) {
+			if (!PermissionInterface.CheckEnabledWorld(craft.getLocation()) && (!craft.crewNames.isEmpty() || (((System.currentTimeMillis() - craft.abandonTime) / 1000) < 180) || craft.isAutoCraft)) {
 				if (topPlayer != null) {
 					if (craft.crewHistory.contains(topPlayer.getName())) { return; }
 					int newExp = craft.blockCountStart;
@@ -7340,7 +7340,7 @@ public class CraftMover {
 						NavyCraft.playerScoresWW1.put(topPlayer.getName(), newExp);
 					}
 					topPlayer.sendMessage(ChatColor.GRAY + "You now have " + ChatColor.WHITE + newExp + ChatColor.GRAY + " rank points.");
-					checkRankWW1(topPlayer, newExp);
+					checkRankWorld(topPlayer, newExp, craft.world);
 					NavyCraft.saveExperience();
 				} else if ((topCraft != null) && (topCraft != craft)) {
 					for (String s : topCraft.crewNames) {
@@ -7369,14 +7369,14 @@ public class CraftMover {
 								NavyCraft.playerScoresWW1.put(p.getName(), playerNewExp);
 							}
 							p.sendMessage(ChatColor.GRAY + "You now have " + ChatColor.WHITE + playerNewExp + ChatColor.GRAY + " rank points.");
-							checkRankWW1(p, playerNewExp);
+							checkRankWorld(p, playerNewExp, craft.world);
 						}
 					}
 					NavyCraft.saveExperience();
 				}
 			}
 
-			if (craft.world.getName().equalsIgnoreCase("admintest") && (NavyCraft.battleMode > 0)) {
+			if (PermissionInterface.CheckBattleWorld(craft.getLocation()) && (NavyCraft.battleMode > 0)) {
 
 				if (topPlayer != null) {
 					if ((!NavyCraft.redPlayers.contains(topPlayer.getName()) && !NavyCraft.bluePlayers.contains(topPlayer.getName())) || (NavyCraft.redPlayers.contains(topPlayer.getName()) && !craft.blueTeam) || (NavyCraft.bluePlayers.contains(topPlayer.getName()) && !craft.redTeam)) { return; }
@@ -7391,7 +7391,7 @@ public class CraftMover {
 						NavyCraft.playerScoresWW2.put(topPlayer.getName(), playerNewExp);
 					}
 					topPlayer.sendMessage(ChatColor.GRAY + "You now have " + ChatColor.WHITE + playerNewExp + ChatColor.GRAY + " rank points.");
-					checkRankWW2(topPlayer, playerNewExp);
+					checkRankWorld(topPlayer, playerNewExp, craft.world);
 					NavyCraft.saveExperience();
 
 					if (NavyCraft.battleType == 1) {
@@ -7425,7 +7425,7 @@ public class CraftMover {
 								NavyCraft.playerScoresWW2.put(p.getName(), playerNewExp);
 							}
 							p.sendMessage(ChatColor.GRAY + "You now have " + ChatColor.WHITE + playerNewExp + ChatColor.GRAY + " rank points.");
-							checkRankWW2(p, playerNewExp);
+							checkRankWorld(p, playerNewExp, craft.world);
 						}
 					}
 					NavyCraft.saveExperience();
@@ -7441,7 +7441,7 @@ public class CraftMover {
 		}
 	}
 
-	public static void checkRankWW1(Player playerIn, int newExp) {
+	public static void checkRankWorld(Player playerIn, int newExp, World world) {
 		if (plugin == null) {
 			plugin = NavyCraft.instance;
 		}
@@ -7453,67 +7453,68 @@ public class CraftMover {
 			GroupManager gm = (GroupManager) groupPlugin;
 			WorldsHolder wd = gm.getWorldsHolder();
 
-			String groupName = wd.getWorldData("alatyr (main)").getUser(playerIn.getName()).getGroupName();
+			//String groupName = wd.getWorldData("alatyr (main)").getUser(playerIn.getName()).getGroupName();
+			String groupName = wd.getWorldData(playerIn.getWorld().getName()).getUser(playerIn.getName()).getGroupName();
 
 			if (groupName.equalsIgnoreCase("Default")) {
 
 				if (newExp >= 2000) {
 					Group g = new Group("LtJG");
-					wd.getWorldData("alatyr (main)").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(world.getName()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Lieutenant Junior Grade" + ChatColor.GREEN + " in War World 1!");
 				}
 			} else if (groupName.equalsIgnoreCase("LtJG")) {
 
 				if (newExp >= 6000) {
 					Group g = new Group("Lieutenant");
-					wd.getWorldData("alatyr (main)").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(world.getName()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Lieutenant" + ChatColor.GREEN + " in War World 1!");
 				}
 			} else if (groupName.equalsIgnoreCase("Lieutenant")) {
 				if (newExp >= 18000) {
 					Group g = new Group("Ltcm");
-					wd.getWorldData("alatyr (main)").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(world.getName()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Lieutenant Commander" + ChatColor.GREEN + " in War World 1!");
 				}
 			} else if (groupName.equalsIgnoreCase("Ltcm")) {
 				if (newExp >= 54000) {
 					Group g = new Group("Commander");
-					wd.getWorldData("alatyr (main)").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(world.getName()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Commander" + ChatColor.GREEN + " in War World 1!");
 				}
 
 			} else if (groupName.equalsIgnoreCase("Commander")) {
 				if (newExp >= 162000) {
 					Group g = new Group("Captain");
-					wd.getWorldData("alatyr (main)").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(world.getName()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Captain" + ChatColor.GREEN + " in War World 1!");
 				}
 
 			} else if (groupName.equalsIgnoreCase("Captain")) {
 				if (newExp >= 486000) {
 					Group g = new Group("RearAdmiral1");
-					wd.getWorldData("alatyr (main)").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(world.getName()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Rear Admiral (Lower)" + ChatColor.GREEN + " in War World 1!");
 				}
 
 			} else if (groupName.equalsIgnoreCase("RearAdmiral1")) {
 				if (newExp >= 1458000) {
 					Group g = new Group("RearAdmiral2");
-					wd.getWorldData("alatyr (main)").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(world.getName()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Rear Admiral (Upper)" + ChatColor.GREEN + " in War World 1!");
 				}
 
 			} else if (groupName.equalsIgnoreCase("RearAdmiral2")) {
 				if (newExp >= 4374000) {
 					Group g = new Group("ViceAdmiral");
-					wd.getWorldData("alatyr (main)").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(world.getName()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Vice Admiral" + ChatColor.GREEN + " in War World 1!");
 				}
 
 			} else if (groupName.equalsIgnoreCase("ViceAdmiral")) {
 				if (newExp >= 13122000) {
 					Group g = new Group("Admiral");
-					wd.getWorldData("alatyr (main)").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(world.getName()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Admiral" + ChatColor.GREEN + " in War World 1!");
 				}
 
@@ -7538,7 +7539,7 @@ public class CraftMover {
 		}
 	}
 
-	public static void checkRankWW2(Player playerIn, int newExp) {
+	/*public static void checkRankWW2(Player playerIn, int newExp) {
 		if (plugin == null) {
 			plugin = NavyCraft.instance;
 		}
@@ -7549,68 +7550,69 @@ public class CraftMover {
 			}
 			GroupManager gm = (GroupManager) groupPlugin;
 			WorldsHolder wd = gm.getWorldsHolder();
-			String groupName = wd.getWorldData("admintest").getUser(playerIn.getName()).getGroupName();
-
+			//String groupName = wd.getWorldData("admintest").getUser(playerIn.getName()).getGroupName();
+			String groupName = wd.getWorldData(playerIn.getWorld().getName()).getUser(playerIn.getName()).getGroupName();
+			
 			if (groupName.equalsIgnoreCase("Default")) {
 
 				if (newExp >= 2000) {
 					Group g = new Group("LtJG");
-					wd.getWorldData("admintest").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(playerIn.getWorld()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Lieutenant Junior Grade" + ChatColor.GREEN + " in War World 2!");
 				}
 			} else if (groupName.equalsIgnoreCase("LtJG")) {
 
 				if (newExp >= 6000) {
 					Group g = new Group("Lieutenant");
-					wd.getWorldData("admintest").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(playerIn.getWorld()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Lieutenant" + ChatColor.GREEN + " in War World 2!");
 				}
 			} else if (groupName.equalsIgnoreCase("Lieutenant")) {
 
 				if (newExp >= 18000) {
 					Group g = new Group("Ltcm");
-					wd.getWorldData("admintest").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(playerIn.getWorld()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Lieutenant Commander" + ChatColor.GREEN + " in War World 2!");
 				}
 			} else if (groupName.equalsIgnoreCase("Ltcm")) {
 				if (newExp >= 54000) {
 					Group g = new Group("Commander");
-					wd.getWorldData("admintest").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(playerIn.getWorld()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Commander" + ChatColor.GREEN + " in War World 2!");
 				}
 
 			} else if (groupName.equalsIgnoreCase("Commander")) {
 				if (newExp >= 162000) {
 					Group g = new Group("Captain");
-					wd.getWorldData("admintest").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(playerIn.getWorld()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Captain" + ChatColor.GREEN + " in War World 2!");
 				}
 
 			} else if (groupName.equalsIgnoreCase("Captain")) {
 				if (newExp >= 486000) {
 					Group g = new Group("RearAdmiral1");
-					wd.getWorldData("admintest").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(playerIn.getWorld()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Rear Admiral (Lower)" + ChatColor.GREEN + " in War World 2!");
 				}
 
 			} else if (groupName.equalsIgnoreCase("RearAdmiral1")) {
 				if (newExp >= 1458000) {
 					Group g = new Group("RearAdmiral2");
-					wd.getWorldData("admintest").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(playerIn.getWorld()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Rear Admiral (Upper)" + ChatColor.GREEN + " in War World 2!");
 				}
 
 			} else if (groupName.equalsIgnoreCase("RearAdmiral2")) {
 				if (newExp >= 4374000) {
 					Group g = new Group("ViceAdmiral");
-					wd.getWorldData("admintest").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(playerIn.getWorld()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Vice Admiral" + ChatColor.GREEN + " in War World 2!");
 				}
 
 			} else if (groupName.equalsIgnoreCase("ViceAdmiral")) {
 				if (newExp >= 13122000) {
 					Group g = new Group("Admiral");
-					wd.getWorldData("admintest").getUser(playerIn.getName()).setGroup(g);
+					wd.getWorldData(playerIn.getWorld()).getUser(playerIn.getName()).setGroup(g);
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + playerIn.getName() + " has been promoted to the rank of " + ChatColor.YELLOW + "Admiral" + ChatColor.GREEN + " in War World 2!");
 				}
 
@@ -7633,7 +7635,7 @@ public class CraftMover {
 			System.out.println("Group manager Error");
 			return;
 		}
-	}
+	}*/
 
 	public String idIntToString(int id) {
 		switch (id % 26) {

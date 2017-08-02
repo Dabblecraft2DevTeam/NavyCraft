@@ -24,6 +24,7 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -75,6 +76,7 @@ public class NavyCraft extends JavaPlugin {
 	
 	public static int battleMode=-1; //-1 false, 0 queue, 1 battle
 	public static int battleType=-1;
+	public static World battleWorld;
 	public static boolean battleLockTeams=false;
 	public static ArrayList<String> bluePlayers = new ArrayList<String>();
 	public static ArrayList<String> redPlayers = new ArrayList<String>();
@@ -190,7 +192,7 @@ public class NavyCraft extends JavaPlugin {
 
 		BlocksInfo.loadBlocksInfo();
 		loadProperties();
-		PermissionInterface.setupPermissions();
+		PermissionInterface.setupPermissions(this);
 		
 		PluginManager manager = getServer().getPluginManager();
 		 
@@ -377,7 +379,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") &&  !loc.getWorld().getName().equalsIgnoreCase("admintest") &&  !loc.getWorld().getName().equalsIgnoreCase("build") )
+    		if( !PermissionInterface.CheckEnabledWorld(loc) )
     		{
     			return 0;
     		}
@@ -412,7 +414,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") )
+    		if( !PermissionInterface.CheckEnabledWorld(loc) )
     		{
     			return false;
     		}
@@ -442,7 +444,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("admintest") )
+    		if( !!PermissionInterface.CheckEnabledWorld(loc) )
     		{
     			return false;
     		}
@@ -472,7 +474,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("admintest") )
+    		if( !!PermissionInterface.CheckEnabledWorld(loc) )
     		{
     			return false;
     		}
@@ -502,7 +504,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") )
+    		if( !PermissionInterface.CheckEnabledWorld(loc) )
     		{
     			return false;
     		}
@@ -532,7 +534,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("admintest") )
+    		if( !PermissionInterface.CheckEnabledWorld(loc) )
     		{
     			return false;
     		}
@@ -562,7 +564,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !loc.getWorld().getName().equalsIgnoreCase("alatyr (main)") && !loc.getWorld().getName().equalsIgnoreCase("admintest") )
+    		if( !PermissionInterface.CheckEnabledWorld(loc) )
     		{
     			return false;
     		}

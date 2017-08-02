@@ -50,7 +50,7 @@ public class TeleportFix implements Listener {
 				// Refresh nearby clients
 				updateEntities(getPlayersWithin(player, visibleDistance));
 				
-				System.out.println("Applying fix ... " + visibleDistance);
+				//System.out.println("Applying fix ... " + visibleDistance);
 			}
 		}, TELEPORT_FIX_DELAY);
 	}

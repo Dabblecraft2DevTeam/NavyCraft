@@ -30,6 +30,8 @@ public class ConfigFile {
 		ConfigSettings.put("ForbiddenBlocks", "29,33,34,36,52,90,95,97,116,119,120,130,137,138,145,146");
 		ConfigSettings.put("DisableHyperSpaceField", "false");
 		
+		ConfigSettings.put("EnabledWorlds", "ww1,ww2");
+		ConfigSettings.put("BattleWorlds", "ww1,ww2");
 		ConfigSettings.put("Ship1_StartX", "16");
 		ConfigSettings.put("Ship1_EndX", "1286");
 		ConfigSettings.put("Ship1_WidthX", "14");

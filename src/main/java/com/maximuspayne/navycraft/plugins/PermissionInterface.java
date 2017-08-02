@@ -4,8 +4,10 @@ package com.maximuspayne.navycraft.plugins;
 import com.maximuspayne.navycraft.CraftType;
 import com.maximuspayne.navycraft.NavyCraft;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 /**
@@ -13,26 +15,28 @@ import org.bukkit.plugin.PluginManager;
 */
 
 public class PermissionInterface {
+	public static NavyCraft plugin;
 	//public static PermissionInfo Permissions = null;
 
-	public static void setupPermissions() {
+	public static void setupPermissions(NavyCraft p) {
+		plugin = p;
 		PluginManager pm = NavyCraft.instance.getServer().getPluginManager();
 //test.
 		if(pm != null) {
-			pm.addPermission(new Permission("seacraft.periscope.use"));
-			pm.addPermission(new Permission("seacraft.aa-gun.use"));
-			pm.addPermission(new Permission("seacraft.periscope.create"));
-			pm.addPermission(new Permission("seacraft.aa-gun.create"));
+			pm.addPermission(new Permission("navycraft.periscope.use"));
+			pm.addPermission(new Permission("navycraft.aa-gun.use"));
+			pm.addPermission(new Permission("navycraft.periscope.create"));
+			pm.addPermission(new Permission("navycraft.aa-gun.create"));
 			
 			for (CraftType type : CraftType.craftTypes) 
 			{
-				pm.addPermission(new Permission("seacraft." + type.name + ".release"));
-				pm.addPermission(new Permission("seacraft." + type.name + ".info"));
-				pm.addPermission(new Permission("seacraft." + type.name + ".takeover"));
-				pm.addPermission(new Permission("seacraft." + type.name + ".start"));
-				pm.addPermission(new Permission("seacraft." + type.name + ".create"));
-				pm.addPermission(new Permission("seacraft." + type.name + ".sink"));
-				pm.addPermission(new Permission("seacraft." + type.name + ".remove"));
+				pm.addPermission(new Permission("navycraft." + type.name + ".release"));
+				pm.addPermission(new Permission("navycraft." + type.name + ".info"));
+				pm.addPermission(new Permission("navycraft." + type.name + ".takeover"));
+				pm.addPermission(new Permission("navycraft." + type.name + ".start"));
+				pm.addPermission(new Permission("navycraft." + type.name + ".create"));
+				pm.addPermission(new Permission("navycraft." + type.name + ".sink"));
+				pm.addPermission(new Permission("navycraft." + type.name + ".remove"));
 			}
 		}
 	}
@@ -101,5 +105,30 @@ public class PermissionInterface {
 				//player.sendMessage("You do not have permission to perform " + command);
 				return false;
 		    }
+	}
+	
+	public static boolean CheckEnabledWorld(Location loc) {
+		if(plugin.ConfigSetting("EnabledWorlds") != "null") {
+			String[] worlds = NavyCraft.instance.ConfigSetting("EnabledWorlds").split(",");
+			for(int i = 0; i < worlds.length; i++) {
+				if( loc.getWorld().getName().equalsIgnoreCase(worlds[i]) )
+				{
+					return true;
+				}
+					
+			}
+		}
+		return false;
+	}
+	
+	public static boolean CheckBattleWorld(Location loc) {
+		if(plugin.ConfigSetting("BattleWorlds") != "null") {
+			String[] worlds = NavyCraft.instance.ConfigSetting("BattleWorlds").split(",");
+			for(int i = 0; i < worlds.length; i++) {
+				if( loc.getWorld().getName().equalsIgnoreCase(worlds[i]) )
+					return true;
+			}
+		}
+		return false;
 	}
 }

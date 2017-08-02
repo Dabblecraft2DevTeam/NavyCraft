@@ -35,6 +35,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import com.earth2me.essentials.Essentials;
+import com.maximuspayne.aimcannon.AimCannonPlayerListener;
 import com.maximuspayne.navycraft.plugins.PermissionInterface;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EditSession;
@@ -62,12 +63,12 @@ import com.sk89q.worldguard.protection.managers.storage.StorageException;
 
 public class MoveCraft_BlockListener implements Listener {
 	public static Craft updatedCraft = null;
-	private static Plugin plugin;
+	private static NavyCraft plugin;
 	public static WorldEditPlugin wep;
 	public static WorldGuardPlugin wgp;
 	public static int lastSpawn = -1;
 
-	public MoveCraft_BlockListener(Plugin p) {
+	public MoveCraft_BlockListener(NavyCraft p) {
 		plugin = p;
 	}
 
@@ -961,7 +962,7 @@ public class MoveCraft_BlockListener implements Listener {
 				return;
 			}
 
-			if ((playerRank < Craft.playerClipboardsRank.get(player)) && (freeSpawnRankLimit < Craft.playerClipboardsRank.get(player))) {
+			if ((playerRank < Craft.playerClipboardsRank.get(player)) && (freeSpawnRankLimit < Craft.playerClipboardsRank.get(player)) && !player.isOp()) {
 				player.sendMessage("You do not have the rank to spawn this vehicle.");
 				return;
 			}
@@ -1891,7 +1892,7 @@ public class MoveCraft_BlockListener implements Listener {
 				}
 				Craft testCraft = Craft.getCraft(block.getX(), block.getY(), block.getZ());
 				// if(playerCraft == null && testCraft != null && testCraft.player == null )
-				if ((testCraft != null) && ((testCraft.captainName == null) || testCraft.abandoned || (testCraft.captainAbandoned && !craftTypeName.equalsIgnoreCase("Controls")))) {
+				if ((testCraft != null) && ((testCraft.captainName == null) || testCraft.abandoned || (testCraft.captainAbandoned && !craftTypeName.equalsIgnoreCase("controls")))) {
 					// check restrictions
 					/*
 					 * String restriction = sign.getLine(2).trim(); if(!restriction.equals("") && restriction != null) {
@@ -1899,7 +1900,7 @@ public class MoveCraft_BlockListener implements Listener {
 					 * + "You do not have permission to use this sign"); return; } }
 					 */
 
-					if (!player.hasPermission("seacraft." + testCraft.type.name + ".takeover") && !player.isOp()) {
+					if (!player.hasPermission("navycraft." + testCraft.type.name + ".takeover") && !player.isOp()) {
 						player.sendMessage(ChatColor.RED + "You do not have permission to takeover this vehicle.");
 						return;
 					}
@@ -2068,7 +2069,7 @@ public class MoveCraft_BlockListener implements Listener {
 				 * "You do not have permission to use this sign"); return; } }
 				 */
 
-				if (!player.hasPermission("seacraft." + craftType.name + ".start") && !player.isOp()) {
+				if (!player.hasPermission("navycraft." + craftType.name + ".start") && !player.isOp()) {
 					player.sendMessage(ChatColor.RED + "You do not have permission to initialize this type of vehicle.");
 					return;
 				}
@@ -2213,7 +2214,7 @@ public class MoveCraft_BlockListener implements Listener {
 		// if the first line of the sign is a craft type, get the matching craft type.
 		CraftType craftType = CraftType.getCraftType(craftTypeName);
 
-		if (!player.isOp() && (((craftType != null) || craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("select") || craftTypeName.equalsIgnoreCase("claim") || craftTypeName.equalsIgnoreCase("spawn") || craftTypeName.equalsIgnoreCase("recall") || craftTypeName.equalsIgnoreCase("target") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")) && !PermissionInterface.CheckPermission(player, "seacraft." + craftTypeName + ".create"))) {
+		if (!player.isOp() && (((craftType != null) || craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("select") || craftTypeName.equalsIgnoreCase("claim") || craftTypeName.equalsIgnoreCase("spawn") || craftTypeName.equalsIgnoreCase("recall") || craftTypeName.equalsIgnoreCase("target") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")) && !PermissionInterface.CheckPermission(player, "navycraft." + craftTypeName + ".create"))) {
 			player.sendMessage("You don't have permission to create this type of sign!");
 			event.setCancelled(true);
 		}
@@ -2222,7 +2223,7 @@ public class MoveCraft_BlockListener implements Listener {
 		// System.out.println("Updated craft is " + updatedCraft.name + " of type " + updatedCraft.type.name);
 
 		/*
-		 * if( theCraft != null ) { if ( !player.isOp() && ( (craftTypeName.equalsIgnoreCase("helm") ||
+		 * if( theCraft != null ) { if ( !player.isOp() && ( (craftTypeName.equalsIgnoreCase("controls") ||
 		 * craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("nav") ||
 		 * craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("select") ||
 		 * craftTypeName.equalsIgnoreCase("spawn") || craftTypeName.equalsIgnoreCase("recall") ||
@@ -2246,7 +2247,7 @@ public class MoveCraft_BlockListener implements Listener {
 		}
 		// }
 
-		if ((player.getWorld().getName().equalsIgnoreCase("alatyr (main)") || player.getWorld().getName().equalsIgnoreCase("build")) && ((craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")))) {
+		if (PermissionInterface.CheckBattleWorld(player.getLocation()) && ((craftTypeName.equalsIgnoreCase("controls") || craftTypeName.equalsIgnoreCase("nav") || craftTypeName.equalsIgnoreCase("periscope") || craftTypeName.equalsIgnoreCase("aa-gun") || craftTypeName.equalsIgnoreCase("radar") || craftTypeName.equalsIgnoreCase("detector") || craftTypeName.equalsIgnoreCase("sonar") || craftTypeName.equalsIgnoreCase("hydrophone") || craftTypeName.equalsIgnoreCase("subdrive") || craftTypeName.equalsIgnoreCase("firecontrol") || craftTypeName.equalsIgnoreCase("passivesonar") || craftTypeName.equalsIgnoreCase("activesonar") || craftTypeName.equalsIgnoreCase("hfsonar") || craftTypeName.equalsIgnoreCase("launcher") || craftTypeName.equalsIgnoreCase("engine") || craftTypeName.equalsIgnoreCase("tdc") || craftTypeName.equalsIgnoreCase("radio")))) {
 			int cost = 0;
 			if (craftTypeName.equalsIgnoreCase("controls")) {
 				cost = 50;
@@ -2437,7 +2438,7 @@ public class MoveCraft_BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockBreak(BlockBreakEvent event) {
 		Player p = event.getPlayer();
-		if (p.getWorld().getName().equalsIgnoreCase("admintest") && (p.getGameMode() != GameMode.CREATIVE)) {
+		if (PermissionInterface.CheckBattleWorld(p.getLocation()) && (p.getGameMode() != GameMode.CREATIVE)) {
 			if (MoveCraft_PlayerListener.checkForTarget(event.getBlock())) {
 				p.sendMessage(ChatColor.RED + "This sign can only be destroyed by an explosive!");
 				event.setCancelled(true);
@@ -2660,7 +2661,7 @@ public class MoveCraft_BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void inventoryClickEvent(final InventoryClickEvent event) {
 		if (!event.isCancelled()) {
-			if (event.getWhoClicked().getWorld().getName().equalsIgnoreCase("alatyr (main)") || event.getWhoClicked().getWorld().getName().equalsIgnoreCase("build")) {
+			if ( PermissionInterface.CheckBattleWorld(event.getWhoClicked().getLocation()) ) {
 				if ((event.getInventory().getType() == InventoryType.DISPENSER) && (event.getRawSlot() == 4) && ((event.getCurrentItem().getTypeId() == 388) || (event.getCursor().getTypeId() == 388))) {
 					event.setCancelled(true);
 				}
@@ -3949,7 +3950,19 @@ public class MoveCraft_BlockListener implements Listener {
 			}
 			GroupManager gm = (GroupManager) groupPlugin;
 			WorldsHolder wd = gm.getWorldsHolder();
-			groupName = wd.getWorldData("alatyr (main)").getUser(player).getGroupName();
+			
+			String worldname = "";
+			if(plugin.ConfigSetting("EnabledWorlds") != "null") {
+				String[] worlds = NavyCraft.instance.ConfigSetting("EnabledWorlds").split(",");
+				worldname = worlds[0];
+			}
+			
+			if( worldname == "" )
+			{
+				System.out.println("Group manager error");
+				return;
+			}
+			groupName = wd.getWorldData(worldname).getUser(player).getGroupName();
 
 			if (groupName.equalsIgnoreCase("Default")) {
 				NavyCraft.playerDDRewards.put(player, 1);
@@ -4071,7 +4084,8 @@ public class MoveCraft_BlockListener implements Listener {
 				NavyCraft.playerCARewards.put(player, 1);
 				NavyCraft.playerHANGAR2Rewards.put(player, 4);
 			}
-
+			
+/*
 			groupName = wd.getWorldData("admintest").getUser(player).getGroupName();
 
 			if (groupName.equalsIgnoreCase("Default")) {
@@ -4271,7 +4285,7 @@ public class MoveCraft_BlockListener implements Listener {
 				} else {
 					NavyCraft.playerCARewards.put(player, 1);
 				}
-			}
+			}*/
 
 			NavyCraft.loadRewardsFile();
 
@@ -4406,11 +4420,14 @@ public class MoveCraft_BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockDispense(final BlockDispenseEvent event) {
 		if (!event.isCancelled()) {
-			if (event.getBlock().getWorld().getName().equalsIgnoreCase("alatyr (main)") && (event.getItem().getType() == Material.EMERALD)) {
+			if (PermissionInterface.CheckBattleWorld(event.getBlock().getLocation()) && (event.getItem().getType() == Material.EMERALD)) {
 				event.setCancelled(true);
 			}
 
 		}
+		
+		if(!event.isCancelled())
+			AimCannonPlayerListener.onBlockDispense(event);
 	}
 
 }
