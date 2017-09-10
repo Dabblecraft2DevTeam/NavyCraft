@@ -28,6 +28,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="jars/AimCannonNC.jar"/>
 	<classpathentry kind="lib" path="jars/BKCommonLib.jar"/>
 	<classpathentry kind="lib" path="jars/craftbukkit-1.11.2.jar"/>
 	<classpathentry kind="lib" path="jars/Essentials-2.x-SNAPSHOT.jar"/>
