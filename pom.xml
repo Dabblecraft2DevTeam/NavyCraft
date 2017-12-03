@@ -80,9 +80,9 @@
         </dependency>
 	<dependency>
            	 <groupId>org.anjocadio</groupId>
-           	 <artifactId>EssesntialsGroupManager2.14.57</artifactId>
+           	 <artifactId>EssesntialsGroupManager</artifactId>
             	<version>LATEST</version>
-          	<systemPath>${project.basedir}/jars/EssesntialsGroupManager2.14.57.jar</systemPath>
+          	<systemPath>${project.basedir}/jars/EssentialsGroupManager2.14.57.jar</systemPath>
                 <scope>system</scope>
         </dependency>
 	<dependency>
