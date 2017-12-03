@@ -42,4 +42,50 @@
 		</plugins>
 	</build>
 	<url>https://github.com/Dabblecraft2DevTeam/NavyCraft</url>
+		<dependencies>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>LATEST</version>
+			<systemPath>${project.basedir}/jars/craftbukkit-1.11.2.jar</systemPath>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+        		<groupId>com.sk89q</groupId>
+        		<artifactId>worldguard</artifactId>
+        		<version>LATEST</version>
+			<systemPath>${project.basedir}/jars/worldguard-legacy-6.1.3-SNAPSHOT-dist.jar</systemPath>
+        </dependency>
+		<dependency>
+        	<groupId>com.sk89q</groupId>
+        	<artifactId>worldedit</artifactId>
+        	<version>LATEST</version>
+		<systemPath>${project.basedir}/jars/worldedit-bukkit-6.1.3-SNAPSHOT-dist (1).jar</systemPath>
+        </dependency>
+		<dependency>
+           	 <groupId>net.ess3</groupId>
+           	 <artifactId>Essentials</artifactId>
+           	 <version>LATEST</version>
+		 <systemPath>${project.basedir}/jars/Essentials-2.x-SNAPSHOT.jar</systemPath>
+        </dependency>
+		<dependency>
+            	<groupId>com.comphenix</groupId>
+           	 <artifactId>ProtocolLib</artifactId>
+           	 <version>LATEST</version>
+           	 <systemPath>${project.basedir}/jars/ProtocolLib.jar</systemPath>
+        </dependency>
+		<dependency>
+           	 <groupId>org.anjocadio</groupId>
+           	 <artifactId>EssesntialsGroupManager2.14.57</artifactId>
+            	<version>LATEST</version>
+          	<systemPath>${project.basedir}/jars/EssesntialsGroupManager2.14.57.jar</systemPath>
+        </dependency>
+        </dependency>
+		<dependency>
+           	 <groupId>com.bergerkiller</groupId>
+           	 <artifactId>BKCommonLib</artifactId>
+            	<version>LATEST</version>
+          	<systemPath>${project.basedir}/jars/BKCommonLib.jar</systemPath>
+        </dependency>
+	</dependencies>
 </project>
