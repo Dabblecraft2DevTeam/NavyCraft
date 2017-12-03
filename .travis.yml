@@ -1,4 +1,3 @@
 language: maven
 rvm:
-  - maven
-  - java
+  - clean-package
