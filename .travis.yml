@@ -9,3 +9,5 @@ cache:
 
 script:
   - mvn clean install -B && mvn clean -B
+after_test:
+ - travis-artifacts upload --target-path target/
