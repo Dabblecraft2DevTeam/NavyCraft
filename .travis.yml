@@ -1,4 +1,2 @@
 language: maven
-rvm:
-  - clean-package
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
