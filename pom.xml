@@ -80,7 +80,6 @@
             	<version>LATEST</version>
           	<systemPath>${project.basedir}/jars/EssesntialsGroupManager2.14.57.jar</systemPath>
         </dependency>
-        </dependency>
 	<dependency>
            	 <groupId>com.bergerkiller</groupId>
            	 <artifactId>BKCommonLib</artifactId>
