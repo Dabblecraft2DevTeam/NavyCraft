@@ -1,0 +1,4 @@
+language: maven
+rvm:
+  - Maven
+  - Java
