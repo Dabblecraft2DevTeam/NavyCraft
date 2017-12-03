@@ -1,3 +1,11 @@
-language: maven
-mvn:
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+sudo: false
+
+language: java
+jdk: oraclejdk8
+
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+
+script:
+  - mvn clean install -B && mvn clean -B
