@@ -48,7 +48,7 @@
 			<artifactId>bukkit</artifactId>
 			<version>LATEST</version>
 			<systemPath>${project.basedir}/jars/craftbukkit-1.11.2.jar</systemPath>
-			<scope>provided</scope>
+			<scope>system</scope>
 	</dependency>
 	<dependency>
         		<groupId>com.sk89q</groupId>
