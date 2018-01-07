@@ -1104,7 +1104,7 @@ public class MoveCraft_PlayerListener implements Listener {
 							|| PermissionInterface.CheckBattleWorld(player.getLocation()))
 					&& !NavyCraft.checkSafeDockRegion(player.getLocation())) {
 				Set<Material> hs = new HashSet<>();
-				hs.add((null) );
+				hs.add((byte) 0x0);
 				Block block = player.getTargetBlock((Set<Material>) null, 200);
 				if (block != null) {
 					System.out.println("Shears used:" + player.getName() + " X:" + block.getX() + " Y:" + block.getY()
@@ -1137,9 +1137,9 @@ public class MoveCraft_PlayerListener implements Listener {
 							|| PermissionInterface.CheckBattleWorld(player.getLocation()))
 					&& !NavyCraft.checkSafeDockRegion(player.getLocation())) {
 				Set<Material> hs = new HashSet<>();
-				hs.add((null) );
-				hs.add((null) );
-				hs.add((null) );
+				hs.add((byte) 0x0);
+				hs.add((byte) 0x8);
+				hs.add((byte) 0x9);
 				Block block = player.getTargetBlock((Set<Material>) null, 200);
 
 				if (block != null) {
