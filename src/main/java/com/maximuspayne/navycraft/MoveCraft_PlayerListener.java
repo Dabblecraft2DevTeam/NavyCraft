@@ -19,7 +19,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -55,7 +55,7 @@ import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import net.ess3.api.MaxMoneyException;
-import net.minecraft.server.v1_12_R1.EntityPlayer;
+import net.minecraft.server.v1_11_R1.EntityPlayer;
 
 public class MoveCraft_PlayerListener implements Listener {
 

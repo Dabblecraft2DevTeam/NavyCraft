@@ -30,8 +30,8 @@ import org.bukkit.block.Dropper;
 import org.bukkit.block.Furnace;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -55,10 +55,10 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import net.ess3.api.MaxMoneyException;
-import net.minecraft.server.v1_12_R1.EntityHuman;
-import net.minecraft.server.v1_12_R1.EntityTracker;
-import net.minecraft.server.v1_12_R1.EntityTrackerEntry;
-import net.minecraft.server.v1_12_R1.WorldServer;
+import net.minecraft.server.v1_11_R1.EntityHuman;
+import net.minecraft.server.v1_11_R1.EntityTracker;
+import net.minecraft.server.v1_11_R1.EntityTrackerEntry;
+import net.minecraft.server.v1_11_R1.WorldServer;
 
 public class CraftMover {
 	private Craft craft;
