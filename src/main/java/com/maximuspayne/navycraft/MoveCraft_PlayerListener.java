@@ -19,7 +19,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -55,10 +55,12 @@ import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import net.ess3.api.MaxMoneyException;
-import net.minecraft.server.v1_11_R1.EntityPlayer;
+import net.minecraft.server.v1_12_R1.Entity;
+import net.minecraft.server.v1_12_R1.EntityPlayer;
 
 public class MoveCraft_PlayerListener implements Listener {
-
+	
+	private static HashSet<Material> hs;
 	public Plugin plugin;
 	public WorldGuardPlugin wgp;
 	public WorldEditPlugin wep;
@@ -1103,9 +1105,12 @@ public class MoveCraft_PlayerListener implements Listener {
 					&& (PermissionInterface.CheckEnabledWorld(player.getLocation())
 							|| PermissionInterface.CheckBattleWorld(player.getLocation()))
 					&& !NavyCraft.checkSafeDockRegion(player.getLocation())) {
-				HashSet<Byte> hs = new HashSet<>();
-				hs.add((byte) 0x0);
-				Block block = player.getTargetBlock(hs, 200);
+				//HashSet<Byte> hs = new HashSet<>();
+				//hs.add((byte) 0x0);
+				//Block block = player.getTargetBlock(hs, 200);
+				Set<Material> transp = new HashSet<>();
+				transp.add(Material.AIR);
+				Block block = player.getTargetBlock(transp, 300);
 				if (block != null) {
 					System.out.println("Shears used:" + player.getName() + " X:" + block.getX() + " Y:" + block.getY()
 							+ " Z:" + block.getZ());
@@ -1136,11 +1141,11 @@ public class MoveCraft_PlayerListener implements Listener {
 					&& (PermissionInterface.CheckEnabledWorld(player.getLocation())
 							|| PermissionInterface.CheckBattleWorld(player.getLocation()))
 					&& !NavyCraft.checkSafeDockRegion(player.getLocation())) {
-				HashSet<Byte> hs = new HashSet<>();
-				hs.add((byte) 0x0);
-				hs.add((byte) 0x8);
-				hs.add((byte) 0x9);
-				Block block = player.getTargetBlock(hs, 200);
+				Set<Material> transp = new HashSet<>();
+                transp.add(Material.AIR);
+                transp.add(Material.STATIONARY_WATER);
+                transp.add(Material.WATER);
+                Block block = player.getTargetBlock(transp, 300);
 
 				if (block != null) {
 					System.out.println("Golden Shovel used:" + player.getName() + " X:" + block.getX() + " Y:"

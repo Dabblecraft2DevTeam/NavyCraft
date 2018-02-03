@@ -29,13 +29,16 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/BKCommonLib.jar"/>
-	<classpathentry kind="lib" path="jars/craftbukkit-1.11.2.jar"/>
 	<classpathentry kind="lib" path="jars/Essentials-2.x-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="jars/EssentialsGroupManager2.14.57.jar"/>
 	<classpathentry kind="lib" path="jars/Navycraft.jar"/>
 	<classpathentry kind="lib" path="jars/ProtocolLib.jar"/>
-	<classpathentry kind="lib" path="jars/spigot-1.10.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/keough99/workspace/NavyCraft/jars/worldedit-bukkit-6.1.3-SNAPSHOT-dist (1).jar"/>
-	<classpathentry kind="lib" path="C:/Users/keough99/workspace/NavyCraft/jars/worldguard-legacy-6.1.3-SNAPSHOT-dist.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/EssentialsXGroupManager-2.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/spigot-1.12.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/worldedit-bukkit-6.1.3-SNAPSHOT-dist (1).jar"/>
+	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/worldedit-bukkit-6.1.9-SNAPSHOT-dist.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/worldguard-legacy-6.1.3-SNAPSHOT-dist.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/worldguard-legacy-6.2.2-SNAPSHOT-dist.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/spigot-1.10.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
