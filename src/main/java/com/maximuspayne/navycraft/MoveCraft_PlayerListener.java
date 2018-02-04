@@ -3670,16 +3670,8 @@ public class MoveCraft_PlayerListener implements Listener {
 								+ ChatColor.GRAY + " rank points.");
 					} else {
 						player.sendMessage("That command does not work in this world");
-					}
-					
-					int exp = 0;
-					if (NavyCraft.playerScoresWW1.containsKey(player.getName())) {
-						exp = NavyCraft.playerScoresWW1.get(player.getName());
-					}
-					player.sendMessage(ChatColor.GRAY + "Your WW1 rank is " + ChatColor.WHITE + groupName
-							+ ChatColor.GRAY + " and you have " + ChatColor.WHITE + exp + "/" + nextRankXP
-							+ ChatColor.GRAY + " rank points.");
-				} else {
+					} 
+				}else {
 					player.sendMessage("Group manager error");
 					return;
 				}
