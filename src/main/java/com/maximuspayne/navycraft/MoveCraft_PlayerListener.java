@@ -3670,7 +3670,8 @@ public class MoveCraft_PlayerListener implements Listener {
 								+ ChatColor.GRAY + " rank points.");
 					} else {
 						player.sendMessage("That command does not work in this world");
-					} else {
+					} 
+				}else {
 					player.sendMessage("Group manager error");
 					return;
 				}
