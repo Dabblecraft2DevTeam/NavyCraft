@@ -8,6 +8,6 @@ cache:
     - '$HOME/.m2/repository'
 
 script:
-  - mvn clean install -B && mvn clean -B
+  - mvn clean install -B
 after_test:
  - travis-artifacts upload --target-path target/
