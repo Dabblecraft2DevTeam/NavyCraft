@@ -35,5 +35,6 @@
 	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/ProtocolLib.jar"/>
 	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/worldedit-bukkit-6.1.9-SNAPSHOT-dist.jar"/>
 	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/worldguard-legacy-6.2.2-SNAPSHOT-dist.jar"/>
+	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/Navycraft.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
