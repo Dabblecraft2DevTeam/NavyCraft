@@ -1,6 +1,6 @@
 package com.maximuspayne.navycraft.database;
 
-import javax.persistence.Entity;
+/*import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,7 +19,7 @@ public class EBeansHandler {
 	import com.afforess.minecartmaniacore.utils.StringUtils;
 	import com.afforess.minecartmaniacore.world.MinecartManiaWorld;
 	*/
-	public class MinecartOwner {
+	/*public class MinecartOwner {
 		@Id
 		private int id;
 		@NotNull
@@ -91,6 +91,6 @@ public class EBeansHandler {
 
 		
 
-	}
+	/*}
 
-}
+}*/
