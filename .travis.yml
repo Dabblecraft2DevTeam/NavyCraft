@@ -12,7 +12,8 @@ deploy:
   provider: releases
   api_key:
     secure: XoqlZYmhT/ExdCAx96mtOFMs/kD5eJhiwP4XTzm4NLgIvZ7s/KxPMNPtiikO/EjgYiPSD6zxwu+nnabj0j3500A7MotU4MQGFeRxy2BgAfIFWCq+8DdG1UCbSgF3BORn3JzNMNOk+tdrRs/7HYGQZDdJ8fTZ42jwf9OTewIS4MiWgLzHRyAdHMsAZSmwdqifH2Aai8PVRZkcvLsGAlc9Fay/2ETOi+3OScXn63VR0Qq5Ukfitj7qICRxtPFlerfMiSMIuKgxANk/OxuBUtZz2m0iI6p+HaCxqNSKk9suioGfBRfg2+gFJyGbP9ssdRM7i+kYfv7Rb5wjbWkkC+ZUgV2etfLR/ef5lZmu0rTPh4JVa3u8u2AF1snyD0oZ/LpucCz1Zj4osJCNqXwYF37D1tVGfAkIjVEhp09sOziDdbJJKqvFKJOACNSVfcf3r8I5k+0na6t6g0R4ejDhfHPYcWFy/U5M5uhiCdbDuajzVxlW8CCzu7GlQH/0OlcCCChroOnvAUR64DQq7Nx91RhJjk/dt9x+ve6irDOuzjGfKlDyOk5H23fhHJ76CKqaduCpcFL/cwcpMlOIOj7ubtS4Voux4XvX56Rh7YIrpIVcA60r1Sf6TW11r1rq56hNJXy5gIpUtjRvOH4B76cXL45UumAQdd4wGmStD2vTVbR4PXg=
-  file: ".travis.yml"
+  file: "NavyCraft.jar"
   on:
     repo: Dabblecraft2DevTeam/NavyCraft
     branch: Dev
+    tags: true
