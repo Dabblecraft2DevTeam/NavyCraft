@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 
 import com.maximuspayne.navycraft.NavyCraft;
 
@@ -16,10 +17,12 @@ public class AimCannonPlayerListener implements Listener {
 
     public static void onPlayerInteract(PlayerInteractEvent event) {
     	
+    	if (event.getHand() != EquipmentSlot.HAND)
+    		return;
+    	
     ///////stone button
 	if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK ) {
 	    if (event.getClickedBlock().getType() == Material.STONE_BUTTON) {
-		// System.out.print("Button clicked");
 		Block b = null;
 		if (event.getClickedBlock().getRelative(BlockFace.NORTH_EAST).getType() == Material.DISPENSER) {
 		    b = event.getClickedBlock().getRelative(BlockFace.NORTH_EAST);
@@ -58,7 +61,6 @@ public class AimCannonPlayerListener implements Listener {
 					    if (onec.isCharged() ) {
 						onec.Action(event.getPlayer());
 					    } else {
-						// System.out.print("Load Cannon first");
 						event.getPlayer().sendMessage("Load Cannon first.. (left click Dispenser)");
 					    }
 					}else
@@ -104,7 +106,6 @@ public class AimCannonPlayerListener implements Listener {
 	    //////Levers
 	    if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK ) {
 		    if (event.getClickedBlock().getType() == Material.LEVER) {
-			// System.out.print("Lever used");
 			Block b = null;
 			
 			////cannon levers
@@ -291,13 +292,11 @@ public class AimCannonPlayerListener implements Listener {
 		// new Cannon
 		OneCannon oc = new OneCannon(event.getClickedBlock().getLocation(), NavyCraft.instance);
 		if (oc.isValidCannon(event.getClickedBlock())) {
-		    // System.out.print("New Cannon");
 			if( event.getAction() == Action.LEFT_CLICK_BLOCK )
 				oc.Charge(event.getPlayer(), true);
 			else
 				oc.Charge(event.getPlayer(), false);
 		    AimCannon.cannons.add(oc);
-		    // event.getPlayer().sendMessage("Cannon charged..");
 		}
 	    }
 	    
@@ -306,16 +305,14 @@ public class AimCannonPlayerListener implements Listener {
     }
     
 
-    public static void onBlockDispense(BlockDispenseEvent event) {
+	@SuppressWarnings("deprecation")
+	public static void onBlockDispense(BlockDispenseEvent event) {
     	if( event.getBlock() != null && event.getBlock().getTypeId() == 23 )
     	{
-    		//System.out.println("test1");
 	    	for (OneCannon onec : AimCannon.getCannons()) 
 			{
-	    		//System.out.println("test2");
 			    if (onec.isThisCannon(event.getBlock().getLocation(), true)) 
 			    {
-			    	//System.out.println("test3");
 			    	event.setCancelled(true);
 			    	return;
 			    }

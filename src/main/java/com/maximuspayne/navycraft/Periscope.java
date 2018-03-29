@@ -2,7 +2,7 @@ package com.maximuspayne.navycraft;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-
+//I don't know why this needs its own class...
 public class Periscope {
 	public Location signLoc;
 	public Location scopeLoc;

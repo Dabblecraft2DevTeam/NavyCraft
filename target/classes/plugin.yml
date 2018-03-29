@@ -1,8 +1,8 @@
 name: NavyCraft
 main: com.maximuspayne.navycraft.NavyCraft
-version: 2.0.1-SNAPSHOT
-authors: [keough99, Pocketkid2, Maximuspayne]
-depend: [WorldGuard,WorldEdit,Essentials,GroupManager]
+version: 3.0.0
+authors: [Maximuspayne, keough99, Pocketkid2]
+depend: [WorldGuard,WorldEdit,Vault,PermissionsEx]
 
 commands:
    navycraft:

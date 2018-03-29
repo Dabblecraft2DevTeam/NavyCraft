@@ -34,5 +34,10 @@
 	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/ProtocolLib.jar"/>
 	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/worldedit-bukkit-6.1.9-SNAPSHOT-dist.jar"/>
 	<classpathentry kind="lib" path="C:/Users/keoug/Documents/GitHub/NavyCraft/jars/worldguard-legacy-6.2.2-SNAPSHOT-dist.jar"/>
+	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

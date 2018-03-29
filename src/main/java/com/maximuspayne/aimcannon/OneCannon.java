@@ -7,18 +7,16 @@ import java.util.Iterator;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Server;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Dispenser;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import com.earth2me.essentials.Essentials;
@@ -26,12 +24,13 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.maximuspayne.navycraft.Craft;
-import com.maximuspayne.navycraft.CraftMover;
 import com.maximuspayne.navycraft.NavyCraft;
 import com.maximuspayne.navycraft.Periscope;
-import com.maximuspayne.navycraft.plugins.PermissionInterface;
+import com.maximuspayne.navycraft.PermissionInterface;
+import com.maximuspayne.navycraft.craft.Craft;
+import com.maximuspayne.navycraft.craft.CraftMover;
 
+@SuppressWarnings("deprecation")
 public class OneCannon{
 	public WorldGuardPlugin wgp;
 	NavyCraft nc;
@@ -124,8 +123,13 @@ public class OneCannon{
 
     public void Ignite(final Player p) {
 
+    	if (isIgnite()) {
+            p.sendMessage(ChatColor.RED + "You have to wait for the Cannon to cool down!");
+            return;
+        }
+    	
 	    Block b;
-	    Server server = nc.getServer();
+
 	    if( cannonType == 6 )
 	    	b = loc.getBlock().getRelative(BlockFace.UP).getRelative(direction);
 	    else
@@ -136,10 +140,7 @@ public class OneCannon{
 		    
 		    if (b.getType() == Material.AIR) 
 		    {
-				//EntityTNTPrimed tnt = new EntityTNTPrimed(cWorld.getHandle(), b.getLocation().getX(), b.getLocation().getY(), b.getLocation().getZ());
-				//tnt.setPositionRotation(b.getLocation().getBlockX() + 0.5, b.getLocation().getBlockY(), b.getLocation().getBlockZ() + 0.5, 0, 0);
-				//cWorld.getHandle().addEntity(tnt);
-				//tntp = new CraftTNTPrimed((CraftServer) server, tnt);
+
 		    	tntp = (TNTPrimed)b.getWorld().spawnEntity(new Location(b.getWorld(), b.getX()+0.5, b.getY()+0.5, b.getZ()+0.5), EntityType.PRIMED_TNT);
 				NavyCraft.shotTNTList.put(tntp.getUniqueId(), p);
 				ignite = true;
@@ -167,17 +168,9 @@ public class OneCannon{
 				    c = b.getRelative(BlockFace.NORTH);
 				    d = b.getRelative(BlockFace.SOUTH);
 		    	}
-			    
-			    
-					//EntityTNTPrimed tnt1 = new EntityTNTPrimed(cWorld.getHandle(), c.getLocation().getX(), c.getLocation().getY(), c.getLocation().getZ());
-					//tnt1.setPositionRotation(c.getLocation().getBlockX() + 0.5, c.getLocation().getBlockY(), c.getLocation().getBlockZ() + 0.5, 0, 0);
-					//cWorld.getHandle().addEntity(tnt1);
-					//tntp = new CraftTNTPrimed((CraftServer) server, tnt1);
+
 		    		tntp = (TNTPrimed)c.getWorld().spawnEntity(new Location(c.getWorld(), c.getX()+0.5, c.getY()+0.5, c.getZ()+0.5), EntityType.PRIMED_TNT);
-					//EntityTNTPrimed tnt2 = new EntityTNTPrimed(cWorld.getHandle(), d.getLocation().getX(), d.getLocation().getY(), d.getLocation().getZ());
-					//tnt2.setPositionRotation(d.getLocation().getBlockX() + 0.5, d.getLocation().getBlockY(), d.getLocation().getBlockZ() + 0.5, 0, 0);
-					//cWorld.getHandle().addEntity(tnt2);
-					//tntp2 = new CraftTNTPrimed((CraftServer) server, tnt2);
+
 		    		tntp2 = (TNTPrimed)d.getWorld().spawnEntity(new Location(d.getWorld(), d.getX()+0.5, d.getY()+0.5, d.getZ()+0.5), EntityType.PRIMED_TNT);
 		    		NavyCraft.shotTNTList.put(tntp.getUniqueId(), p);
 					NavyCraft.shotTNTList.put(tntp2.getUniqueId(), p);
@@ -209,53 +202,16 @@ public class OneCannon{
 				    d = b.getRelative(BlockFace.SOUTH,2);
 		    	}
 			    
-			    
-					//EntityTNTPrimed tnt1 = new EntityTNTPrimed(cWorld.getHandle(), c.getLocation().getX(), c.getLocation().getY(), c.getLocation().getZ());
-					//tnt1.setPositionRotation(c.getLocation().getBlockX() + 0.5, c.getLocation().getBlockY(), c.getLocation().getBlockZ() + 0.5, 0, 0);
-					//cWorld.getHandle().addEntity(tnt1);
-					//tntp = new CraftTNTPrimed((CraftServer) server, tnt1);
 		    		tntp = (TNTPrimed)c.getWorld().spawnEntity(new Location(c.getWorld(), c.getX()+0.5, c.getY()+0.5, c.getZ()+0.5), EntityType.PRIMED_TNT);
-					//EntityTNTPrimed tnt2 = new EntityTNTPrimed(cWorld.getHandle(), d.getLocation().getX(), d.getLocation().getY(), d.getLocation().getZ());
-					//tnt2.setPositionRotation(d.getLocation().getBlockX() + 0.5, d.getLocation().getBlockY(), d.getLocation().getBlockZ() + 0.5, 0, 0);
-					//cWorld.getHandle().addEntity(tnt2);
-					//tntp2 = new CraftTNTPrimed((CraftServer) server, tnt2);
 		    		tntp2 = (TNTPrimed)d.getWorld().spawnEntity(new Location(d.getWorld(), d.getX()+0.5, d.getY()+0.5, d.getZ()+0.5), EntityType.PRIMED_TNT);
-					//EntityTNTPrimed tnt3 = new EntityTNTPrimed(cWorld.getHandle(), b.getLocation().getX(), b.getLocation().getY(), b.getLocation().getZ());
-					//tnt3.setPositionRotation(b.getLocation().getBlockX() + 0.5, b.getLocation().getBlockY(), b.getLocation().getBlockZ() + 0.5, 0, 0);
-					//cWorld.getHandle().addEntity(tnt3);
-					//tntp3 = new CraftTNTPrimed((CraftServer) server, tnt3);
+
 		    		tntp3 = (TNTPrimed)b.getWorld().spawnEntity(new Location(b.getWorld(), b.getX()+0.5, b.getY()+0.5, b.getZ()+0.5), EntityType.PRIMED_TNT);
+		    		
 		    		NavyCraft.shotTNTList.put(tntp.getUniqueId(), p);
 		    		NavyCraft.shotTNTList.put(tntp2.getUniqueId(), p);
 		    		NavyCraft.shotTNTList.put(tntp3.getUniqueId(), p);
 					ignite = true;
 			   }
-	    	
-	    	
-	    	/*if (b.getType() == Material.AIR) 
-		    {
-	    		CraftPlayer playerE = null;
-	    		Vector velocity = null;
-	    		
-		    	playerE = (CraftPlayer) p;
-		    	EntityLiving playerEntity = playerE.getHandle();
-				EntityFireball fb = new EntityFireball(cWorld.getHandle(), playerEntity, b.getLocation().getX(), b.getLocation().getY()+1, b.getLocation().getZ());
-				fb.setPositionRotation(b.getLocation().getBlockX() + 0.5, b.getLocation().getBlockY(), b.getLocation().getBlockZ() + 0.5, 0, 0);
-			    p.sendMessage("3");
-			    sleep(500);
-			    p.sendMessage("2");
-			    sleep(500);
-			    p.sendMessage("1");
-			    sleep(500);
-			    p.sendMessage("Fire");
-				cWorld.getHandle().addEntity(fb);
-				org.bukkit.entity.Entity Bukkitentity = fb.getBukkitEntity();
-				velocity = p.getLocation().getDirection().multiply(150);
-		    	Bukkitentity.teleport(loc.add(0,3,0));
-		    	Bukkitentity.setVelocity(velocity);
-				ignite = false;
-				charged = 0;
-		    }*/
 	    
 	    }
 	    if( charged == 1 && delay == 2000 )
@@ -264,8 +220,7 @@ public class OneCannon{
 	    if( ignite )
 	    {
 	    	fireThreadNew(delay, p);
-	    	ignite = false;
-	    	p.sendMessage("3 - Ready...");
+	    	p.sendMessage("3 - Ready!");
 	    }
     }
     
@@ -283,7 +238,6 @@ public class OneCannon{
 					fire3(p);
 					
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
     		}
@@ -292,18 +246,16 @@ public class OneCannon{
     
     public void fire1(final Player p) {
     	nc.getServer().getScheduler().scheduleSyncDelayedTask(nc, new Runnable(){
-    	//new Thread() {
 	  //  @Override
 	    public void run()
 	    {
-	    	p.sendMessage("2 - Aim...");
+	    	p.sendMessage("2 - Aim!");
 	    }
 	    });
     }
     
     public void fire2(final Player p) {
     	nc.getServer().getScheduler().scheduleSyncDelayedTask(nc, new Runnable(){
-    	//new Thread() {
 	  //  @Override
 	    public void run()
 	    {
@@ -314,19 +266,15 @@ public class OneCannon{
     
     public void fire3(final Player p) {
     	nc.getServer().getScheduler().scheduleSyncDelayedTask(nc, new Runnable(){
-    	//new Thread() {
 	  //  @Override
 	    public void run()
 	    {
 	    	Vector look;
 		    look = p.getLocation().getDirection();
-		    //p.sendMessage("x=" + look.getX() + " y=" + look.getY() + " z=" + look.getZ());
-		    // System.out.print("X: " +look.getX());
-		    // System.out.print("Y: " +look.getY());
-		    // System.out.print("Z: " +look.getZ());
 		    if (direction == BlockFace.WEST) {
 			if (look.getX() > -0.5)
 			    look.setX(-0.5);
+			if (look.getY() < 0.05)
 				look.setY(0.05);
 			if (look.getZ() > 0.5)
 			    look.setZ(0.5);
@@ -336,6 +284,7 @@ public class OneCannon{
 		    if (direction == BlockFace.NORTH) {
 			if (look.getZ() > -0.5)
 			    look.setZ(-0.5);
+			if (look.getY() < 0.05)
 				look.setY(0.05);
 			if (look.getX() > 0.5)
 			    look.setX(0.5);
@@ -345,6 +294,7 @@ public class OneCannon{
 		    if (direction == BlockFace.EAST) {
 			if (look.getX() < 0.5)
 			    look.setX(0.5);
+			if (look.getY() < 0.05)
 				look.setY(0.05);
 			if (look.getZ() > 0.5)
 			    look.setZ(0.5);
@@ -354,6 +304,7 @@ public class OneCannon{
 		    if (direction == BlockFace.SOUTH) {
 			if (look.getZ() < 0.5)
 			    look.setZ(0.5);
+			if (look.getY() < 0.05)
 				look.setY(0.05);
 			if (look.getX() > 0.5)
 			    look.setX(0.5);
@@ -361,6 +312,7 @@ public class OneCannon{
 			    look.setX(-0.5);
 		    }
 		    fireShell(look.multiply((float)(2*charged)), p);
+	    	ignite = false;
 	    }
 	    });
     }
@@ -370,30 +322,18 @@ public class OneCannon{
     	tntp.setVelocity(look);
     	if( cannonType == 1 )
 	    {
-	    	//fireUpdate(tntp2, look);
     		
 	    	tntp2.setVelocity(look);
-	    	//shellThread(2);
 	    }
 	    if( cannonType == 6 )
 	    {
-	    	//fireUpdate(tntp2, look);
-	    	
 	    	tntp2.setVelocity(look);
-	    	//tntp2.setVelocity(look);
-	    	//shellThread(2);
-	    	//fireUpdate(tntp3, look);
-	    	
 	    	tntp3.setVelocity(look);
-	    	//tntp3.setVelocity(look);
-	    	//shellThread(3);
 	    }
 	    charged = 0;
 	    
 	    Block b;
-	    //Server server = plugin.getServer();
 	    b = loc.getBlock().getRelative(BlockFace.UP);
-	    //CraftWorld cWorld = (CraftWorld) b.getWorld();
 	    b.getWorld().createExplosion(loc.getBlock().getRelative(direction,4).getLocation(), 0);
 	    
 	    if( cannonType == 6 )
@@ -411,120 +351,94 @@ public class OneCannon{
     }
     
     public void Fire(final Player p) {
-	ignite = false;
-	
-	setTimeout();
-	// Fire the TNT at player View Direction
-	new Thread() {
-	    @Override
-	    public void run() {
-		setPriority(Thread.MIN_PRIORITY);
-		try {
-		    //p.sendMessage("3 - Ready...");
-			p.sendMessage("2 - Aim...");
-		   // sleep(500);
-		    
-		    sleep(1000);
-		    p.sendMessage("1 - Fire!!!");
-		    sleep(500);
-		    //p.sendMessage("Fire");
-		    Vector look;
-		    look = p.getLocation().getDirection();
-		    //p.sendMessage("x=" + look.getX() + " y=" + look.getY() + " z=" + look.getZ());
-		    // System.out.print("X: " +look.getX());
-		    // System.out.print("Y: " +look.getY());
-		    // System.out.print("Z: " +look.getZ());
-		    if (direction == BlockFace.WEST) {
-			if (look.getX() > -0.5)
-			    look.setX(-0.5);
-			if (look.getY() < 0.05)
-				look.setY(0.05);
-			if (look.getZ() > 0.5)
-			    look.setZ(0.5);
-			if (look.getZ() < -0.5)
-			    look.setZ(-0.5);
-		    }
-		    if (direction == BlockFace.NORTH) {
-			if (look.getZ() > -0.5)
-			    look.setZ(-0.5);
-			if (look.getY() < 0.05)
-					look.setY(0.05);
-			if (look.getX() > 0.5)
-			    look.setX(0.5);
-			if (look.getX() < -0.5)
-			    look.setX(-0.5);
-		    }
-		    if (direction == BlockFace.EAST) {
-			if (look.getX() < 0.5)
-			    look.setX(0.5);
-			if (look.getY() < 0.05)
-				look.setY(0.05);
-			if (look.getZ() > 0.5)
-			    look.setZ(0.5);
-			if (look.getZ() < -0.5)
-			    look.setZ(-0.5);
-		    }
-		    if (direction == BlockFace.SOUTH) {
-			if (look.getZ() < 0.5)
-			    look.setZ(0.5);
-			if (look.getY() < 0.05)
-				look.setY(0.05);
-			if (look.getX() > 0.5)
-			    look.setX(0.5);
-			if (look.getX() < -0.5)
-			    look.setX(-0.5);
-		    }
-		    
-		    	
-		    
-		    fireUpdate(look.multiply((float)(2*charged)), p);
-		    //shellThread(1);
-		    
-		    
-		    /*Set<Block> aSet = net.minecraft.server.Explosion.;
-		    Packet60Explosion packet = new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 0, aSet);
-		    ( (CraftPlayer)p ).getHandle().netServerHandler.sendPacket(packet); */
-		    
-		} catch (InterruptedException e) {
-		}
-	    }
-	}.start();
-    }
-    
+    	
+    	setTimeout();
+    	// Fire the TNT at player View Direction
+    	new Thread() {
+    	    @Override
+    	    public void run() {
+    		setPriority(Thread.MIN_PRIORITY);
+    		try {
+
+    		    sleep(1000);
+    		    sleep(500);
+
+    		    Vector look;
+    		    look = p.getLocation().getDirection();
+
+    		    if (direction == BlockFace.WEST) {
+    			if (look.getX() > -0.5)
+    			    look.setX(-0.5);
+    			if (look.getY() < 0.05)
+    				look.setY(0.05);
+    			if (look.getZ() > 0.5)
+    			    look.setZ(0.5);
+    			if (look.getZ() < -0.5)
+    			    look.setZ(-0.5);
+    		    }
+    		    if (direction == BlockFace.NORTH) {
+    			if (look.getZ() > -0.5)
+    			    look.setZ(-0.5);
+    			if (look.getY() < 0.05)
+    					look.setY(0.05);
+    			if (look.getX() > 0.5)
+    			    look.setX(0.5);
+    			if (look.getX() < -0.5)
+    			    look.setX(-0.5);
+    		    }
+    		    if (direction == BlockFace.EAST) {
+    			if (look.getX() < 0.5)
+    			    look.setX(0.5);
+    			if (look.getY() < 0.05)
+    				look.setY(0.05);
+    			if (look.getZ() > 0.5)
+    			    look.setZ(0.5);
+    			if (look.getZ() < -0.5)
+    			    look.setZ(-0.5);
+    		    }
+    		    if (direction == BlockFace.SOUTH) {
+    			if (look.getZ() < 0.5)
+    			    look.setZ(0.5);
+    			if (look.getY() < 0.05)
+    				look.setY(0.05);
+    			if (look.getX() > 0.5)
+    			    look.setX(0.5);
+    			if (look.getX() < -0.5)
+    			    look.setX(-0.5);
+    		    }
+    		    
+    		    	
+    		    
+    		    fireUpdate(look.multiply((float)(2*charged)), p);
+    	    	ignite = false;
+    		    
+    		} catch (InterruptedException e) {
+    		}
+    	    }
+    	}.start();
+        }
     public void fireUpdate(final Vector look, final Player p) {
     	nc.getServer().getScheduler().scheduleSyncDelayedTask(nc, new Runnable(){
-    	//new Thread() {
-	  //  @Override
+
 	    public void run()
 	    {
-	    	//p.sendMessage("x=" + look.getX() + " y=" + look.getY() + " z=" + look.getZ());
+
 	    	tntp.setVelocity(look);
 	    	if( cannonType == 1 )
 		    {
-		    	//fireUpdate(tntp2, look);
 	    		
 		    	tntp2.setVelocity(look);
-		    	//shellThread(2);
 		    }
 		    if( cannonType == 6 )
 		    {
-		    	//fireUpdate(tntp2, look);
-		    	
 		    	tntp2.setVelocity(look);
-		    	//tntp2.setVelocity(look);
-		    	//shellThread(2);
-		    	//fireUpdate(tntp3, look);
 		    	
 		    	tntp3.setVelocity(look);
-		    	//tntp3.setVelocity(look);
-		    	//shellThread(3);
 		    }
 		    charged = 0;
 		    
 		    final Block b;
-		    //Server server = plugin.getServer();
 		    b = loc.getBlock().getRelative(BlockFace.UP);
-		    //CraftWorld cWorld = (CraftWorld) b.getWorld();
 		    b.getWorld().createExplosion(loc.getBlock().getRelative(direction,4).getLocation(), 0);
 		    
 		    if( cannonType == 6 )
@@ -568,17 +482,12 @@ public class OneCannon{
 	    if (isTimeout()) {
 		if (isIgnite()) {
 		    Fire(p);
-		    // System.out.print("Fire the Cannon");
 		} else {
 		    Ignite(p);
-		    // System.out.print("Ignite");
-		    //p.sendMessage("Cannon Firing...Take Aim");
-		    
 		}
 	    
 	    } else {
-		// System.out.print("Wait for the Cannon to cool down");
-		p.sendMessage("You have to wait for the Cannon to cool down!!");
+		p.sendMessage(ChatColor.RED + "You have to wait for the Cannon to cool down!");
 	    }
 	}
 
@@ -611,8 +520,6 @@ public class OneCannon{
     
     public void fireCannon(final Player p, final Block b)
     {
-    	//final int taskNum;
-    	//int taskNum = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
 		new Thread(){
 			
     	@Override
@@ -622,9 +529,9 @@ public class OneCannon{
 				//taskNum = -1;
     			try{
     				sleep(500);
-    				p.sendMessage("3 - Ready...");
+    				p.sendMessage("3 - Ready!");
     			    sleep(500);
-    			    p.sendMessage("2 - Aim...  ");
+    			    p.sendMessage("2 - Aim!  ");
     			    sleep(500);
     			    p.sendMessage("1 - Fire!!!");
     			    sleep(500);
@@ -632,9 +539,6 @@ public class OneCannon{
     			    look = p.getLocation().getDirection();
     			    look.setY(0);
     			    look.normalize();
-    			    // System.out.print("X: " +look.getX());
-    			    // System.out.print("Y: " +look.getY());
-    			    // System.out.print("Z: " +look.getZ());
     			    if (direction == BlockFace.NORTH) {
     				if (look.getX() > -0.5)
     				    look.setX(-0.5);
@@ -673,15 +577,7 @@ public class OneCannon{
     			    }
     			    
     			    
-    			    //,dY,dXZ;
-    			    //Vector projectile, oldProjectile;
-    			    //projectile = look;
-    			    //theta = (Math.asin(range*9.8/(100.0f*100.0f)))/2.0f;
-    			   // double oldDXZ, oldDY;
-    			    
-    			    //p.sendMessage("projX=" + look.getX() );
-    			    //p.sendMessage("projZ=" + look.getZ() );
-    			    //p.sendMessage("theta=" + theta );
+
     			    
     			    double x2,y2,z2,x1,y1,z1;
     			    double arcHeight;
@@ -696,80 +592,16 @@ public class OneCannon{
     			    
     			    for(int i=0; i<=range; i++)
     			    {
-    			    	//projectile = look;
-    			    	//projectile.multiply(1*i);
-    			    	//oldProjectile = look;
-    			    	//oldProjectile.multiply(1*(i-1));
-    			    	
     			    	x2 = look.getX() * i;
     			    	z2 = look.getZ() * i;
     			    	y2 = (termA*i*i + termB*i + termC) - gunHeight;
-    			    	//dXZ2 = Math.sqrt(x2*x2 + z2*z2);
-        			    //y2 = dXZ2*Math.tan(theta) - dXZ2*dXZ2*9.8/(2*20*20*Math.cos(theta)*Math.cos(theta) );
-        			   // p.sendMessage("theta="+ theta +" y2=" + y2 );
-        			    
-    			    	
-    			    	
-    			    	/*if( range == 10 )
-    			    	{
-    			    		
-    			    		if( range-(i+1) <= gunHeight )
-    			    			y2 = (range-(i+1)) - gunHeight;
-    			    		else
-    			    			y2=0;
-    			    	}else if( range == 20 || range == 30 )
-    			    	{
-    			    		if( (range-(i+1)) <= 2*gunHeight )
-    			    		{
-    			    			if( i%2 == 0 )
-    			    				y2 = (range-(i))/2 - gunHeight;
-    			    			else
-    			    				y2 = (range-(i+1))/2 - gunHeight;
-    			    			
-    			    			if( i == range )
-    			    				y2 = -gunHeight-1;
-    			    		}
-    			    		else
-    			    			y2=0;
-
-    			    	}else
-    			    	{
-    			    		y2 = 0;
-    			    	}*/
-    			    	
-    			    	
     			    	
         			    if( i > 0 )
         			    {
         			    	x1 = look.getX() * (i-1);
         			    	z1 = look.getZ() * (i-1);
         			    	y1 = (termA*(i-1)*(i-1) + termB*(i-1) + termC) - gunHeight;
-        			    	/*
-        			    	if( range == 10 )
-        			    	{
-        			    		if( range-(i) <= gunHeight )
-        			    			y1 = (range-(i)) - gunHeight;
-        			    		else
-        			    			y1=0;
-        			    	}else if( range == 20 || range == 30 )
-        			    	{
-        			    		if( (range-(i)) <= 2*gunHeight )
-        			    		{
-        			    			if( (i-1)%2 == 0 )
-        			    				y1 = (range-(i-1))/2 - gunHeight;
-        			    			else
-        			    				y1 = (range-(i))/2 - gunHeight;
-        			    		}
-        			    		else
-        			    			y1=0;
-        			    		
-        			    	}else
-        			    	{
-        			    		y1 = 0;
-        			    	}*/
-        			    	
-        			    	//dXZ1 = Math.sqrt(x1*x1 + z1*z1);
-        			    	//y1 = dXZ1*Math.tan(theta) - dXZ1*dXZ1*9.8/(2*20*20*Math.cos(theta)*Math.cos(theta) );
+
         			    }else
         			    {
         			    	x1=0;
@@ -787,14 +619,15 @@ public class OneCannon{
 					e.printStackTrace();
 				}
 			}
-    	}.start(); //, 20L);
+    	}.start(); 
     }
     
     public void fireCannonUpdate(final Block b, final double x2, final double y2, final double z2, final double x1, final double y1, final double z1, final int i)
     {
     	nc.getServer().getScheduler().scheduleSyncDelayedTask(nc, new Runnable(){
  
-	    public void run()
+
+		public void run()
 	    {
 	    	
 	    	Block c = b.getRelative((int)x1, (int)y1, (int)z1);
@@ -807,7 +640,6 @@ public class OneCannon{
 			    	else	
 			    		c.setType(Material.WATER);
 	    		}
-	    		//projectile.
 	    		
 		    	Block d = b.getRelative((int)x2, (int)y2, (int)z2);
 		    	if( d.getY() > 60 )
@@ -820,7 +652,8 @@ public class OneCannon{
     }
 
     
-    public void colorTorpedoes()
+	
+	public void colorTorpedoes()
     {
     	//color wool
 		Block a,b,c,d;
@@ -857,14 +690,16 @@ public class OneCannon{
     	c = c.getRelative(direction,4);
     	d = d.getRelative(direction,4);
     	
-    	byte wool1;
-		byte wool2;
-		byte wool3;
-		byte wool4;
+    	Byte wool1;
+    	Byte wool2;
+    	Byte wool3;
+    	Byte wool4;
 		wool1 = 0xE;
 		wool2 = 0x8;
 		wool3 = 0x8;
 		wool4 = 0x7;
+		
+		
 		if( cannonType == 7 )
 		{
     		wool1 = 0x3;
@@ -873,12 +708,15 @@ public class OneCannon{
 			wool4 = 0x7;
 		}else if( cannonType == 8 )
 		{
-    		wool1 = 0x8;
+			wool1 = 0x8;
 			wool2 = 0x0;
 			wool3 = 0x0;
 			wool4 = 0x7;
 		}
-    	
+		
+
+		
+		
 		if( c.getTypeId() == 35 )
     		c.setTypeIdAndData(35, wool1, false);
     	if( c.getRelative(direction,-1).getTypeId() == 35 )
@@ -898,8 +736,7 @@ public class OneCannon{
     		d.getRelative(direction,-3).setTypeIdAndData(35, wool4, false);
 		
     	for( int i=0; i<4; i++ )
-    	{
-    		
+    	{	
     		
         	if( a.getTypeId() == 35 )
         		a.setTypeIdAndData(35, wool1, false);
@@ -918,6 +755,8 @@ public class OneCannon{
         		b.getRelative(direction,-2).setTypeIdAndData(35, wool3, false);
         	if( b.getRelative(direction,-3).getTypeId() == 35 )
         		b.getRelative(direction,-3).setTypeIdAndData(35, wool4, false);
+    		
+    		
         	
         	if( i == 0 || i == 2 )
         	{
@@ -931,7 +770,8 @@ public class OneCannon{
     	}
     }
 
-    public boolean Charge(Player p, boolean leftClick) 
+    
+	public boolean Charge(Player p, boolean leftClick) 
     {
     	Dispenser dispenser = (Dispenser) loc.getBlock().getState();
     	Inventory inventory = dispenser.getInventory();
@@ -954,7 +794,7 @@ public class OneCannon{
 		    else if( cannonType == 3 )//torpedo mk 2
 		    	cost=600;
 		    else if( cannonType == 4 )//depth charge
-		    	cost=250;
+		    	cost=850;
 		    else if( cannonType == 5 )//depth charge mk2
 		    	cost=1250;
 		    else if( cannonType == 6 )//triple barrel
@@ -964,12 +804,10 @@ public class OneCannon{
 		    else if( cannonType == 8 )//torpedo mk 1
 		    	cost=250;
 		    else if( cannonType == 9 )//bombs
-		    	cost=100;
+		    	cost=500;
 		    
-		    //p.sendMessage("test1.");
 			if( PermissionInterface.CheckEnabledWorld(p.getLocation()) )
 			{
-				//p.sendMessage("test2.");
 				if( ess.getUser(p).canAfford(new BigDecimal(cost)) )
 				{
 					p.sendMessage("Weapon purchased.");
@@ -984,7 +822,6 @@ public class OneCannon{
 				}
 			}else
 			{
-				//p.sendMessage("test2.");
 				inventory.setItem(4, new ItemStack( 388, 1));
 			}
     	}
@@ -1023,10 +860,6 @@ public class OneCannon{
     	{
 	    	if( cannonType == 0 )
 	    	{
-			    // System.out.print("Cannon charged");
-			    //if ((p.getInventory().contains(46) || charged > 0) && p.getInventory().contains(289)) 
-			    //{//p.getInventory().removeItem(new ItemStack(46, 1));
-		    	//p.getInventory().removeItem(new ItemStack(289, 1));
 	    		
 			    if( charged == 0 )
 			    {
@@ -1210,7 +1043,8 @@ public class OneCannon{
     	}
     }
     
-    public boolean loadTorpedo(boolean left)
+    
+	public boolean loadTorpedo(boolean left)
     {
     	Block b;
     	b = getDirectionFromRelative(loc.getBlock(), direction, left).getRelative(direction, -5);
@@ -1295,7 +1129,8 @@ public class OneCannon{
     {
     	nc.getServer().getScheduler().scheduleSyncDelayedTask(nc, new Runnable(){
  
-	    public void run()
+
+		public void run()
 	    {
 	    	Block warhead = b;
 	    	Craft testCraft = Craft.getCraft(loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
@@ -1556,7 +1391,6 @@ public class OneCannon{
 			    	testCraft.addBlock(warhead.getRelative(torpHeading,-2), true);
 			    	testCraft.addBlock(warhead.getRelative(torpHeading,-3), true);
 			    }
-	 
 	    	}
 	    	if( i== 15 )
 	    	{
@@ -1567,20 +1401,13 @@ public class OneCannon{
 					testCraft.waitTorpLoading--;
 				}
 	    	}
-    	
-	    
-	    
 	    }
     	
     	});
     }
 
     
-    
-    
-    
-    
-    public void openTorpedoDoors(Player p, boolean inner, boolean leftInner)
+	public void openTorpedoDoors(Player p, boolean inner, boolean leftInner)
     {
     	if( checkProtectedRegion(p, p.getLocation()) )
     	{
@@ -1794,313 +1621,13 @@ public class OneCannon{
     	}
     }
     
-  /*  public void fireTorpedo(final Player p, final Block b, final BlockFace torpHeading, final int torpDepth, final int delayShoot, final BlockFace spreadFace, final int spread){
-    	//final int taskNum;
-    	//int taskNum = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
-		new Thread(){
-			
-    	@Override
-			public void run() {
-    		
-    		setPriority(Thread.MIN_PRIORITY);
-				//taskNum = -1;
-    			try{
-    				sleep(delayShoot);
-    				for( int i=0; i<200; i++ )
-    				{
-						fireTorpedoUpdate(p, b, torpHeading, torpDepth, spreadFace, spread, i);
-						sleep(160);
-					} 
-				}catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-    	}.start(); //, 20L);
-    }
+ 
     
-    public void fireTorpedoUpdate(final Player p, final Block b, final BlockFace torpHeading, final int torpDepth, final BlockFace torpSpreadFace, final int torpSpread, final int i) {
-    	plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
-    	//new Thread() {
-	  //  @Override
-	    public void run()
-	    {
-	    	//getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
-	    //	}
-		//setPriority(Thread.MIN_PRIORITY);
-			//try
-			//{ 
-				Block warhead = b.getRelative(torpHeading, i);
-				int currentDepth=0, lastDepth=0;
-				currentDepth = 63 - b.getY();
-				lastDepth = currentDepth;
-				Craft testCraft = Craft.getCraft(loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
-				int horizontalShift = 0;
-					
-					
-					if( i > 10 )
-					{
-						if( torpSpread > 0 )
-						{
-							if( i <= 10+torpSpread )
-								horizontalShift = i - 10;
-							else
-								horizontalShift = torpSpread;
-						}
-						
-						
-						if( torpDepth - (63 - b.getY()) > 0 )
-						{
-							currentDepth = 63 - b.getY() + (i-10);
-							if( currentDepth > torpDepth )
-							{
-								currentDepth = torpDepth;
-								lastDepth = torpDepth;
-							}
-							else
-							{
-								lastDepth = 63 - b.getY() + (i-11);
-							}
-						}else if( torpDepth - (63 - b.getY()) < 0)
-						{
-							currentDepth = 63 - b.getY() - (i-10);
-							if( currentDepth < torpDepth )
-							{
-								currentDepth = torpDepth;
-								lastDepth = torpDepth;
-							}
-							else
-							{
-								lastDepth = 63 - b.getY() - (i-11);
-							}
-						}else
-						{
+	public void fireTorpedoMk1(final Player p, final Block b, final BlockFace torpHeading, final int torpDepth, final int delayShoot, final boolean left){
 
-						}
-						
-					}
-					else
-					{
-						currentDepth = 63 - b.getY();
-						lastDepth = currentDepth;
-						if( i == 10 )
-						{
-							
-	    					if( testCraft != null )
-	    					{
-	    						if( !checkOuterDoorClosed() )
-	    							openTorpedoDoors(p, false, false);
-	    						testCraft.waitTorpLoading = false;
-	    						
-	    					}
-						}
-					}
-
-					
-					
-					
-					Block oldWarhead;
-					oldWarhead = warhead.getRelative(BlockFace.UP, 63 - b.getY() - lastDepth);
-					
-					if( horizontalShift > 0 )
-					{
-						if( i > 10 && i <= 10+torpSpread)
-							oldWarhead = oldWarhead.getRelative(torpSpreadFace, horizontalShift-1);
-						else
-							oldWarhead = oldWarhead.getRelative(torpSpreadFace, horizontalShift);
-					}
-					
-					////////if torp still exists
-					if( oldWarhead.getTypeId() == 35 && oldWarhead.getRelative(torpHeading, -1).getTypeId() == 35 && oldWarhead.getRelative(torpHeading, -2).getTypeId() == 35 && oldWarhead.getRelative(torpHeading, -3).getTypeId() == 35 )
-					{
-					
-						if( lastDepth <= 0 || i < 5 )
-						{
-							oldWarhead.setType(Material.AIR);
-							oldWarhead.getRelative(torpHeading, -1).setType(Material.AIR);
-							oldWarhead.getRelative(torpHeading, -2).setType(Material.AIR);
-							oldWarhead.getRelative(torpHeading, -3).setType(Material.AIR);
-							
-							if( i == 4  )
-							{
-								if( testCraft != null )
-								{
-									testCraft.addBlock(oldWarhead, true);
-									testCraft.addBlock(oldWarhead.getRelative(torpHeading, -1), true);
-									testCraft.addBlock(oldWarhead.getRelative(torpHeading, -2), true);
-									testCraft.addBlock(oldWarhead.getRelative(torpHeading, -3), true);
-									testCraft.addBlock(oldWarhead.getRelative(torpHeading, -4), true);
-								}
-							}
-						}else
-						{
-							oldWarhead.setType(Material.WATER);
-							oldWarhead.getRelative(torpHeading, -1).setType(Material.WATER);
-							oldWarhead.getRelative(torpHeading, -2).setType(Material.WATER);
-							oldWarhead.getRelative(torpHeading, -3).setType(Material.WATER);
-						}
-						
-						//p.sendMessage("Update #" + i + " currentDepth=" + currentDepth);
-						warhead = warhead.getRelative(torpHeading).getRelative(BlockFace.UP, 63 - b.getY() - currentDepth);
-						if( horizontalShift > 0 )
-						{
-							warhead = warhead.getRelative(torpSpreadFace, horizontalShift);
-						}
-						//warhead = warhead.getRelative(torpHeading);
-						
-						//keep moving through air/water 
-						if( warhead.getType() == Material.WATER || warhead.getType() == Material.AIR || warhead.getType() == Material.STATIONARY_WATER )
-						{
-							warhead.setTypeIdAndData(35, (byte) 0xE, false);
-							warhead.getRelative(torpHeading, -1).setTypeIdAndData(35, (byte) 0x8, false);
-							warhead.getRelative(torpHeading, -2).setTypeIdAndData(35, (byte) 0x8, false);
-							warhead.getRelative(torpHeading, -3).setTypeIdAndData(35, (byte) 0x7, false);
-							
-							if( i == 199 )
-							{
-								if( currentDepth <= 0 )
-								{
-									warhead.setType(Material.AIR);
-									warhead.getRelative(torpHeading, -1).setType(Material.AIR);
-									warhead.getRelative(torpHeading, -2).setType(Material.AIR);
-									warhead.getRelative(torpHeading, -3).setType(Material.AIR);
-								}else
-								{
-									warhead.setType(Material.WATER);
-									warhead.getRelative(torpHeading, -1).setType(Material.WATER);
-									warhead.getRelative(torpHeading, -2).setType(Material.WATER);
-									warhead.getRelative(torpHeading, -3).setType(Material.WATER);
-								}
-								p.sendMessage("Torpedo expired.");
-							}
-
-						
-						}else if( i > 10) //else explode if further than 10 away
-						{
-							
-							if( checkProtectedRegion(p, warhead.getLocation()) )
-							{
-								p.sendMessage(ChatColor.RED + "No torpedo explosions in dock area.");
-								return;
-							}
-							
-							
-							p.sendMessage("Torpedo Impact!");
-							
-							
-							int fuseDelay = 5;
-							
-							for (int x = 0; x < 9; x++) 
-							{
-								for( int y = 0; y < 9; y++ )
-								{
-								    for (int z = 0; z < 9; z++) 
-								    {
-								    	double ranNum = Math.random();
-								    	int xdist = Math.abs(x - 4);
-								    	int ydist = Math.abs(y - 4);
-								    	int zdist = Math.abs(z - 4);
-								    	int dist = xdist+ydist+zdist;
-								    	Block theBlock = warhead.getRelative(x - 4, y - 4, z - 4);
-								    	int blockType = theBlock.getTypeId();
-								    	
-								    	double breakChance = 1;
-								    	if( Craft.blockHardness(blockType) == 3 )
-								    	{
-								    		breakChance = 0;
-								    		
-								    	}else if( Craft.blockHardness(blockType) == 46 )
-								    	{
-								    		breakChance = -1;
-								    		
-								    	}else if( dist > 9 )
-								    	{
-								    		if( Craft.blockHardness(blockType) == 2 )
-								    		{
-								    			breakChance = .1;
-								    		}else if( Craft.blockHardness(blockType) == 1 )
-								    		{
-								    			breakChance = .3;
-								    		}
-								    	}else if( dist > 6 )
-								    	{
-								    		if( Craft.blockHardness(blockType) == 2 )
-								    		{
-								    			breakChance = .3;
-								    		}else if( Craft.blockHardness(blockType) == 1 )
-								    		{
-								    			breakChance = .6;
-								    		}
-								    	}else if( dist > 3 )
-								    	{
-								    		if( Craft.blockHardness(blockType) == 2 )
-								    		{
-								    			breakChance = .6;
-								    		}else if( Craft.blockHardness(blockType) == 1 )
-								    		{
-								    			breakChance = .9;
-								    		}
-								    	}
-								    	
-								    	if( breakChance == -1 )
-								    	{
-								    		//CraftWorld cWorld = (CraftWorld) theBlock.getWorld();
-											//cWorld.createExplosion(theBlock.getLocation(), 6);
-								    		//CraftWorld cWorld = (CraftWorld) theBlock.getWorld();
-								    		//EntityTNTPrimed tnt = new EntityTNTPrimed(cWorld.getHandle(), theBlock.getLocation().getX(), theBlock.getLocation().getY(), theBlock.getLocation().getZ());
-								    		TNTPrimed tnt = (TNTPrimed)theBlock.getWorld().spawnEntity(new Location(theBlock.getWorld(), theBlock.getX(), theBlock.getY(), theBlock.getZ()), EntityType.PRIMED_TNT);
-											//cWorld.getHandle().addEntity(tnt);
-								    		
-											tnt.setFuseTicks(fuseDelay);
-											fuseDelay = fuseDelay + 2;
-								    	}else if( ranNum < breakChance )
-								    	{
-									    	if( currentDepth - (y - 4) <= 0 )
-									    		theBlock.setType(Material.AIR);
-									    	else
-									    		theBlock.setType(Material.WATER);
-								    	}
-								    }
-								}
-							}
-							
-							
-							warhead.getRelative(torpHeading).setTypeId(42);
-							//CraftWorld cWorld = (CraftWorld) warhead.getWorld();
-						    
-							warhead.getWorld().createExplosion(warhead.getRelative(torpHeading).getLocation(), 10);
-							
-							mc = (NavyCraft) plugin.getServer().getPluginManager().getPlugin("NavyCraft");
-							if( mc != null )
-							{
-								if( !NavyCraft.instance.entityListener.structureUpdate(warhead.getRelative(torpHeading).getLocation(), p) )
-									if( !NavyCraft.instance.entityListener.structureUpdate(warhead.getRelative(4,4,4).getLocation(), p) )
-										if( !NavyCraft.instance.entityListener.structureUpdate(warhead.getRelative(-4,-4,-4).getLocation(), p) )
-											if( !NavyCraft.instance.entityListener.structureUpdate(warhead.getRelative(2,-1,-2).getLocation(), p) )
-												NavyCraft.instance.entityListener.structureUpdate(warhead.getRelative(-2,1,2).getLocation(), p);
-							}
-							
-							
-						}else //dud, too close
-						{
-							p.sendMessage("Dud Torpedo! Too Close!");
-						}
-				}else
-				{
-
-				}
-
-	    }
-    	}
-    	
-	);
-
-    }*/
-    public void fireTorpedoMk1(final Player p, final Block b, final BlockFace torpHeading, final int torpDepth, final int delayShoot, final boolean left){
-    	//final int taskNum;
-    	//int taskNum = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
     	final Craft testCraft = Craft.getCraft(loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
-		final Torpedo torp = new Torpedo(b, torpHeading, torpDepth);
-		
+		final Weapon torp = new Weapon(b, torpHeading, torpDepth);
+		AimCannon.weapons.add(torp);
 		
 		if( torp.warhead.getRelative(torp.hdg, -4).getRelative(BlockFace.UP).getTypeId() == 68 )
 		{
@@ -2124,7 +1651,7 @@ public class OneCannon{
 			torp.tubeNum=tubeNum;
 		}
 		
-		torp.torpDepth = torpDepth;
+		torp.setDepth = torpDepth;
 		
 		if( testCraft != null )
 		{
@@ -2168,21 +1695,18 @@ public class OneCannon{
     	}.start(); //, 20L);
     }
     
-    public void fireTorpedoUpdateMk1(final Player p, final Torpedo torp, final int i, final Craft firingCraft, final boolean left) {
+    public void fireTorpedoUpdateMk1(final Player p, final Weapon torp, final int i, final Craft firingCraft, final boolean left) {
     	nc.getServer().getScheduler().scheduleSyncDelayedTask(nc, new Runnable(){
     	//new Thread() {
 	  //  @Override
-	    public void run()
+		public void run()
 	    {
-	    	//getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
-	    //	}
-		//setPriority(Thread.MIN_PRIORITY);
-			//try
-			//{ 
+
 	    	if( !torp.dead )
 	    	{
 		    	if( torp.warhead.getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -1).getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -2).getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -3).getTypeId() == 35 )
 		    	{
+		    		CraftMover.playWeaponSound(torp.warhead.getLocation(), Sound.ENTITY_PLAYER_BREATH, 2.0f, 0.8f);
 		    		
 					if( i > 15 )
 					{
@@ -2205,7 +1729,7 @@ public class OneCannon{
 						
 						//new position
 						torp.warhead = torp.warhead.getRelative(torp.hdg);
-						int depthDifference = torp.torpDepth - (63 - torp.warhead.getY());
+						int depthDifference = torp.setDepth - (63 - torp.warhead.getY());
 						if( depthDifference > 0 )
 						{
 							torp.warhead = torp.warhead.getRelative(BlockFace.DOWN);
@@ -2315,19 +1839,33 @@ public class OneCannon{
 							}
 							
 							
-							p.sendMessage("Torpedo Impact!");
 							
 							
-							torp.warhead = torp.warhead.getRelative(torp.hdg,1);
-							NavyCraft.explosion(5,  torp.warhead);
+							
+							torp.warhead = torp.warhead.getRelative(torp.hdg,-1);
+							NavyCraft.explosion(7,  torp.warhead, false);
 							torp.dead = true;
 	
+							Craft checkCraft=null;
+							checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(torp.hdg,2).getLocation(), p);
+							if( checkCraft == null ) {
+								checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(7,7,7).getLocation(), p);
+								if( checkCraft == null ) {
+									checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-7,-7,-7).getLocation(), p);
+									if( checkCraft == null ) {
+										checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(3,-2,-3).getLocation(), p);
+										if( checkCraft == null ) {
+											checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-3,2,3).getLocation(), p);
+										}
+									}
+								}
+							}
 							
-							if( !NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(torp.hdg).getLocation(), p) )
-								if( !NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(7,7,7).getLocation(), p) )
-									if( !NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-7,-7,-7).getLocation(), p) )
-										if( !NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(3,-1,-3).getLocation(), p) )
-											NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-3,1,3).getLocation(), p);
+							if( checkCraft == null )
+								p.sendMessage("Torpedo hit unknown object!");
+							else
+								p.sendMessage("Torpedo hit " + checkCraft.name + "!");
+										
 						
 						}else
 						{
@@ -2402,7 +1940,7 @@ public class OneCannon{
 								if( !leftLoading && !rightLoading && !checkOuterDoorClosed() )
 									openTorpedoDoors(p, false, false);
 							}
-							p.sendMessage("Dud Torpedo! Too close...");
+							p.sendMessage("Dud Torpedo! Too close.");
 							torp.dead = true;
 						}
 						
@@ -2421,7 +1959,7 @@ public class OneCannon{
 					
 		    		if( !torp.active )
 		    		{
-		    			p.sendMessage("Dud Torpedo! Too close...");
+		    			p.sendMessage("Dud Torpedo! Too close.");
 						torp.dead = true;
 						if( firingCraft != null )
 						{
@@ -2446,12 +1984,31 @@ public class OneCannon{
 						return;
 		    		}
 					
-					p.sendMessage("Torpedo Impact!");
 					
-					
-					torp.warhead = torp.warhead.getRelative(torp.hdg,1);
-					NavyCraft.explosion(5,  torp.warhead);
+					torp.warhead = torp.warhead.getRelative(torp.hdg,-1);
+					NavyCraft.explosion(7,  torp.warhead, false);
 					torp.dead = true;
+					
+					Craft checkCraft=null;
+					checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(torp.hdg,2).getLocation(), p);
+					if( checkCraft == null ) {
+						checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(7,7,7).getLocation(), p);
+						if( checkCraft == null ) {
+							checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-7,-7,-7).getLocation(), p);
+							if( checkCraft == null ) {
+								checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(3,-2,-3).getLocation(), p);
+								if( checkCraft == null ) {
+									checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-3,2,3).getLocation(), p);
+								}
+							}
+						}
+					}
+					
+					if( checkCraft == null )
+						p.sendMessage("Torpedo detonated prematurely!");
+					else
+						p.sendMessage("Torpedo hit " + checkCraft.name + "!");
+					
 					
 					if( firingCraft != null )
 					{
@@ -2510,12 +2067,13 @@ public class OneCannon{
     
     
 
-    public void fireTorpedoMk2(final Player p, final Block b, final BlockFace torpHeading, final int torpDepth, final int delayShoot, final boolean left){
+    
+	public void fireTorpedoMk2(final Player p, final Block b, final BlockFace torpHeading, final int torpDepth, final int delayShoot, final boolean left){
     	//final int taskNum;
     	//int taskNum = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
     	final Craft testCraft = Craft.getCraft(loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
-		final Torpedo torp = new Torpedo(b, torpHeading, torpDepth);
-		
+		final Weapon torp = new Weapon(b, torpHeading, torpDepth);
+		AimCannon.weapons.add(torp);
 		
 		if( torp.warhead.getRelative(torp.hdg, -4).getRelative(BlockFace.UP).getTypeId() == 68 )
 		{
@@ -2542,9 +2100,9 @@ public class OneCannon{
 		if( testCraft != null && testCraft.tubeMk1FiringDisplay > -1 )
 		{
 			if( testCraft.tubeMk1FiringDepth > -1)
-				torp.torpDepth = testCraft.tubeMk1FiringDepth;
+				torp.setDepth = testCraft.tubeMk1FiringDepth;
 			else
-				torp.torpDepth = torpDepth;
+				torp.setDepth = torpDepth;
 			Player onScopePlayer=null;
 			for( Periscope per: testCraft.periscopes )
 			{
@@ -2584,10 +2142,7 @@ public class OneCannon{
 			
 			float nx = -(float) Math.sin(rotation);
 			float nz = (float) Math.cos(rotation);
-
-			int dx = (Math.abs(nx) >= 0.5 ? 1 : 0) * (int) Math.signum(nx);
-			int dz = (Math.abs(nz) > 0.5 ? 1 : 0) * (int) Math.signum(nz);
-			int dy = 0;
+			
 		////north
 			
 			//p.sendMessage("torpRotation=" + torpRotation + " rotation=" + rotation);
@@ -2856,7 +2411,7 @@ public class OneCannon{
 			}
 		}else
 		{
-			torp.torpDepth = depth;
+			torp.setDepth = depth;
 		}
     	
     	
@@ -2886,11 +2441,11 @@ public class OneCannon{
     	}.start(); //, 20L);
     }
     
-    public void fireTorpedoUpdateMk2(final Player p, final Torpedo torp, final int i, final Craft firingCraft, final boolean left) {
+    public void fireTorpedoUpdateMk2(final Player p, final Weapon torp, final int i, final Craft firingCraft, final boolean left) {
     	nc.getServer().getScheduler().scheduleSyncDelayedTask(nc, new Runnable(){
     	//new Thread() {
 	  //  @Override
-	    public void run()
+		public void run()
 	    {
 	    	//getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
 	    //	}
@@ -2901,7 +2456,7 @@ public class OneCannon{
 	    	{
 		    	if( torp.warhead.getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -1).getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -2).getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -3).getTypeId() == 35 )
 		    	{
-		    		
+		    		CraftMover.playWeaponSound(torp.warhead.getLocation(), Sound.ENTITY_PLAYER_BREATH, 2.0f, 0.8f);
 					if( i > 15 )
 					{
 						if( torp.warhead.getY() > 62 )
@@ -2923,7 +2478,7 @@ public class OneCannon{
 						
 						//new position
 						torp.warhead = torp.warhead.getRelative(torp.hdg);
-						int depthDifference = torp.torpDepth - (63 - torp.warhead.getY());
+						int depthDifference = torp.setDepth - (63 - torp.warhead.getY());
 						if( depthDifference > 0 )
 						{
 							torp.warhead = torp.warhead.getRelative(BlockFace.DOWN);
@@ -3032,20 +2587,31 @@ public class OneCannon{
 								torp.dead = true;
 								return;
 							}
-							
-							
-							p.sendMessage("Torpedo Impact!");
 	
 							
-							torp.warhead = torp.warhead.getRelative(torp.hdg,1);
-							NavyCraft.explosion(8,  torp.warhead);
+							torp.warhead = torp.warhead.getRelative(torp.hdg,-1);
+							NavyCraft.explosion(10,  torp.warhead, false);
 							torp.dead = true;
 							
-							if( !NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(torp.hdg).getLocation(), p) )
-								if( !NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(7,7,7).getLocation(), p) )
-									if( !NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-7,-7,-7).getLocation(), p) )
-										if( !NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(3,-1,-3).getLocation(), p) )
-											NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-3,1,3).getLocation(), p);
+							Craft checkCraft=null;
+							checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(torp.hdg,2).getLocation(), p);
+							if( checkCraft == null ) {
+								checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(7,7,7).getLocation(), p);
+								if( checkCraft == null ) {
+									checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-7,-7,-7).getLocation(), p);
+									if( checkCraft == null ) {
+										checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(3,-2,-3).getLocation(), p);
+										if( checkCraft == null ) {
+											checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-3,2,3).getLocation(), p);
+										}
+									}
+								}
+							}
+							
+							if( checkCraft == null )
+								p.sendMessage("Torpedo hit unknown object!");
+							else
+								p.sendMessage("Torpedo hit " + checkCraft.name + "!");
 							
 						}else
 						{
@@ -3123,7 +2689,7 @@ public class OneCannon{
 									openTorpedoDoors(p, false, false);
 							}
 							torp.dead = true;
-							p.sendMessage("Dud Torpedo! Too close...");
+							p.sendMessage("Dud Torpedo! Too close.");
 						}
 	
 					}
@@ -3140,7 +2706,7 @@ public class OneCannon{
 					
 		    		if( !torp.active )
 		    		{
-		    			p.sendMessage("Dud Torpedo! Too close...");
+		    			p.sendMessage("Dud Torpedo! Too close.");
 						torp.dead = true;
 						if( firingCraft != null )
 						{
@@ -3165,12 +2731,31 @@ public class OneCannon{
 						return;
 		    		}
 					
-					p.sendMessage("Torpedo Impact!");
 					
-					
-					torp.warhead = torp.warhead.getRelative(torp.hdg,1);
-					NavyCraft.explosion(8,  torp.warhead);
+					torp.warhead = torp.warhead.getRelative(torp.hdg,-1);
+					NavyCraft.explosion(10,  torp.warhead, false);
 					torp.dead = true;
+					
+					Craft checkCraft=null;
+					checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(torp.hdg,2).getLocation(), p);
+					if( checkCraft == null ) {
+						checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(7,7,7).getLocation(), p);
+						if( checkCraft == null ) {
+							checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-7,-7,-7).getLocation(), p);
+							if( checkCraft == null ) {
+								checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(3,-2,-3).getLocation(), p);
+								if( checkCraft == null ) {
+									checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-3,2,3).getLocation(), p);
+								}
+							}
+						}
+					}
+					
+					if( checkCraft == null )
+						p.sendMessage("Torpedo detonated prematurely!");
+					else
+						p.sendMessage("Torpedo hit " + checkCraft.name + "!");
+					
 					
 					if( firingCraft != null )
 					{
@@ -3229,12 +2814,13 @@ public class OneCannon{
     }
     
     
-    public void fireTorpedoMk3(final Player p, final Block b, final BlockFace torpHeading, final int torpDepth, final int delayShoot, final boolean left){
+    
+	public void fireTorpedoMk3(final Player p, final Block b, final BlockFace torpHeading, final int torpDepth, final int delayShoot, final boolean left){
     	//final int taskNum;
     	//int taskNum = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
     	final Craft testCraft = Craft.getCraft(loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
-		final Torpedo torp = new Torpedo(b, torpHeading, torpDepth);
-		
+		final Weapon torp = new Weapon(b, torpHeading, torpDepth);
+		AimCannon.weapons.add(torp);
 		
 		if( torp.warhead.getRelative(torp.hdg, -4).getRelative(BlockFace.UP).getTypeId() == 68 )
 		{
@@ -3260,7 +2846,7 @@ public class OneCannon{
 		
 		if( testCraft != null && torp.tubeNum != 0 && testCraft.tubeFiringMode.containsKey(torp.tubeNum) )
 		{
-			torp.torpDepth = testCraft.tubeFiringDepth.get(torp.tubeNum);
+			torp.setDepth = testCraft.tubeFiringDepth.get(torp.tubeNum);
 			Player onScopePlayer=null;
 			for( Periscope per: testCraft.periscopes )
 			{
@@ -3300,9 +2886,6 @@ public class OneCannon{
 				float nx = -(float) Math.sin(rotation);
 				float nz = (float) Math.cos(rotation);
 
-				int dx = (Math.abs(nx) >= 0.5 ? 1 : 0) * (int) Math.signum(nx);
-				int dz = (Math.abs(nz) > 0.5 ? 1 : 0) * (int) Math.signum(nz);
-				int dy = 0;
 			////north
 				if( torpRotation%360 == 0 )
 				{
@@ -3599,22 +3182,18 @@ public class OneCannon{
     	}.start(); //, 20L);
     }
     
-    public void fireTorpedoUpdateMk3(final Player p, final Torpedo torp, final int i, final Craft firingCraft, final boolean left) {
+    public void fireTorpedoUpdateMk3(final Player p, final Weapon torp, final int i, final Craft firingCraft, final boolean left) {
     	nc.getServer().getScheduler().scheduleSyncDelayedTask(nc, new Runnable(){
     	//new Thread() {
 	  //  @Override
-	    public void run()
+		public void run()
 	    {
-	    	//getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
-	    //	}
-		//setPriority(Thread.MIN_PRIORITY);
-			//try
-			//{ 
+
 	    	if( !torp.dead )
 	    	{
 		    	if( torp.warhead.getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -1).getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -2).getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -3).getTypeId() == 35 )
 		    	{
-		    		
+		    		CraftMover.playWeaponSound(torp.warhead.getLocation(), Sound.ENTITY_PLAYER_BREATH, 2.0f, 0.8f);
 					if( i > 15 )
 					{
 						if( torp.warhead.getY() > 62 )
@@ -3632,46 +3211,36 @@ public class OneCannon{
 			    		}
 						
 						//check sub update
-						if( firingCraft.tubeFiringMode.containsKey(torp.tubeNum) )
+						if( firingCraft != null && firingCraft.tubeFiringMode.containsKey(torp.tubeNum) )
 						{
-							if( firingCraft.tubeFiringDepth.get(torp.tubeNum) != torp.torpDepth )
+							if( firingCraft.tubeFiringDepth.get(torp.tubeNum) != torp.setDepth )
 							{
-								torp.torpDepth = firingCraft.tubeFiringDepth.get(torp.tubeNum);
-								//CraftMover cm = new CraftMover( firingCraft, plugin);
-								//cm.structureUpdate(null);
+								torp.setDepth = firingCraft.tubeFiringDepth.get(torp.tubeNum);
 							}
 							if( firingCraft.tubeFiringHeading.get(torp.tubeNum) != torp.torpSetHeading )
 							{
 								torp.torpSetHeading = firingCraft.tubeFiringHeading.get(torp.tubeNum);
-								//CraftMover cm = new CraftMover( firingCraft, plugin);
-								//cm.structureUpdate(null);
 							}
 							if( firingCraft.tubeFiringArmed.get(torp.tubeNum) != torp.active )
 							{
 								torp.active = firingCraft.tubeFiringArmed.get(torp.tubeNum);
-								//CraftMover cm = new CraftMover( firingCraft, plugin);
-								//cm.structureUpdate(null);
 							}
 							if( firingCraft.tubeFiringAuto.get(torp.tubeNum) != torp.auto )
 							{
 								torp.auto = firingCraft.tubeFiringAuto.get(torp.tubeNum);
-								//CraftMover cm = new CraftMover( firingCraft, plugin);
-								//cm.structureUpdate(null);
 							}
 							
 							if( !firingCraft.tubeFiringArmed.get(torp.tubeNum) && (i == firingCraft.tubeFiringArm.get(torp.tubeNum) || (i==11 && firingCraft.tubeFiringArm.get(torp.tubeNum)==10)) )
 							{
 								firingCraft.tubeFiringArmed.put(torp.tubeNum,true);
 								torp.active = true;
-								//CraftMover cm = new CraftMover( firingCraft, plugin);
-								//cm.structureUpdate(null);
 							}
 						}
 						
 						
 						//new position
 						torp.warhead = torp.warhead.getRelative(torp.hdg);
-						int depthDifference = torp.torpDepth - (63 - torp.warhead.getY());
+						int depthDifference = torp.setDepth - (63 - torp.warhead.getY());
 						if( depthDifference > 0 )
 						{
 							torp.warhead = torp.warhead.getRelative(BlockFace.DOWN);
@@ -3765,15 +3334,15 @@ public class OneCannon{
 									torp.warhead.getRelative(torp.hdg, -3).setType(Material.WATER);
 								}
 								p.sendMessage("Torpedo expired.");
-								firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
-								firingCraft.tubeFiringDepth.put(torp.tubeNum, 1);
-								firingCraft.tubeFiringArm.put(torp.tubeNum, 20);
-								firingCraft.tubeFiringArmed.put(torp.tubeNum, false);
-								firingCraft.tubeFiringHeading.put(torp.tubeNum, firingCraft.rotation);
-								firingCraft.tubeFiringAuto.put(torp.tubeNum, true);
-								firingCraft.tubeFiringDisplay.put(torp.tubeNum, 0);
-								//CraftMover cm = new CraftMover( firingCraft, plugin);
-								//cm.structureUpdate(null);
+								if( firingCraft != null ) {
+									firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
+									firingCraft.tubeFiringDepth.put(torp.tubeNum, 1);
+									firingCraft.tubeFiringArm.put(torp.tubeNum, 20);
+									firingCraft.tubeFiringArmed.put(torp.tubeNum, false);
+									firingCraft.tubeFiringHeading.put(torp.tubeNum, firingCraft.rotation);
+									firingCraft.tubeFiringAuto.put(torp.tubeNum, true);
+									firingCraft.tubeFiringDisplay.put(torp.tubeNum, 0);
+								}
 								return;
 							}
 		    				
@@ -3797,52 +3366,58 @@ public class OneCannon{
 									
 									if( !leftLoading && !rightLoading && !checkOuterDoorClosed() )
 										openTorpedoDoors(p, false, false);
-								}else
-								{
-									if( left )
-										leftLoading = false;
-									else
-										rightLoading = false;
-									
-									if( !leftLoading && !rightLoading && !checkOuterDoorClosed() )
-										openTorpedoDoors(p, false, false);
 								}
 								return;
 							}
 							
-							
-							p.sendMessage("Torpedo Impact!");
-							
-							torp.warhead = torp.warhead.getRelative(torp.hdg,1);
-							NavyCraft.explosion(12,  torp.warhead);
+							torp.warhead = torp.warhead.getRelative(torp.hdg,-1);
+							NavyCraft.explosion(14,  torp.warhead, false);
 							torp.dead=true;
 							
 							
-							if( !NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(torp.hdg).getLocation(), p) )
-								if( !NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(7,7,7).getLocation(), p) )
-									if( !NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-7,-7,-7).getLocation(), p) )
-										if( !NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(3,-1,-3).getLocation(), p) )
-											NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-3,1,3).getLocation(), p);
+							Craft checkCraft=null;
+							checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(torp.hdg,2).getLocation(), p);
+							if( checkCraft == null ) {
+								checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(7,7,7).getLocation(), p);
+								if( checkCraft == null ) {
+									checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-7,-7,-7).getLocation(), p);
+									if( checkCraft == null ) {
+										checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(3,-2,-3).getLocation(), p);
+										if( checkCraft == null ) {
+											checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-3,2,3).getLocation(), p);
+										}
+									}
+								}
+							}
 							
-							firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
-							firingCraft.tubeFiringDepth.put(torp.tubeNum, 1);
-							firingCraft.tubeFiringArm.put(torp.tubeNum, 20);
-							firingCraft.tubeFiringArmed.put(torp.tubeNum, false);
-							firingCraft.tubeFiringHeading.put(torp.tubeNum, firingCraft.rotation);
-							firingCraft.tubeFiringAuto.put(torp.tubeNum, true);
-							firingCraft.tubeFiringDisplay.put(torp.tubeNum, 0);
+							if( checkCraft == null )
+								p.sendMessage("Torpedo hit unknown object!");
+							else
+								p.sendMessage("Torpedo hit " + checkCraft.name + "!");
+							
+							if( firingCraft != null ) {
+								firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
+								firingCraft.tubeFiringDepth.put(torp.tubeNum, 1);
+								firingCraft.tubeFiringArm.put(torp.tubeNum, 20);
+								firingCraft.tubeFiringArmed.put(torp.tubeNum, false);
+								firingCraft.tubeFiringHeading.put(torp.tubeNum, firingCraft.rotation);
+								firingCraft.tubeFiringAuto.put(torp.tubeNum, true);
+								firingCraft.tubeFiringDisplay.put(torp.tubeNum, 0);
+							}
 							//CraftMover cm = new CraftMover( firingCraft, plugin);
 							//cm.structureUpdate(null);
 						}else
 						{
 							p.sendMessage("Torpedo Dud (Inactive).");
-							firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
-							firingCraft.tubeFiringDepth.put(torp.tubeNum, 1);
-							firingCraft.tubeFiringArm.put(torp.tubeNum, 20);
-							firingCraft.tubeFiringArmed.put(torp.tubeNum, false);
-							firingCraft.tubeFiringHeading.put(torp.tubeNum, firingCraft.rotation);
-							firingCraft.tubeFiringAuto.put(torp.tubeNum, true);
-							firingCraft.tubeFiringDisplay.put(torp.tubeNum, 0);
+							if( firingCraft != null ) {
+								firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
+								firingCraft.tubeFiringDepth.put(torp.tubeNum, 1);
+								firingCraft.tubeFiringArm.put(torp.tubeNum, 20);
+								firingCraft.tubeFiringArmed.put(torp.tubeNum, false);
+								firingCraft.tubeFiringHeading.put(torp.tubeNum, firingCraft.rotation);
+								firingCraft.tubeFiringAuto.put(torp.tubeNum, true);
+								firingCraft.tubeFiringDisplay.put(torp.tubeNum, 0);
+							}
 							//CraftMover cm = new CraftMover( firingCraft, plugin);
 							//cm.structureUpdate(null);
 						}
@@ -3893,17 +3468,17 @@ public class OneCannon{
 			    			torp.warhead.getRelative(torp.hdg, -3).setTypeIdAndData(35, (byte) 0x7, false);
 						}else
 						{
-							p.sendMessage("Dud Torpedo! Too close...");
+							p.sendMessage("Dud Torpedo! Too close.");
 							torp.dead=true;
-							firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
-							firingCraft.tubeFiringDepth.put(torp.tubeNum, 1);
-							firingCraft.tubeFiringArm.put(torp.tubeNum, 20);
-							firingCraft.tubeFiringArmed.put(torp.tubeNum, false);
-							firingCraft.tubeFiringHeading.put(torp.tubeNum, firingCraft.rotation);
-							firingCraft.tubeFiringAuto.put(torp.tubeNum, true);
-							firingCraft.tubeFiringDisplay.put(torp.tubeNum, 0);
-							if( firingCraft != null )
-							{
+							if( firingCraft != null ) {
+								firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
+								firingCraft.tubeFiringDepth.put(torp.tubeNum, 1);
+								firingCraft.tubeFiringArm.put(torp.tubeNum, 20);
+								firingCraft.tubeFiringArmed.put(torp.tubeNum, false);
+								firingCraft.tubeFiringHeading.put(torp.tubeNum, firingCraft.rotation);
+								firingCraft.tubeFiringAuto.put(torp.tubeNum, true);
+								firingCraft.tubeFiringDisplay.put(torp.tubeNum, 0);
+								
 								firingCraft.waitTorpLoading--;
 								if( left )
 									leftLoading = false;
@@ -3912,18 +3487,7 @@ public class OneCannon{
 								
 								if( !leftLoading && !rightLoading && !checkOuterDoorClosed() )
 									openTorpedoDoors(p, false, false);
-							}else
-							{
-								if( left )
-									leftLoading = false;
-								else
-									rightLoading = false;
-								
-								if( !leftLoading && !rightLoading && !checkOuterDoorClosed() )
-									openTorpedoDoors(p, false, false);
 							}
-							//CraftMover cm = new CraftMover( firingCraft, plugin);
-							//cm.structureUpdate(null);
 						}
 					}
 					
@@ -3939,7 +3503,7 @@ public class OneCannon{
 					
 		    		if( !torp.active )
 		    		{
-		    			p.sendMessage("Dud Torpedo! Too close...");
+		    			p.sendMessage("Dud Torpedo! Too close.");
 						torp.dead = true;
 						if( firingCraft != null )
 						{
@@ -3964,12 +3528,30 @@ public class OneCannon{
 						return;
 		    		}
 					
-					p.sendMessage("Torpedo Impact!");
-					
-					
-					torp.warhead = torp.warhead.getRelative(torp.hdg,1);
-					NavyCraft.explosion(12,  torp.warhead);
+					torp.warhead = torp.warhead.getRelative(torp.hdg,-1);
+					NavyCraft.explosion(14,  torp.warhead, false);
 					torp.dead = true;
+					
+					Craft checkCraft=null;
+					checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(torp.hdg,2).getLocation(), p);
+					if( checkCraft == null ) {
+						checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(7,7,7).getLocation(), p);
+						if( checkCraft == null ) {
+							checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-7,-7,-7).getLocation(), p);
+							if( checkCraft == null ) {
+								checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(3,-2,-3).getLocation(), p);
+								if( checkCraft == null ) {
+									checkCraft = NavyCraft.instance.entityListener.structureUpdate(torp.warhead.getRelative(-3,2,3).getLocation(), p);
+								}
+							}
+						}
+					}
+					
+					if( checkCraft == null )
+						p.sendMessage("Torpedo detonated prematurely!");
+					else
+						p.sendMessage("Torpedo hit " + checkCraft.name + "!");
+					
 					
 					if( firingCraft != null )
 					{
@@ -3991,7 +3573,7 @@ public class OneCannon{
 						if( !leftLoading && !rightLoading && !checkOuterDoorClosed() )
 							openTorpedoDoors(p, false, false);
 					}
-		    		if( firingCraft.tubeFiringMode.get(torp.tubeNum) == -3 )
+		    		if( firingCraft != null && firingCraft.tubeFiringMode.get(torp.tubeNum) == -3 )
 		    		{
 			    		firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
 						firingCraft.tubeFiringDepth.put(torp.tubeNum, 1);
@@ -4204,7 +3786,8 @@ public class OneCannon{
     	}
     }
     
-    public boolean checkTubeLoaded(boolean left)
+    
+	public boolean checkTubeLoaded(boolean left)
     {
     	Block b;
     	b = getDirectionFromRelative(loc.getBlock(), direction, left);
@@ -4756,7 +4339,8 @@ public class OneCannon{
     }
     
     
-    public void turnCannonLayer(Boolean right, Player p, int offsetY) {
+    
+	public void turnCannonLayer(Boolean right, Player p, int offsetY) {
 		// Get data
 		int[][] arr = new int[7][7];
 		byte[][] arrb = new byte[7][7];
@@ -4936,7 +4520,8 @@ public class OneCannon{
     	return false;
 	}
     
-    public void fireDCButton(Player p, boolean leftClick)
+    
+	public void fireDCButton(Player p, boolean leftClick)
     {
     	if( checkProtectedRegion(p, p.getLocation()) )
     	{
@@ -5018,7 +4603,10 @@ public class OneCannon{
     public void fireDC(final Player p, final Block b, final int dcDepth, final int startY, final int delayShoot, final int direction){
     	//final int taskNum;                                                      ////direction= -1 left, 0 center, 1 right, 2 single
     	//int taskNum = plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
-		new Thread(){
+    	final Weapon dc = new Weapon(b, direction, dcDepth);
+    	AimCannon.weapons.add(dc);
+    	
+    	new Thread(){
 			
     	@Override
 			public void run() {
@@ -5032,9 +4620,9 @@ public class OneCannon{
     				if( startY > 63 )
     					freeFallHt = startY - 63;
     				
-    				for( int i=0; i <= dcDepth+freeFallHt; i++ )
+    				for( int i=0; i <= dc.setDepth+freeFallHt; i++ )
     				{
-						fireDCUpdate(p, b, dcDepth, freeFallHt, i, direction);
+						fireDCUpdate(p, dc, freeFallHt, i);
 						if( i<freeFallHt )
 							sleep(160);
 						else
@@ -5052,60 +4640,59 @@ public class OneCannon{
     }
     
     
-    public void fireDCUpdate(final Player p, final Block b, final int dcDepth, final int freeFallHt, final int i, final int direction) {
+    public void fireDCUpdate(final Player p, final Weapon dc, final int freeFallHt, final int i) {
     	nc.getServer().getScheduler().scheduleSyncDelayedTask(nc, new Runnable(){
     	//new Thread() {
 	  //  @Override
-	    public void run()
+
+		public void run()
 	    {
-	    		if ( stopFall1 && direction == 1 )
+	    		if ( stopFall1 && dc.dcDirection == 1 )
 	    			return;
-	    		if ( stopFallM1 && direction == -1 )
+	    		if ( stopFallM1 && dc.dcDirection == -1 )
 	    			return;
-	    		if ( stopFall0 && direction == 0 )
+	    		if ( stopFall0 && dc.dcDirection == 0 )
 	    			return;
-	    		if ( stopFall2 && direction == 2 )
+	    		if ( stopFall2 && dc.dcDirection == 2 )
 	    			return;
 	    				
-	    	
-				Block warhead = b;
-				Block currentBlock;
+	 
 				
-				currentBlock = warhead.getRelative(BlockFace.DOWN, i);
+				//currentBlock = warhead.getRelative(BlockFace.DOWN, i);
 				
-				if( currentBlock.getTypeId() != 35 )
+				if( dc.warhead.getTypeId() != 35 )
 				{
 					return;
 				}
 
-				if( i >= dcDepth+freeFallHt || ( currentBlock.getRelative(BlockFace.DOWN,2).getTypeId() != 8 && currentBlock.getRelative(BlockFace.DOWN,2).getTypeId() != 9 && currentBlock.getRelative(BlockFace.DOWN,2).getTypeId() != 0 && currentBlock.getRelative(BlockFace.DOWN,2).getTypeId() != 79) )
+				if( i >= dc.setDepth+freeFallHt || ( dc.warhead.getRelative(BlockFace.DOWN,2).getTypeId() != 8 && dc.warhead.getRelative(BlockFace.DOWN,2).getTypeId() != 9 && dc.warhead.getRelative(BlockFace.DOWN,2).getTypeId() != 0 && dc.warhead.getRelative(BlockFace.DOWN,2).getTypeId() != 79) )
 				{
 					
-					if( checkProtectedRegion(p, currentBlock.getLocation()) )
+					if( checkProtectedRegion(p, dc.warhead.getLocation()) )
 					{
 						p.sendMessage(ChatColor.RED + "No Depth Charge explosions in dock area.");
-						if( currentBlock.getY() >= 63 )
+						if( dc.warhead.getY() >= 63 )
 						{
-							currentBlock.setTypeId(0);
-							currentBlock.getRelative(BlockFace.DOWN).setTypeId(0);
+							dc.warhead.setTypeId(0);
+							dc.warhead.getRelative(BlockFace.DOWN).setTypeId(0);
 						}
 						else
 						{
-							currentBlock.setTypeId(8);
-							currentBlock.getRelative(BlockFace.DOWN).setTypeId(8);
+							dc.warhead.setTypeId(8);
+							dc.warhead.getRelative(BlockFace.DOWN).setTypeId(8);
 						}
-			    		if ( direction == 1 )
+			    		if ( dc.dcDirection == 1 )
 			    			stopFall1 = true;
-			    		if ( direction == -1 )
+			    		if ( dc.dcDirection == -1 )
 			    			stopFallM1 = true;
-			    		if ( direction == 0 )
+			    		if ( dc.dcDirection == 0 )
 			    			stopFall0 = true;
-			    		if ( direction == 2 )
+			    		if ( dc.dcDirection == 2 )
 			    			stopFall2 = true;
 						return;
 					}
 					
-					
+					/*
 					int fuseDelay = 5;
 					for (int x = 0; x < 9; x++) 
 					{
@@ -5161,12 +4748,8 @@ public class OneCannon{
 						    	
 						    	if( breakChance == -1 )
 						    	{
-						    		//CraftWorld cWorld = (CraftWorld) theBlock.getWorld();
-									//cWorld.createExplosion(theBlock.getLocation(), 6);
-						    		//CraftWorld cWorld = (CraftWorld) theBlock.getWorld();
-						    		//EntityTNTPrimed tnt = new EntityTNTPrimed(cWorld.getHandle(), theBlock.getLocation().getX(), theBlock.getLocation().getY(), theBlock.getLocation().getZ());
+
 						    		TNTPrimed tnt = (TNTPrimed)theBlock.getWorld().spawnEntity(new Location(theBlock.getWorld(), theBlock.getX(), theBlock.getY(), theBlock.getZ()), EntityType.PRIMED_TNT);
-						    		//cWorld.getHandle().addEntity(tnt);
 									tnt.setFuseTicks(fuseDelay);
 									fuseDelay = fuseDelay + 2;
 						    	}else if( ranNum < breakChance )
@@ -5178,49 +4761,61 @@ public class OneCannon{
 						    	}
 						    }
 						}
-					}
+					}*/
 					
-					
-					//warhead.getRelative(torpHeading).setTypeId(5);
-					//CraftWorld cWorld = (CraftWorld) currentBlock.getWorld();
+
 				    
-					currentBlock.getWorld().createExplosion(currentBlock.getLocation(), 10);
+					//currentBlock.getWorld().createExplosion(currentBlock.getLocation(), 10);
+					NavyCraft.explosion(10, dc.warhead, false);
 					
-					if( currentBlock.getY() >= 63 )
+					if( dc.warhead.getY() >= 63 )
 					{
-						currentBlock.setTypeId(0);
-						currentBlock.getRelative(BlockFace.DOWN).setTypeId(0);
+						dc.warhead.setTypeId(0);
+						dc.warhead.getRelative(BlockFace.DOWN).setTypeId(0);
 					}
 					else
 					{
-						currentBlock.setTypeId(8);
-						currentBlock.getRelative(BlockFace.DOWN).setTypeId(8);
+						dc.warhead.setTypeId(8);
+						dc.warhead.getRelative(BlockFace.DOWN).setTypeId(8);
 					}
 
-					if( !NavyCraft.instance.entityListener.structureUpdate(currentBlock.getLocation(), p) )
-						if( !NavyCraft.instance.entityListener.structureUpdate(currentBlock.getRelative(-4,-4,-4).getLocation(), p) )
-							if( !NavyCraft.instance.entityListener.structureUpdate(currentBlock.getRelative(4,4,4).getLocation(), p) )
-								if( !NavyCraft.instance.entityListener.structureUpdate(currentBlock.getRelative(-2,-1,2).getLocation(), p) )
-									NavyCraft.instance.entityListener.structureUpdate(currentBlock.getRelative(2,1,-2).getLocation(), p);
+					Craft checkCraft=null;
+					checkCraft = NavyCraft.instance.entityListener.structureUpdate(dc.warhead.getLocation(), p);
+					if( checkCraft == null ) {
+						checkCraft = NavyCraft.instance.entityListener.structureUpdate(dc.warhead.getRelative(4,4,4).getLocation(), p);
+						if( checkCraft == null ) {
+							checkCraft = NavyCraft.instance.entityListener.structureUpdate(dc.warhead.getRelative(-4,-4,-4).getLocation(), p);
+							if( checkCraft == null ) {
+								checkCraft = NavyCraft.instance.entityListener.structureUpdate(dc.warhead.getRelative(2,-2,-2).getLocation(), p);
+								if( checkCraft == null ) {
+									checkCraft = NavyCraft.instance.entityListener.structureUpdate(dc.warhead.getRelative(-2,2,2).getLocation(), p);
+								}
+							}
+						}
+					}
+					
+					if( checkCraft != null )
+						p.sendMessage("Depth Charge hit " + checkCraft.name + "!");
 					
 							
 
 				}else
 				{
 
-					if( currentBlock.getY() >= 63 )
-						currentBlock.setTypeId(0);
+					if( dc.warhead.getY() >= 63 )
+						dc.warhead.setTypeId(0);
 					else
-						currentBlock.setTypeId(8);
-					if( dcDepth == 0 )
+						dc.warhead.setTypeId(8);
+					if( dc.setDepth == 0 ) //if bomb?
 					{
-						currentBlock.getRelative(BlockFace.DOWN).setTypeIdAndData(35, (byte) 0x7, false);
-						currentBlock.getRelative(BlockFace.DOWN,2).setTypeIdAndData(35, (byte) 0x7, false);
+						dc.warhead.getRelative(BlockFace.DOWN).setTypeIdAndData(35, (byte) 0x7, false);
+						dc.warhead.getRelative(BlockFace.DOWN,2).setTypeIdAndData(35, (byte) 0x7, false);
 					}else
 					{
-						currentBlock.getRelative(BlockFace.DOWN).setTypeIdAndData(35, (byte) 0x8, false);
-						currentBlock.getRelative(BlockFace.DOWN,2).setTypeIdAndData(35, (byte) 0x8, false);
+						dc.warhead.getRelative(BlockFace.DOWN).setTypeIdAndData(35, (byte) 0x8, false);
+						dc.warhead.getRelative(BlockFace.DOWN,2).setTypeIdAndData(35, (byte) 0x8, false);
 					}
+					dc.warhead = dc.warhead.getRelative(BlockFace.DOWN,1);
 						
 				}
 
