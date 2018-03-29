@@ -1,6 +1,6 @@
 name: NavyCraft
 main: com.maximuspayne.navycraft.NavyCraft
-version: 3.0.0
+version: ${project.version}
 authors: [Maximuspayne, keough99, Pocketkid2]
 depend: [WorldGuard,WorldEdit,Vault,PermissionsEx]
 
