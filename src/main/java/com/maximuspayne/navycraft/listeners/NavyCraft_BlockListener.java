@@ -2187,7 +2187,7 @@ public class NavyCraft_BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockBreak(BlockBreakEvent event) {
 		Player p = event.getPlayer();
-		if (!p.isOp() && !PermissionInterface.CheckQuietPerm(p, "NavyCraft.admin")) {
+		if( p.getWorld().getName().equalsIgnoreCase("warworld2") && p.getGameMode() != GameMode.CREATIVE )
 		{
 			if( NavyCraft_PlayerListener.checkForTarget(event.getBlock()) )
 			{
@@ -2226,7 +2226,7 @@ public class NavyCraft_BlockListener implements Listener {
 					return;
 				}
 			}
-		}else if( PermissionInterface.CheckEnabledWorld(p.getLocation()))
+		}else if( p.getWorld().getName().equalsIgnoreCase("warworld1") )
 		{
 			Block checkBlock;
 			checkBlock = event.getBlock();
