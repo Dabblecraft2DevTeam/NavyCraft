@@ -3,7 +3,6 @@ package com.maximuspayne.navycraft.craft;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +31,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
-import com.earth2me.essentials.Essentials;
 import com.maximuspayne.aimcannon.AimCannon;
 import com.maximuspayne.aimcannon.OneCannon;
 import com.maximuspayne.aimcannon.Weapon;
@@ -50,13 +48,10 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
-import ru.tehkode.permissions.bukkit.PermissionsEx;
-
 @SuppressWarnings("deprecation")
 public class CraftMover {
 	private Craft craft;
 	public static Plugin plugin;
-	public static PermissionsEx pex;
 	public WorldGuardPlugin wgp;
 
 	volatile boolean sinkUpdate = false;
@@ -67,20 +62,19 @@ public class CraftMover {
 	public HashMap<Player, Location> playerTeleports = new HashMap<>();
 
 	public ArrayList<Block> initWeaponDispensers = new ArrayList<>();
-	
+
 	public Sign firstSonarSign;
 	public Sign firstRadarSign;
 	public Sign firstHydroSign;
 	public Sign firstDetectSign;
-	public boolean pingOtherSigns=false;
-	public float returnPingStrength=0;
+	public boolean pingOtherSigns = false;
+	public float returnPingStrength = 0;
 
 	public CraftMover(Craft c, Plugin p) {
 		craft = c;
 		plugin = p;
 	}
 
-	
 	public void setBlock(int id, Block block) {
 		// if(y < 0 || y > 127 || id < 0 || id > 255){
 		if ((id < 0) || (id > 255)) {
@@ -89,15 +83,12 @@ public class CraftMover {
 			return;
 		}
 
-
-
 		if (block.getTypeId() == id) {
 			NavyCraft.instance.DebugMessage("Tried to change a " + id + " to itself.", 5);
 			return;
 		}
 
 		NavyCraft.instance.DebugMessage("Attempting to set block at " + block.getX() + ", " + block.getY() + ", " + block.getZ() + " to " + id, 5);
-
 
 		try {
 			if (block.setTypeId(id) == false) {
@@ -111,7 +102,6 @@ public class CraftMover {
 			System.out.println("Routine cast exception.");
 		}
 
-
 	}
 
 	public Block getWorldBlock(int x, int y, int z) {
@@ -119,7 +109,6 @@ public class CraftMover {
 		return craft.world.getBlockAt(craft.minX + x, craft.minY + y, craft.minZ + z);
 	}
 
-	
 	public void storeDataBlocks() {
 		for (DataBlock dataBlock : craft.dataBlocks) {
 			if (dataBlock.id == getWorldBlock(dataBlock.x, dataBlock.y, dataBlock.z).getTypeId()) {
@@ -128,7 +117,6 @@ public class CraftMover {
 		}
 	}
 
-	
 	public void storeComplexBlocks() { // store the data of all complex blocks, or die trying
 		Block currentBlock;
 
@@ -174,7 +162,6 @@ public class CraftMover {
 
 							complexBlock.setItem(slot, inventory.getItem(slot));
 
-
 							NavyCraft.instance.DebugMessage("Inventory has " + inventory.getItem(slot).getAmount() + " inventory item of type " + inventory.getItem(slot).getTypeId() + " in slot " + slot, 4);
 
 							inventory.setItem(slot, null);
@@ -185,7 +172,6 @@ public class CraftMover {
 		}
 	}
 
-	
 	public void restoreDataBlocks(int dx, int dy, int dz) {
 		Block block;
 
@@ -200,20 +186,19 @@ public class CraftMover {
 				block.setData((byte) dataBlock.data);
 			} else { // the block is already there, just set the data
 				Block theBlock = getWorldBlock(dx + dataBlock.x, dy + dataBlock.y, dz + dataBlock.z);
-				
-				
-				if (theBlock.getType() == Material.SPONGE) //update pumps
+
+				if (theBlock.getType() == Material.SPONGE) // update pumps
 				{
 					Block oldBlock = getWorldBlock(dataBlock.x, dataBlock.y, dataBlock.z);
-					for( Pump p:craft.pumps ) {
-						if( oldBlock.getLocation().equals(p.loc) ) {
+					for (Pump p : craft.pumps) {
+						if (oldBlock.getLocation().equals(p.loc)) {
 							p.loc = theBlock.getLocation();
 						}
 					}
-					
+
 				}
-				
-				if (theBlock.getTypeId() == 23) { //move cannons
+
+				if (theBlock.getTypeId() == 23) { // move cannons
 
 					boolean stopSearch = false;
 					for (OneCannon onec : AimCannon.getCannons()) {
@@ -242,7 +227,6 @@ public class CraftMover {
 		}
 	}
 
-	
 	public void reloadWeapons(Player p) {
 
 		for (DataBlock dataBlock : craft.dataBlocks) {
@@ -260,11 +244,12 @@ public class CraftMover {
 		}
 	}
 
-	
 	public void delayedRestoreSigns(int dx, int dy, int dz) {
 
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			if (NavyCraft.shutDown || craft.sinking) { return; }
+			if (NavyCraft.shutDown || craft.sinking) {
+				return;
+			}
 
 			Block theBlock;
 
@@ -296,7 +281,6 @@ public class CraftMover {
 
 	}
 
-	
 	public void restoreComplexBlocks(int dx, int dy, int dz) {
 		Block theBlock;
 		Inventory inventory;
@@ -309,7 +293,6 @@ public class CraftMover {
 			inventory = null;
 
 			if (((complexBlock.id == 63) || (complexBlock.id == 68))) {
-
 
 			} else if ((theBlock.getTypeId() == 54) || (theBlock.getTypeId() == 146)) {
 				Chest chest = ((Chest) theBlock.getState());
@@ -345,14 +328,13 @@ public class CraftMover {
 		delayedRestoreSigns(0, 0, 0);
 	}
 
-	
-	//perform collision detection, gravity.
-	//called by cruiseUpdate, calls delayed_move_collide
-	
+	// perform collision detection, gravity.
+	// called by cruiseUpdate, calls delayed_move_collide
+
 	public void calculateMove(int dx, int dy, int dz) {
-		//Try to detect damage and changes before moving
+		// Try to detect damage and changes before moving
 		structureUpdate(null, false);
-		
+
 		NavyCraft.instance.DebugMessage("DXYZ is (" + dx + ", " + dy + ", " + dz + ")", 4);
 		// instead of forcing the craft to move, check some things beforehand
 		if (craft.waitTorpLoading > 0) {
@@ -365,10 +347,11 @@ public class CraftMover {
 
 			return;
 		}
-		
-		//Return if active weapon within vehicle grid
-		if( checkForWeapons() )
+
+		// Return if active weapon within vehicle grid
+		if (checkForWeapons()) {
 			return;
+		}
 
 		if (craft.sinking) {
 			if (craft.driverName != null) {
@@ -495,7 +478,8 @@ public class CraftMover {
 						break;
 					}
 
-					// craft.player.sendMessage(ChatColor.RED + "the " + craft.name + " won't go any further");
+					// craft.player.sendMessage(ChatColor.RED + "the " + craft.name + " won't go any
+					// further");
 					if (craft.possibleCollision && !checkProtectedRegion(craft.collisionLoc) && !NavyCraft.checkSpawnRegion(craft.collisionLoc) && !craft.type.canFly) {
 						if (craft.driverName != null) {
 							Player p = plugin.getServer().getPlayer(craft.driverName);
@@ -600,39 +584,28 @@ public class CraftMover {
 		}
 	}
 
-	
-	public int calculateBuoyancyMove()
-	{	
-		if( craft.canMove(0, craft.buoyancy, 0) )
-		{
+	public int calculateBuoyancyMove() {
+		if (craft.canMove(0, craft.buoyancy, 0)) {
 			return craft.buoyancy;
-		}else
-		{
-			if( craft.buoyancy < 0 )
-			{
+		} else {
+			if (craft.buoyancy < 0) {
 				Block newBlock;
 				int newBlockId;
-				int solidCount=0;
-				for( int x=0; x<craft.sizeX; x++ )
-				{
-					for( int z=0; z<craft.sizeZ; z++ )
-					{
+				int solidCount = 0;
+				for (int x = 0; x < craft.sizeX; x++) {
+					for (int z = 0; z < craft.sizeZ; z++) {
 						newBlock = craft.world.getBlockAt(craft.minX + x, craft.minY - 1, craft.minZ + z);
 						newBlockId = newBlock.getTypeId();
-						if( newBlockId != 0 && !(newBlockId >= 8 && newBlockId <= 11) )
-						{
+						if ((newBlockId != 0) && !((newBlockId >= 8) && (newBlockId <= 11))) {
 							solidCount++;
 						}
 					}
 				}
-				
-				if( solidCount > (int)(craft.sizeX * craft.sizeZ * 0.2f) )
-				{
+
+				if (solidCount > (int) (craft.sizeX * craft.sizeZ * 0.2f)) {
 					craft.doSink = true;
-				}
-				else
-				{
-					return craft.buoyancy;						
+				} else {
+					return craft.buoyancy;
 				}
 			}
 		}
@@ -640,10 +613,12 @@ public class CraftMover {
 	}
 
 	// move the craft according to a vector d
-	
+
 	public void move1() {
 		// if(craft.type.canDig) {
-		if (craft.isDestroying) { return; }
+		if (craft.isDestroying) {
+			return;
+		}
 
 		NavyCraft.instance.DebugMessage("craft.waterLevel is " + craft.waterLevel, 2);
 		NavyCraft.instance.DebugMessage("craft.waterType is " + craft.waterType, 2);
@@ -663,7 +638,6 @@ public class CraftMover {
 			craft.waterLevel = craft.newWaterLevel;
 			// craft.waterLevel = 63;
 		}
-
 
 		if (craft.type.canDive && (craft.dy != 0)) {
 			if (craft.speed > 10) {
@@ -738,7 +712,6 @@ public class CraftMover {
 
 	}
 
-	
 	public void move2() {
 		// first pass, remove all items that need a support
 		removeSupportBlocks();
@@ -746,17 +719,19 @@ public class CraftMover {
 		short blockId;
 		Block block;
 		Block innerBlock;
-		if( craft.matrix == null )
+		if (craft.matrix == null) {
 			return;
-		
+		}
+
 		// second pass, the regular blocks
 		for (int x = 0; x < craft.sizeX; x++) {
 			for (int z = 0; z < craft.sizeZ; z++) {
 				for (int y = 0; y < craft.sizeY; y++) {
 
 					// handle displaced blocks
-					if( craft.matrix == null )
+					if (craft.matrix == null) {
 						return;
+					}
 					blockId = craft.matrix[x][y][z];
 
 					if (blockId == -1) {
@@ -764,8 +739,8 @@ public class CraftMover {
 					}
 
 					block = getWorldBlock(x, y, z);
-					
-					if( craft.sinking && (block.getType() == Material.GLOWSTONE || block.getType() == Material.REDSTONE_LAMP_ON )) {
+
+					if (craft.sinking && ((block.getType() == Material.GLOWSTONE) || (block.getType() == Material.REDSTONE_LAMP_ON))) {
 						block.setType(Material.AIR);
 						craft.matrix[x][y][z] = -1;
 						blockId = -1;
@@ -803,11 +778,11 @@ public class CraftMover {
 					// new block position (place)
 					if (!BlocksInfo.needsSupport(blockId)) {
 
-						// Block innerBlock = world.getBlockAt(posX + dx + x,posY + dy + y, posZ + dz + z);
+						// Block innerBlock = world.getBlockAt(posX + dx + x,posY + dy + y, posZ + dz +
+						// z);
 						innerBlock = getWorldBlock(craft.dx + x, craft.dy + y, craft.dz + z);
 
 						// drop the item corresponding to the block if it is not a craft block
-
 
 						if (craft.type.digBlockDurability > 0) { // break drill bits
 							int blockDurability = block.getType().getMaxDurability();
@@ -844,7 +819,6 @@ public class CraftMover {
 								setBlock(blockId, innerBlock);
 							}
 
-
 						}
 					}
 				}
@@ -856,7 +830,6 @@ public class CraftMover {
 		restoreComplexBlocks(craft.dx, craft.dy, craft.dz);
 	}
 
-	
 	public void move2b() {
 		// first pass, remove all items that need a support
 		removeSupportBlocks();
@@ -864,9 +837,10 @@ public class CraftMover {
 		short blockId;
 		Block block;
 		Block innerBlock;
-		
-		if( craft.matrix == null )
+
+		if (craft.matrix == null) {
 			return;
+		}
 
 		// second pass, the regular blocks
 		for (int x = 0; x < craft.sizeX; x++) {
@@ -874,9 +848,10 @@ public class CraftMover {
 				for (int y = 0; y < craft.sizeY; y++) {
 
 					// handle displaced blocks
-					if( craft.matrix == null )
+					if (craft.matrix == null) {
 						return;
-					
+					}
+
 					blockId = craft.matrix[x][y][z];
 
 					if (blockId == -1) {
@@ -886,7 +861,6 @@ public class CraftMover {
 					block = getWorldBlock(x, y, z);
 
 					// old block position (remove)
-
 
 					// after moving, this location is not a craft block anymore
 					if ((craft.matrix[x][y][z] == -1) || BlocksInfo.needsSupport(craft.matrix[x][y][z])) {
@@ -905,7 +879,8 @@ public class CraftMover {
 					// new block position (place)
 					if (!BlocksInfo.needsSupport(blockId)) {
 
-						// Block innerBlock = world.getBlockAt(posX + dx + x,posY + dy + y, posZ + dz + z);
+						// Block innerBlock = world.getBlockAt(posX + dx + x,posY + dy + y, posZ + dz +
+						// z);
 						innerBlock = getWorldBlock(craft.dx + x, craft.dy + y, craft.dz + z);
 
 						if (craft.type.digBlockDurability > 0) { // break drill bits
@@ -962,12 +937,12 @@ public class CraftMover {
 		}
 
 		for (Entity e : craft.checkEntities) {
-			//tp player on ship
-				teleportPlayer(e, craft.dx, craft.dy, craft.dz);
-			}
+			// tp player on ship
+			teleportPlayer(e, craft.dx, craft.dy, craft.dz);
+		}
 
 		teleportUpdate();
-		
+
 		TeleportFix.updateNMSChunks(craft);
 
 		craft.minX += craft.dx;
@@ -976,7 +951,6 @@ public class CraftMover {
 		craft.maxX = (craft.minX + craft.sizeX) - 1;
 		craft.maxY = (craft.minY + craft.sizeY) - 1;
 		craft.maxZ = (craft.minZ + craft.sizeZ) - 1;
-
 
 		if ((craft.waterLevel == (craft.sizeY - 1)) && (craft.newWaterLevel < craft.waterLevel)) {
 			craft.waterLevel = craft.newWaterLevel;
@@ -990,17 +964,15 @@ public class CraftMover {
 			craft.lastMove = System.currentTimeMillis();
 		}
 
-		/*if (craft.type.requiresRails) {
-			int xMid = craft.matrix.length / 2;
-			int zMid = craft.matrix[0][0].length / 2;
-
-			Block belowBlock = getWorldBlock(xMid, -1, zMid);
-			craft.railBlock = belowBlock;
-
-			if (belowBlock.getType() == Material.RAILS) {
-				railMove();
-			}
-		}*/
+		/*
+		 * if (craft.type.requiresRails) { int xMid = craft.matrix.length / 2; int zMid
+		 * = craft.matrix[0][0].length / 2;
+		 *
+		 * Block belowBlock = getWorldBlock(xMid, -1, zMid); craft.railBlock =
+		 * belowBlock;
+		 *
+		 * if (belowBlock.getType() == Material.RAILS) { railMove(); } }
+		 */
 
 		if (!craft.autoTurn) {
 			craft.speed = 1;
@@ -1010,35 +982,32 @@ public class CraftMover {
 		if (!craft.type.doesCruise) {
 			craft.setSpeed(craft.speed + 1);
 		}
-		
-		//structureUpdate(null,false);
+
+		// structureUpdate(null,false);
 	}
 
-/*	public static void updateEntity(Entity entity, List<Player> observers) {
-
-		World world = entity.getWorld();
-		WorldServer worldServer = ((CraftWorld) world).getHandle();
-
-		EntityTracker tracker = worldServer.tracker;
-		EntityTrackerEntry entry = tracker.trackedEntities.get(entity.getEntityId());
-
-		List<EntityHuman> nmsPlayers = getNmsPlayers(observers);
-
-		// Force Minecraft to resend packets to the affected clients
-		entry.trackedPlayers.removeAll(nmsPlayers);
-		entry.scanPlayers(nmsPlayers);
-	}
-
-	private static List<EntityHuman> getNmsPlayers(List<Player> players) {
-		List<EntityHuman> nsmPlayers = new ArrayList<>();
-
-		for (Player bukkitPlayer : players) {
-			CraftPlayer craftPlayer = (CraftPlayer) bukkitPlayer;
-			nsmPlayers.add(craftPlayer.getHandle());
-		}
-
-		return nsmPlayers;
-	}*/
+	/*
+	 * public static void updateEntity(Entity entity, List<Player> observers) {
+	 *
+	 * World world = entity.getWorld(); WorldServer worldServer = ((CraftWorld)
+	 * world).getHandle();
+	 *
+	 * EntityTracker tracker = worldServer.tracker; EntityTrackerEntry entry =
+	 * tracker.trackedEntities.get(entity.getEntityId());
+	 *
+	 * List<EntityHuman> nmsPlayers = getNmsPlayers(observers);
+	 *
+	 * // Force Minecraft to resend packets to the affected clients
+	 * entry.trackedPlayers.removeAll(nmsPlayers); entry.scanPlayers(nmsPlayers); }
+	 *
+	 * private static List<EntityHuman> getNmsPlayers(List<Player> players) {
+	 * List<EntityHuman> nsmPlayers = new ArrayList<>();
+	 *
+	 * for (Player bukkitPlayer : players) { CraftPlayer craftPlayer = (CraftPlayer)
+	 * bukkitPlayer; nsmPlayers.add(craftPlayer.getHandle()); }
+	 *
+	 * return nsmPlayers; }
+	 */
 
 	public void move(int dx, int dy, int dz) {
 		if (!((dx == 0) && (dy == 0) && (dz == 0))) {
@@ -1053,15 +1022,17 @@ public class CraftMover {
 
 	public void delayed_move(int dx, int dy, int dz) {
 
-		//plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			if (NavyCraft.shutDown) { return; }
-			move(dx, dy, dz);
-		//});
+		// plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+		if (NavyCraft.shutDown) {
+			return;
+		}
+		move(dx, dy, dz);
+		// });
 	}
 
-	//performs vehicle movement, performs collision explosion
-	//called by calculateMove, calls move1, move2, move3
-	
+	// performs vehicle movement, performs collision explosion
+	// called by calculateMove, calls move1, move2, move3
+
 	public void delayed_move_collide(int dx, int dy, int dz) {
 
 		if (craft.type.canNavigate || craft.type.canDive) {
@@ -1079,74 +1050,76 @@ public class CraftMover {
 			}
 
 		}
-		//plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			if (NavyCraft.shutDown) { return; }
+		// plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+		if (NavyCraft.shutDown) {
+			return;
+		}
 
-			if (!craft.doCollide){
-				craft.dx = dx;
-				craft.dy = dy;
-				craft.dz = dz;
-				move1();
-				move2();
-				move3(true);
-				
+		if (!craft.doCollide) {
+			craft.dx = dx;
+			craft.dy = dy;
+			craft.dz = dz;
+			move1();
+			move2();
+			move3(true);
+
+		} else {
+
+			Block colBlock = null;
+			if (craft.collisionLoc != null) {
+				colBlock = craft.collisionLoc.getBlock();
+			} else {
+				colBlock = new Location(craft.world, craft.minX + (craft.sizeX / 2), craft.minY, craft.minZ + (craft.sizeZ / 2)).getBlock();
 			}
-			else {
+			NavyCraft.explosion(6, colBlock, false);
 
-				Block colBlock = null;
-				if (craft.collisionLoc != null) {
-					colBlock = craft.collisionLoc.getBlock();
-				} else {
-					colBlock = new Location(craft.world, craft.minX + (craft.sizeX / 2), craft.minY, craft.minZ + (craft.sizeZ / 2)).getBlock();
-				}
-				NavyCraft.explosion(6, colBlock,false);
+			craft.setSpeed = 0;
+			craft.turnProgress = 0;
+			craft.rudder = 0;
+			craft.enginesOn = false;
 
-				craft.setSpeed = 0;
-				craft.turnProgress = 0;
-				craft.rudder = 0;
-				craft.enginesOn = false;
+			structureUpdate(null, false);
 
-				structureUpdate(null, false);
+			if (craft.captainName != null) {
+				Player p = plugin.getServer().getPlayer(craft.captainName);
+				if (p != null) {
+					Craft otherCraft = Craft.getOtherCraft(craft, p, colBlock.getLocation().getBlockX(), colBlock.getLocation().getBlockY(), colBlock.getLocation().getBlockZ());
+					if (otherCraft != null) {
+						CraftMover cm1 = new CraftMover(otherCraft, plugin);
 
-				if (craft.captainName != null) {
-					Player p = plugin.getServer().getPlayer(craft.captainName);
-					if (p != null) {
-						Craft otherCraft = Craft.getOtherCraft(craft, p, colBlock.getLocation().getBlockX(), colBlock.getLocation().getBlockY(), colBlock.getLocation().getBlockZ());
+						if (p != null) {
+							cm1.structureUpdate(p, false);
+						}
+					} else {
+						if (p != null) {
+							otherCraft = Craft.getOtherCraft(craft, p, colBlock.getRelative(2, 1, 2).getX(), colBlock.getRelative(2, 1, 2).getY(), colBlock.getRelative(2, 1, 2).getZ());
+						}
 						if (otherCraft != null) {
-							CraftMover cm1 = new CraftMover(otherCraft, plugin);
-
-							if (p != null) {
-								cm1.structureUpdate(p, false);
-							}
+							CraftMover cm2 = new CraftMover(otherCraft, plugin);
+							cm2.structureUpdate(p, false);
 						} else {
-							if (p != null) {
-								otherCraft = Craft.getOtherCraft(craft, p, colBlock.getRelative(2, 1, 2).getX(), colBlock.getRelative(2, 1, 2).getY(), colBlock.getRelative(2, 1, 2).getZ());
-							}
+							otherCraft = Craft.getOtherCraft(craft, p, colBlock.getRelative(-2, -1, -2).getX(), colBlock.getRelative(-2, -1, -2).getY(), colBlock.getRelative(-2, -1, -2).getZ());
 							if (otherCraft != null) {
-								CraftMover cm2 = new CraftMover(otherCraft, plugin);
-								cm2.structureUpdate(p, false);
-							} else {
-								otherCraft = Craft.getOtherCraft(craft, p, colBlock.getRelative(-2, -1, -2).getX(), colBlock.getRelative(-2, -1, -2).getY(), colBlock.getRelative(-2, -1, -2).getZ());
-								if (otherCraft != null) {
-									CraftMover cm3 = new CraftMover(otherCraft, plugin);
-									cm3.structureUpdate(p, false);
-								}
+								CraftMover cm3 = new CraftMover(otherCraft, plugin);
+								cm3.structureUpdate(p, false);
 							}
 						}
 					}
 				}
 			}
-		//});
+		}
+		// });
 	}
 
-	
 	public void move(int dx, int dy, int dz, boolean checkStructure) {
-		if (craft.isDestroying) { return; }
+		if (craft.isDestroying) {
+			return;
+		}
 
 		NavyCraft.instance.DebugMessage("craft.waterLevel is " + craft.waterLevel, 2);
 		NavyCraft.instance.DebugMessage("craft.waterType is " + craft.waterType, 2);
 		NavyCraft.instance.DebugMessage("newcraft.waterLevel is " + craft.newWaterLevel, 2);
-		
+
 		if ((Math.abs(dx) > 0) && (Math.abs(dz) > 0)) {
 			dx = (craft.speed / 2) * dx;
 			dz = (craft.speed / 2) * dz;
@@ -1288,7 +1261,8 @@ public class CraftMover {
 					// new block position (place)
 					if (!BlocksInfo.needsSupport(blockId)) {
 
-						// Block innerBlock = world.getBlockAt(posX + dx + x,posY + dy + y, posZ + dz + z);
+						// Block innerBlock = world.getBlockAt(posX + dx + x,posY + dy + y, posZ + dz +
+						// z);
 						innerBlock = getWorldBlock(dx + x, dy + y, dz + z);
 
 						if (craft.type.digBlockDurability > 0) { // break drill bits
@@ -1347,9 +1321,9 @@ public class CraftMover {
 		craft.isMovingPlayers = true;
 
 		for (Entity e : checkEntities) {
-			//tp player on a ship
-				teleportPlayer(e, dx, dy, dz);
-			}
+			// tp player on a ship
+			teleportPlayer(e, dx, dy, dz);
+		}
 
 		for (Chunk checkChunk : craft.checkedChunks) {
 			craft.world.refreshChunk(checkChunk.getX(), checkChunk.getZ());
@@ -1380,42 +1354,45 @@ public class CraftMover {
 
 		craft.lastMove = System.currentTimeMillis();
 
-		/*if (craft.type.requiresRails) {
-			int xMid = craft.matrix.length / 2;
-			int zMid = craft.matrix[0][0].length / 2;
-
-			// Block belowBlock = world.getBlockAt(posX + xMid, posY - 1, posZ + zMid);
-			Block belowBlock = getWorldBlock(xMid, -1, zMid);
-			craft.railBlock = belowBlock;
-
-			if (belowBlock.getType() == Material.RAILS) {
-				railMove();
-			}
-		}*/
+		/*
+		 * if (craft.type.requiresRails) { int xMid = craft.matrix.length / 2; int zMid
+		 * = craft.matrix[0][0].length / 2;
+		 *
+		 * // Block belowBlock = world.getBlockAt(posX + xMid, posY - 1, posZ + zMid);
+		 * Block belowBlock = getWorldBlock(xMid, -1, zMid); craft.railBlock =
+		 * belowBlock;
+		 *
+		 * if (belowBlock.getType() == Material.RAILS) { railMove(); } }
+		 */
 
 	}
 
-	// scan to know if any of the craft blocks are now missing (blocks removed, TNT damage, creeper ?)
+	// scan to know if any of the craft blocks are now missing (blocks removed, TNT
+	// damage, creeper ?)
 	// and update the structure
-	
+
 	public void structureUpdate(Player causer, boolean scheduled) {
 		short craftBlockId;
 		int blockId;
 
-		if (craft == null) { return; }
+		if (craft == null) {
+			return;
+		}
 
-		if (craft.matrix == null) { return; }
+		if (craft.matrix == null) {
+			return;
+		}
 
 		craft.signLoc = null;
 
 		craft.radioSignLoc = null;
-		
+
 		firstSonarSign = null;
 		firstRadarSign = null;
 		firstDetectSign = null;
 		firstHydroSign = null;
 		pingOtherSigns = false;
-		returnPingStrength = 0;	
+		returnPingStrength = 0;
 
 		for (int i : craft.engineIDLocs.keySet()) {
 			craft.engineIDLocs.put(i, null);
@@ -1430,9 +1407,10 @@ public class CraftMover {
 		if (causer != null) {
 			craft.lastCauser = causer;
 		}
-		
-		if( craft.weightCurrent > craft.weightStart )
+
+		if (craft.weightCurrent > craft.weightStart) {
 			craft.weightStart = craft.weightCurrent;
+		}
 
 		craft.lastUpdate = System.currentTimeMillis();
 
@@ -1442,15 +1420,13 @@ public class CraftMover {
 				if (craft.captainName != null) {
 					Player p = plugin.getServer().getPlayer(craft.captainName);
 					if ((p != null) && craft.isNameOnBoard.get(craft.captainName)) {
-						Essentials ess;
-						ess = (Essentials) plugin.getServer().getPluginManager().getPlugin("Essentials");
-						if (ess == null) {
-							p.sendMessage(ChatColor.DARK_RED + "Essentials Economy error");
-							return;
-						}
-						if (!PermissionInterface.CheckQuietPerm(p, "navycraft.free") && ess.getUser(p).canAfford(new BigDecimal(craft.vehicleCost))) {
+						if (!PermissionInterface.CheckQuietPerm(p, "navycraft.free") && NavyCraft.econ.has(p, craft.vehicleCost)
+						/*
+						 * ess . getUser ( p ) . canAfford ( new BigDecimal ( craft . vehicleCost ) )
+						 */) {
 							p.sendMessage(ChatColor.GREEN + "Vehicle purchased.");
-							ess.getUser(p).takeMoney(new BigDecimal(craft.vehicleCost));
+							NavyCraft.econ.withdrawPlayer(p, craft.vehicleCost);// ess.getUser(p).takeMoney(new
+																				// BigDecimal(craft.vehicleCost));
 
 						} else if (PermissionInterface.CheckQuietPerm(p, "navycraft.free")) {
 							p.sendMessage(ChatColor.GREEN + "Vehicle given for free!");
@@ -1470,88 +1446,88 @@ public class CraftMover {
 			}
 			craft.doDestroy = true;
 			return;
-		
+
 		}
-// TODO This is really important if you ever want to test battles and score regions arent working. Eventually I will and probably will remove this and replace it with a kind reminder as to where the score region code is.
-			if (!craft.isDestroying && (NavyCraft.battleType == 3) && craft.isMerchantCraft && (checkMerchantScoreRegion(new Location(craft.world, craft.minX, craft.minY, craft.minZ), craft) || checkMerchantScoreRegion(new Location(craft.world, craft.maxX, craft.maxY, craft.maxZ), craft))) {
+		// TODO This is really important if you ever want to test battles and score
+		// regions arent working. Eventually I will and probably will remove this and
+		// replace it with a kind reminder as to where the score region code is.
+		if (!craft.isDestroying && (NavyCraft.battleType == 3) && craft.isMerchantCraft && (checkMerchantScoreRegion(new Location(craft.world, craft.minX, craft.minY, craft.minZ), craft) || checkMerchantScoreRegion(new Location(craft.world, craft.maxX, craft.maxY, craft.maxZ), craft))) {
 
-				if (craft.redTeam) {
-					for (String s : NavyCraft.redPlayers) {
-						Player p = plugin.getServer().getPlayer(s);
-						int playerNewExp = 5000;
-						if ((p != null) && p.isOnline()) {
-							if (NavyCraft.playerExp.containsKey(p.getName())) {
-								playerNewExp = NavyCraft.playerExp.get(p.getName()) + playerNewExp;
-								NavyCraft.playerExp.put(p.getName(), playerNewExp);
-							} else {
-								NavyCraft.playerExp.put(p.getName(), playerNewExp);
-							}
-							p.sendMessage(ChatColor.GRAY + "You now have " + ChatColor.WHITE + playerNewExp + ChatColor.GRAY + " rank points.");
-							NavyCraft_BlockListener.checkRankWorld(p, playerNewExp, craft.world);
+			if (craft.redTeam) {
+				for (String s : NavyCraft.redPlayers) {
+					Player p = plugin.getServer().getPlayer(s);
+					int playerNewExp = 5000;
+					if ((p != null) && p.isOnline()) {
+						if (NavyCraft.playerExp.containsKey(p.getName())) {
+							playerNewExp = NavyCraft.playerExp.get(p.getName()) + playerNewExp;
+							NavyCraft.playerExp.put(p.getName(), playerNewExp);
+						} else {
+							NavyCraft.playerExp.put(p.getName(), playerNewExp);
 						}
-						NavyCraft_FileListener.saveExperience(p.getName());
+						p.sendMessage(ChatColor.GRAY + "You now have " + ChatColor.WHITE + playerNewExp + ChatColor.GRAY + " rank points.");
+						NavyCraft_BlockListener.checkRankWorld(p, playerNewExp, craft.world);
 					}
-
-					plugin.getServer().broadcastMessage(ChatColor.RED + "Red Team Merchant Score! Red Team earns " + ChatColor.GOLD + "5000 points!");
-					NavyCraft.redPoints += 5000;
-
-					for (String s : craft.crewNames) {
-						Player p = plugin.getServer().getPlayer(s);
-						if ((p != null) && p.isOnline()) {
-							p.teleport(NavyCraft.redSpawn);
-						}
-					}
-
-					NavyCraft.redMerchant = false;
-
-				} else if (craft.blueTeam) {
-					for (String s : NavyCraft.bluePlayers) {
-						Player p = plugin.getServer().getPlayer(s);
-						int playerNewExp = 5000;
-						if ((p != null) && p.isOnline()) {
-							if (NavyCraft.playerExp.containsKey(p.getName())) {
-								playerNewExp = NavyCraft.playerExp.get(p.getName()) + playerNewExp;
-								NavyCraft.playerExp.put(p.getName(), playerNewExp);
-							} else {
-								NavyCraft.playerExp.put(p.getName(), playerNewExp);
-							}
-							p.sendMessage(ChatColor.GRAY + "You now have " + ChatColor.WHITE + playerNewExp + ChatColor.GRAY + " rank points.");
-							NavyCraft_BlockListener.checkRankWorld(p, playerNewExp, craft.world);
-						}
-						NavyCraft_FileListener.saveExperience(p.getName());
-					}
-
-					plugin.getServer().broadcastMessage(ChatColor.BLUE + "Blue Team Merchant Score! Blue Team earns " + ChatColor.GOLD + "5000 points!");
-					NavyCraft.bluePoints += 5000;
-
-					for (String s : craft.crewNames) {
-						Player p = plugin.getServer().getPlayer(s);
-						if ((p != null) && p.isOnline()) {
-							p.teleport(NavyCraft.blueSpawn);
-						}
-					}
-
-					NavyCraft.blueMerchant = false;
+					NavyCraft_FileListener.saveExperience(p.getName());
 				}
 
-				craft.doDestroy = true;
-				return;
+				plugin.getServer().broadcastMessage(ChatColor.RED + "Red Team Merchant Score! Red Team earns " + ChatColor.GOLD + "5000 points!");
+				NavyCraft.redPoints += 5000;
+
+				for (String s : craft.crewNames) {
+					Player p = plugin.getServer().getPlayer(s);
+					if ((p != null) && p.isOnline()) {
+						p.teleport(NavyCraft.redSpawn);
+					}
+				}
+
+				NavyCraft.redMerchant = false;
+
+			} else if (craft.blueTeam) {
+				for (String s : NavyCraft.bluePlayers) {
+					Player p = plugin.getServer().getPlayer(s);
+					int playerNewExp = 5000;
+					if ((p != null) && p.isOnline()) {
+						if (NavyCraft.playerExp.containsKey(p.getName())) {
+							playerNewExp = NavyCraft.playerExp.get(p.getName()) + playerNewExp;
+							NavyCraft.playerExp.put(p.getName(), playerNewExp);
+						} else {
+							NavyCraft.playerExp.put(p.getName(), playerNewExp);
+						}
+						p.sendMessage(ChatColor.GRAY + "You now have " + ChatColor.WHITE + playerNewExp + ChatColor.GRAY + " rank points.");
+						NavyCraft_BlockListener.checkRankWorld(p, playerNewExp, craft.world);
+					}
+					NavyCraft_FileListener.saveExperience(p.getName());
+				}
+
+				plugin.getServer().broadcastMessage(ChatColor.BLUE + "Blue Team Merchant Score! Blue Team earns " + ChatColor.GOLD + "5000 points!");
+				NavyCraft.bluePoints += 5000;
+
+				for (String s : craft.crewNames) {
+					Player p = plugin.getServer().getPlayer(s);
+					if ((p != null) && p.isOnline()) {
+						p.teleport(NavyCraft.blueSpawn);
+					}
+				}
+
+				NavyCraft.blueMerchant = false;
 			}
-			
+
+			craft.doDestroy = true;
+			return;
+		}
 
 		float displacement = 0.0f;
 		craft.airDisplacement = 0.0f;
 		craft.blockDisplacement = 0.0f;
 		craft.ballastDisplacement = 0.0f;
 		craft.buoyancy = 0;
-		
+
 		craft.chunkList.clear();
-		
-		for(Pump p:craft.pumps) { //set all pumps to not updated
+
+		for (Pump p : craft.pumps) { // set all pumps to not updated
 			p.updated = false;
 		}
-		
-		
+
 		for (int y = 0; y < craft.sizeY; y++) {
 			for (int x = 0; x < craft.sizeX; x++) {
 				for (int z = 0; z < craft.sizeZ; z++) {
@@ -1562,63 +1538,68 @@ public class CraftMover {
 					if (!newBlock.getChunk().isLoaded()) {
 						newBlock.getChunk().load();
 					}
-					
-					if( !craft.chunkList.contains(newBlock.getChunk()) )
+
+					if (!craft.chunkList.contains(newBlock.getChunk())) {
 						craft.chunkList.add(newBlock.getChunk());
+					}
 
 					if (craft.type.canNavigate || craft.type.canDive) {
-						if( newBlock.getType() == Material.SPONGE ) //regenerate sponges/pumps
+						if (newBlock.getType() == Material.SPONGE) // regenerate sponges/pumps
 						{
-							boolean pumpFound=false;
-							for(Pump p:craft.pumps) { //check if sponge is an existing pump
-								if( newBlock.getData() == 1 && p.loc.equals(newBlock.getLocation()) && p.counter <= p.limit ) { //still active
-									pumpFound=true;
+							boolean pumpFound = false;
+							for (Pump p : craft.pumps) { // check if sponge is an existing pump
+								if ((newBlock.getData() == 1) && p.loc.equals(newBlock.getLocation()) && (p.counter <= p.limit)) { // still
+																																	// active
+									pumpFound = true;
 									playEngineSound(newBlock.getLocation(), Sound.ENTITY_BOBBER_SPLASH, 1.0f, 0.7f);
-									newBlock.setData((byte)0);
-									p.counter = p.counter+1;
+									newBlock.setData((byte) 0);
+									p.counter = p.counter + 1;
 									p.updated = true;
-									
-									if(craft.captainName != null) {
-										//Player player = plugin.getServer().getPlayer(craft.captainName);
-										//player.sendMessage("Pump lifespan-" + p.counter);
+
+									if (craft.captainName != null) {
+										// Player player = plugin.getServer().getPlayer(craft.captainName);
+										// player.sendMessage("Pump lifespan-" + p.counter);
 									}
-									if( p.counter == p.limit/2 && craft.captainName != null )
-									{
+									if ((p.counter == (p.limit / 2)) && (craft.captainName != null)) {
 										Player player = plugin.getServer().getPlayer(craft.captainName);
 										player.sendMessage("Pump lifespan 50% remaining!");
-										
+
 									}
 									break;
-								}else if( newBlock.getData() == 1 && p.loc.equals(newBlock.getLocation()) ) { //found pump but expired
-									if (p.counter == p.limit+1) {
-										if(craft.captainName != null) {
+								} else if ((newBlock.getData() == 1) && p.loc.equals(newBlock.getLocation())) { // found
+																												// pump
+																												// but
+																												// expired
+									if (p.counter == (p.limit + 1)) {
+										if (craft.captainName != null) {
 											Player player = plugin.getServer().getPlayer(craft.captainName);
 											player.sendMessage("Pump expired!");
 										}
 										playEngineSound(newBlock.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1.0f, 1.0f);
 										p.counter++;
 									}
-									
+
 									p.updated = true;
-									pumpFound=true;
-									
+									pumpFound = true;
+
 									break;
-								}else if( p.loc.equals(newBlock.getLocation()) ) { //pump is dry, found it but dont need to regenerate
+								} else if (p.loc.equals(newBlock.getLocation())) { // pump is dry, found it but dont
+																					// need to regenerate
 									p.updated = true;
-									pumpFound=true;
-									
+									pumpFound = true;
+
 									break;
 								}
-									
+
 							}
-							if( !pumpFound ) { //add new pump
+							if (!pumpFound) { // add new pump
 								Pump newPump = new Pump(newBlock.getLocation());
 								newPump.updated = true;
 								craft.pumps.add(newPump);
 							}
-							
+
 						}
-						
+
 						if ((newBlock.getY() < 63) && !((blockId >= 8) && (blockId <= 11))) {
 							float yScale = craft.sizeY / 3.0f;
 							if ((blockId == 0) && (y < yScale)) {
@@ -1731,9 +1712,9 @@ public class CraftMover {
 						}
 
 						// regenerate TNT on a bomber
-						/*if ((craftBlockId == 46) && craft.type.bomber) {
-							continue;
-						}*/
+						/*
+						 * if ((craftBlockId == 46) && craft.type.bomber) { continue; }
+						 */
 
 						if ((craftBlockId == 87) && (blockId == 87)) {
 							if (craft.redTeam) {
@@ -1755,7 +1736,7 @@ public class CraftMover {
 
 						}
 
-						if (blockId == 68 || blockId == 63) {
+						if ((blockId == 68) || (blockId == 63)) {
 							signUpdates(newBlock);
 						} // end if sign
 
@@ -1874,26 +1855,23 @@ public class CraftMover {
 				}
 			}
 		}
-		
+
 		ArrayList<Pump> removePumps = new ArrayList<Pump>();
-		for(Pump p:craft.pumps) {  //remove pumps not found/updated
-			if ( p.updated == false ) {
+		for (Pump p : craft.pumps) { // remove pumps not found/updated
+			if (p.updated == false) {
 				removePumps.add(p);
 			}
 		}
-		for(Pump p : removePumps ) {
+		for (Pump p : removePumps) {
 			craft.pumps.remove(p);
 		}
 
-		if( craft.type.canNavigate || craft.type.canDive )
-		{
+		if (craft.type.canNavigate || craft.type.canDive) {
 			updateBuoyancy(displacement);
-			if( !craft.isMoving && scheduled && craft.buoyancy != 0 && ((craft.buoyFloodTicker == 3 && Math.abs((displacement-craft.weightStart*craft.weightMult)/(craft.weightStart*craft.weightMult)) > 0.3f ) || craft.buoyFloodTicker == 7))
-			{
-				if( craft.waitTorpLoading == 0 && !craft.launcherOn)
-				{
+			if (!craft.isMoving && scheduled && (craft.buoyancy != 0) && (((craft.buoyFloodTicker == 3) && (Math.abs((displacement - (craft.weightStart * craft.weightMult)) / (craft.weightStart * craft.weightMult)) > 0.3f)) || (craft.buoyFloodTicker == 7))) {
+				if ((craft.waitTorpLoading == 0) && !craft.launcherOn) {
 					delayed_move(0, calculateBuoyancyMove(), 0);
-				}		
+				}
 			}
 			if (scheduled || (craft.gear == 3)) {
 				craft.buoyFloodTicker = (craft.buoyFloodTicker + 1) % 8;
@@ -1909,22 +1887,20 @@ public class CraftMover {
 		}
 
 		if (craft.doCost) {
-			if (craft.type.discount == 100) 
+			if (craft.type.discount == 100) {
 				craft.vehicleCost = 0;
-			else if(craft.type.discount > 0)
-				craft.vehicleCost = (int)((float)craft.vehicleCost * (float)craft.type.discount * .01f);
-			
+			} else if (craft.type.discount > 0) {
+				craft.vehicleCost = (int) ((float) craft.vehicleCost * (float) craft.type.discount * .01f);
+			}
+
 			if (NavyCraft.checkSpawnRegion(craft.getLocation())) {
 				if (craft.captainName != null) {
 					Player p = plugin.getServer().getPlayer(craft.captainName);
 					if (p != null) {
-						Essentials ess;
-						ess = (Essentials) plugin.getServer().getPluginManager().getPlugin("Essentials");
-						if (ess == null) {
-							p.sendMessage("Essentials Economy error");
-							return;
-						}
-						if (!ess.getUser(p).canAfford(new BigDecimal(craft.vehicleCost))) {
+						if (!NavyCraft.econ.has(p, craft.vehicleCost)
+						/*
+						 * ess.getUser(p).canAfford(new BigDecimal(craft.vehicleCost))
+						 */) {
 							p.sendMessage(ChatColor.YELLOW + "You cannot afford this vehicle:" + ChatColor.RED + "$" + craft.vehicleCost + ChatColor.YELLOW + ". It will be destroyed if driven outside of the dock region.");
 						} else {
 							p.sendMessage(ChatColor.YELLOW + "This vehicle will cost:" + ChatColor.GREEN + "$" + craft.vehicleCost + ChatColor.YELLOW + " if driven outside of the dock region.");
@@ -1947,7 +1923,6 @@ public class CraftMover {
 		if (craft.signLoc == null) {
 			craft.helmDestroyed = true;
 		} // else
-
 
 		if (craft.blockCount < craft.lastBlockCount) {
 			if (causer != null) {
@@ -2062,47 +2037,38 @@ public class CraftMover {
 		}
 	}
 
-	public void updateBuoyancy(float displacement)
-	{
-		if( displacement < craft.weightStart * craft.weightMult )
-		{
-			if( craft.type.canDive && displacement < craft.weightStart*craft.weightMult*0.9f )
-			{
-				//if( displacement < craft.weight*craft.weightMult*0.3f )
-					//craft.buoyancy = -2;
-				//else
+	public void updateBuoyancy(float displacement) {
+		if (displacement < (craft.weightStart * craft.weightMult)) {
+			if (craft.type.canDive && (displacement < (craft.weightStart * craft.weightMult * 0.9f))) {
+				// if( displacement < craft.weight*craft.weightMult*0.3f )
+				// craft.buoyancy = -2;
+				// else
 				craft.buoyancy = -1;
-			}
-			else if( !craft.type.canDive )
-			{
-				//if( displacement < craft.weight*craft.weightMult*0.3f )
-					//craft.buoyancy = -2;
-				//else
+			} else if (!craft.type.canDive) {
+				// if( displacement < craft.weight*craft.weightMult*0.3f )
+				// craft.buoyancy = -2;
+				// else
 				craft.buoyancy = -1;
-			}
-			else
+			} else {
 				craft.buoyancy = 0;
-		}else
-		{
-	
-			if( craft.type.canDive && displacement > craft.weightStart*craft.weightMult*1.1f )
-			{
-				//if( displacement > craft.weight*craft.weightMult*1.7f )
-					//craft.buoyancy = 2;
-				//else
-				craft.buoyancy = 1;
 			}
-			else if( !craft.type.canDive )
-			{
-				//if( displacement > craft.weight*craft.weightMult*1.7f )
-					//craft.buoyancy = 2;
-				//else
+		} else {
+
+			if (craft.type.canDive && (displacement > (craft.weightStart * craft.weightMult * 1.1f))) {
+				// if( displacement > craft.weight*craft.weightMult*1.7f )
+				// craft.buoyancy = 2;
+				// else
 				craft.buoyancy = 1;
-			}
-			else
+			} else if (!craft.type.canDive) {
+				// if( displacement > craft.weight*craft.weightMult*1.7f )
+				// craft.buoyancy = 2;
+				// else
+				craft.buoyancy = 1;
+			} else {
 				craft.buoyancy = 0;
+			}
 		}
-		
+
 		craft.displacement = displacement;
 
 		if (craft.ballastMode == 1) {
@@ -2130,7 +2096,6 @@ public class CraftMover {
 		}
 	}
 
-	
 	public void signUpdates(Block newBlock) {
 		Sign sign = (Sign) newBlock.getState();
 
@@ -2740,31 +2705,31 @@ public class CraftMover {
 						int display = craft.tubeFiringDisplay.get(tubeNum);
 						switch (display) {
 
-							case 0:
-								line3 = "DPT=";
-								if (craft.tubeFiringAuto.get(tubeNum)) {
-									line3 += "AUTO";
-								} else {
-									line3 += "" + craft.tubeFiringDepth.get(tubeNum);
-								}
+						case 0:
+							line3 = "DPT=";
+							if (craft.tubeFiringAuto.get(tubeNum)) {
+								line3 += "AUTO";
+							} else {
+								line3 += "" + craft.tubeFiringDepth.get(tubeNum);
+							}
 
-								break;
-							case 1:
-								line3 = "ARMED=";
-								if (craft.tubeFiringArmed.get(tubeNum)) {
-									line3 += "ON";
-								} else {
-									line3 += "OFF";
-								}
-								break;
-							case 2:
-								line3 = "AUTO=";
-								if (craft.tubeFiringAuto.get(tubeNum)) {
-									line3 += "ON";
-								} else {
-									line3 += "OFF";
-								}
-								break;
+							break;
+						case 1:
+							line3 = "ARMED=";
+							if (craft.tubeFiringArmed.get(tubeNum)) {
+								line3 += "ON";
+							} else {
+								line3 += "OFF";
+							}
+							break;
+						case 2:
+							line3 = "AUTO=";
+							if (craft.tubeFiringAuto.get(tubeNum)) {
+								line3 += "ON";
+							} else {
+								line3 += "OFF";
+							}
+							break;
 
 						}
 					} else if (mode == -2) {
@@ -2772,31 +2737,31 @@ public class CraftMover {
 						int display = craft.tubeFiringDisplay.get(tubeNum);
 						switch (display) {
 
-							case 0:
-								line3 = "DPT=" + craft.tubeFiringDepth.get(tubeNum);
-								break;
-							case 1:
-								line3 = "ARM=" + craft.tubeFiringArm.get(tubeNum);
+						case 0:
+							line3 = "DPT=" + craft.tubeFiringDepth.get(tubeNum);
+							break;
+						case 1:
+							line3 = "ARM=" + craft.tubeFiringArm.get(tubeNum);
 						}
 					} else if (mode == -1) {
 						line2 = "Periscope";
 						int display = craft.tubeFiringDisplay.get(tubeNum);
 						switch (display) {
-							case 0:
-								line3 = "DPT=" + craft.tubeFiringDepth.get(tubeNum);
-								break;
-							case 1:
-								line3 = "ARM=" + craft.tubeFiringArm.get(tubeNum);
+						case 0:
+							line3 = "DPT=" + craft.tubeFiringDepth.get(tubeNum);
+							break;
+						case 1:
+							line3 = "ARM=" + craft.tubeFiringArm.get(tubeNum);
 						}
 					} else {
 						line3 = "Target";
 						int display = craft.tubeFiringDisplay.get(tubeNum);
 						switch (display) {
-							case 0:
-								line3 = "DPT=" + craft.tubeFiringDepth.get(tubeNum);
-								break;
-							case 1:
-								line3 = "ARM=10" + craft.tubeFiringArm.get(tubeNum);
+						case 0:
+							line3 = "DPT=" + craft.tubeFiringDepth.get(tubeNum);
+							break;
+						case 1:
+							line3 = "ARM=10" + craft.tubeFiringArm.get(tubeNum);
 						}
 					}
 
@@ -2820,21 +2785,21 @@ public class CraftMover {
 					int display = craft.tubeMk1FiringDisplay;
 					switch (display) {
 
-						case 0:
-							line3 = "DPTH=" + craft.tubeMk1FiringDepth;
-							break;
-						case 1:
-							line3 = "SPRD=" + craft.tubeMk1FiringSpread;
+					case 0:
+						line3 = "DPTH=" + craft.tubeMk1FiringDepth;
+						break;
+					case 1:
+						line3 = "SPRD=" + craft.tubeMk1FiringSpread;
 					}
 				} else if (mode == -1) {
 					line2 = "Periscope";
 					int display = craft.tubeMk1FiringDisplay;
 					switch (display) {
-						case 0:
-							line3 = "DPTH=" + craft.tubeMk1FiringDepth;
-							break;
-						case 1:
-							line3 = "SPRD=" + craft.tubeMk1FiringSpread;
+					case 0:
+						line3 = "DPTH=" + craft.tubeMk1FiringDepth;
+						break;
+					case 1:
+						line3 = "SPRD=" + craft.tubeMk1FiringSpread;
 					}
 				}
 
@@ -2847,229 +2812,229 @@ public class CraftMover {
 
 		} else if (craftTypeName.equalsIgnoreCase("radar")) {
 			if (craft.radarOn && !craft.sinking && (craft.maxY > 63)) {
-				if( firstRadarSign == null ) {
-				craft.lastRadarPulse = System.currentTimeMillis();
-				HashMap<Integer, String> bearings = new HashMap<>();
-				for (Craft c : Craft.craftList) {
-					if ((c != craft) && (c.world == craft.world) && !c.sinking && (c.maxY > 65)) {
-						float xDist = (c.minX + (c.sizeX / 2.0f)) - (craft.minX + (craft.sizeX / 2.0f));
-						float zDist = (c.minZ + (c.sizeZ / 2.0f)) - (craft.minZ + (craft.sizeZ / 2.0f));
-						float dist = (float) Math.sqrt((xDist * xDist) + (zDist * zDist));
+				if (firstRadarSign == null) {
+					craft.lastRadarPulse = System.currentTimeMillis();
+					HashMap<Integer, String> bearings = new HashMap<>();
+					for (Craft c : Craft.craftList) {
+						if ((c != craft) && (c.world == craft.world) && !c.sinking && (c.maxY > 65)) {
+							float xDist = (c.minX + (c.sizeX / 2.0f)) - (craft.minX + (craft.sizeX / 2.0f));
+							float zDist = (c.minZ + (c.sizeZ / 2.0f)) - (craft.minZ + (craft.sizeZ / 2.0f));
+							float dist = (float) Math.sqrt((xDist * xDist) + (zDist * zDist));
 
-						if (dist < 500) {
-							double trueBearing = 0;
-							if ((xDist >= 0) && (zDist < 0)) {
-								double bear = Math.atan(xDist / (-zDist));
-								if (bear < 0.26) {
-									trueBearing = 0;
-								} else if (bear < .70) {
-									trueBearing = 30;
-								} else if (bear < .87) {
-									trueBearing = 45;
-								} else if (bear < 1.31) {
-									trueBearing = 60;
-								} else if (bear < 1.57) {
-									trueBearing = 90;
-								}
-							} else if ((xDist < 0) && (zDist < 0)) {
-								double bear = Math.atan(xDist / zDist);
-								if (bear < 0.26) {
-									trueBearing = 0;
-								} else if (bear < .70) {
-									trueBearing = 330;
-								} else if (bear < .87) {
-									trueBearing = 315;
-								} else if (bear < 1.31) {
-									trueBearing = 300;
-								} else if (bear < 1.57) {
+							if (dist < 500) {
+								double trueBearing = 0;
+								if ((xDist >= 0) && (zDist < 0)) {
+									double bear = Math.atan(xDist / (-zDist));
+									if (bear < 0.26) {
+										trueBearing = 0;
+									} else if (bear < .70) {
+										trueBearing = 30;
+									} else if (bear < .87) {
+										trueBearing = 45;
+									} else if (bear < 1.31) {
+										trueBearing = 60;
+									} else if (bear < 1.57) {
+										trueBearing = 90;
+									}
+								} else if ((xDist < 0) && (zDist < 0)) {
+									double bear = Math.atan(xDist / zDist);
+									if (bear < 0.26) {
+										trueBearing = 0;
+									} else if (bear < .70) {
+										trueBearing = 330;
+									} else if (bear < .87) {
+										trueBearing = 315;
+									} else if (bear < 1.31) {
+										trueBearing = 300;
+									} else if (bear < 1.57) {
+										trueBearing = 270;
+									}
+								} else if ((xDist >= 0) && (zDist > 0)) {
+									double bear = Math.atan(xDist / zDist);
+									if (bear < 0.26) {
+										trueBearing = 180;
+									} else if (bear < .70) {
+										trueBearing = 150;
+									} else if (bear < .87) {
+										trueBearing = 135;
+									} else if (bear < 1.31) {
+										trueBearing = 120;
+									} else if (bear < 1.57) {
+										trueBearing = 90;
+									}
+								} else if ((xDist < 0) && (zDist > 0)) {
+									double bear = Math.atan((-xDist) / zDist);
+									if (bear < 0.26) {
+										trueBearing = 180;
+									} else if (bear < .70) {
+										trueBearing = 210;
+									} else if (bear < .87) {
+										trueBearing = 225;
+									} else if (bear < 1.31) {
+										trueBearing = 240;
+									} else if (bear < 1.57) {
+										trueBearing = 270;
+									}
+								} else if ((zDist == 0) && (xDist < 0)) {
 									trueBearing = 270;
-								}
-							} else if ((xDist >= 0) && (zDist > 0)) {
-								double bear = Math.atan(xDist / zDist);
-								if (bear < 0.26) {
-									trueBearing = 180;
-								} else if (bear < .70) {
-									trueBearing = 150;
-								} else if (bear < .87) {
-									trueBearing = 135;
-								} else if (bear < 1.31) {
-									trueBearing = 120;
-								} else if (bear < 1.57) {
+								} else if ((zDist == 0) && (xDist > 0)) {
 									trueBearing = 90;
+								} else {
+									trueBearing = 0;
 								}
-							} else if ((xDist < 0) && (zDist > 0)) {
-								double bear = Math.atan((-xDist) / zDist);
-								if (bear < 0.26) {
-									trueBearing = 180;
-								} else if (bear < .70) {
-									trueBearing = 210;
-								} else if (bear < .87) {
-									trueBearing = 225;
-								} else if (bear < 1.31) {
-									trueBearing = 240;
-								} else if (bear < 1.57) {
-									trueBearing = 270;
+
+								int relBearing = (int) trueBearing - craft.rotation;
+								if (relBearing < 0) {
+									relBearing = relBearing + 360;
 								}
-							} else if ((zDist == 0) && (xDist < 0)) {
-								trueBearing = 270;
-							} else if ((zDist == 0) && (xDist > 0)) {
-								trueBearing = 90;
-							} else {
-								trueBearing = 0;
-							}
 
-							int relBearing = (int) trueBearing - craft.rotation;
-							if (relBearing < 0) {
-								relBearing = relBearing + 360;
-							}
-
-							String distanceStr = "";
-							if (dist < 150) {
-								distanceStr = "X";
-							} else if (dist < 300) {
-								distanceStr = "*";
-							} else {
-								distanceStr = ".";
-								if (Math.random() < ((dist - 300) / 200)) {
-									continue;
+								String distanceStr = "";
+								if (dist < 150) {
+									distanceStr = "X";
+								} else if (dist < 300) {
+									distanceStr = "*";
+								} else {
+									distanceStr = ".";
+									if (Math.random() < ((dist - 300) / 200)) {
+										continue;
+									}
 								}
-							}
 
-							if (bearings.containsKey(relBearing)) {
-								if (bearings.get(relBearing).equalsIgnoreCase(".") && (distanceStr.equalsIgnoreCase("*") || distanceStr.equalsIgnoreCase("X"))) {
-									bearings.put(relBearing, distanceStr);
-								} else if (bearings.get(relBearing).equalsIgnoreCase("*") && distanceStr.equalsIgnoreCase("X")) {
+								if (bearings.containsKey(relBearing)) {
+									if (bearings.get(relBearing).equalsIgnoreCase(".") && (distanceStr.equalsIgnoreCase("*") || distanceStr.equalsIgnoreCase("X"))) {
+										bearings.put(relBearing, distanceStr);
+									} else if (bearings.get(relBearing).equalsIgnoreCase("*") && distanceStr.equalsIgnoreCase("X")) {
+										bearings.put(relBearing, distanceStr);
+									}
+								} else {
 									bearings.put(relBearing, distanceStr);
 								}
-							} else {
-								bearings.put(relBearing, distanceStr);
-							}
 
+							}
 						}
 					}
-				}
 
-				String line1;
-				line1 = "";
-				if (bearings.containsKey(300)) {
-					line1 += bearings.get(300);
-				} else {
+					String line1;
+					line1 = "";
+					if (bearings.containsKey(300)) {
+						line1 += bearings.get(300);
+					} else {
+						line1 += " ";
+					}
 					line1 += " ";
-				}
-				line1 += " ";
-				if (bearings.containsKey(315)) {
-					line1 += bearings.get(315);
-				} else {
+					if (bearings.containsKey(315)) {
+						line1 += bearings.get(315);
+					} else {
+						line1 += " ";
+					}
 					line1 += " ";
-				}
-				line1 += " ";
-				if (bearings.containsKey(330)) {
-					line1 += bearings.get(330);
-				} else {
+					if (bearings.containsKey(330)) {
+						line1 += bearings.get(330);
+					} else {
+						line1 += " ";
+					}
+
 					line1 += " ";
-				}
+					if (bearings.containsKey(0)) {
+						line1 += bearings.get(0);
+					} else {
+						line1 += "0";
+					}
 
-				line1 += " ";
-				if (bearings.containsKey(0)) {
-					line1 += bearings.get(0);
-				} else {
-					line1 += "0";
-				}
-
-				line1 += " ";
-				if (bearings.containsKey(30)) {
-					line1 += bearings.get(30);
-				} else {
 					line1 += " ";
-				}
-				line1 += " ";
-				if (bearings.containsKey(45)) {
-					line1 += bearings.get(45);
-				} else {
+					if (bearings.containsKey(30)) {
+						line1 += bearings.get(30);
+					} else {
+						line1 += " ";
+					}
 					line1 += " ";
-				}
-				line1 += " ";
-				if (bearings.containsKey(60)) {
-					line1 += bearings.get(60);
-				} else {
+					if (bearings.containsKey(45)) {
+						line1 += bearings.get(45);
+					} else {
+						line1 += " ";
+					}
 					line1 += " ";
-				}
+					if (bearings.containsKey(60)) {
+						line1 += bearings.get(60);
+					} else {
+						line1 += " ";
+					}
 
-				sign.setLine(1, line1);
+					sign.setLine(1, line1);
 
-				String line2;
-				line2 = "";
-				if (bearings.containsKey(270)) {
-					line2 += " " + bearings.get(270) + "           ";
-				} else {
-					line2 += "270          ";
-				}
+					String line2;
+					line2 = "";
+					if (bearings.containsKey(270)) {
+						line2 += " " + bearings.get(270) + "           ";
+					} else {
+						line2 += "270          ";
+					}
 
-				if (bearings.containsKey(90)) {
-					line2 += bearings.get(90) + " ";
-				} else {
-					line2 += "90";
-				}
+					if (bearings.containsKey(90)) {
+						line2 += bearings.get(90) + " ";
+					} else {
+						line2 += "90";
+					}
 
-				sign.setLine(2, line2);
+					sign.setLine(2, line2);
 
-				String line3;
-				line3 = "";
-				if (bearings.containsKey(240)) {
-					line3 += bearings.get(240);
-				} else {
+					String line3;
+					line3 = "";
+					if (bearings.containsKey(240)) {
+						line3 += bearings.get(240);
+					} else {
+						line3 += " ";
+					}
 					line3 += " ";
-				}
-				line3 += " ";
-				if (bearings.containsKey(225)) {
-					line3 += bearings.get(225);
-				} else {
+					if (bearings.containsKey(225)) {
+						line3 += bearings.get(225);
+					} else {
+						line3 += " ";
+					}
 					line3 += " ";
-				}
-				line3 += " ";
-				if (bearings.containsKey(210)) {
-					line3 += bearings.get(210);
-				} else {
-					line3 += " ";
-				}
+					if (bearings.containsKey(210)) {
+						line3 += bearings.get(210);
+					} else {
+						line3 += " ";
+					}
 
-				if (bearings.containsKey(180)) {
-					line3 += " " + bearings.get(180) + " ";
-				} else {
-					line3 += "180";
-				}
+					if (bearings.containsKey(180)) {
+						line3 += " " + bearings.get(180) + " ";
+					} else {
+						line3 += "180";
+					}
 
-				if (bearings.containsKey(150)) {
-					line3 += bearings.get(150);
-				} else {
+					if (bearings.containsKey(150)) {
+						line3 += bearings.get(150);
+					} else {
+						line3 += " ";
+					}
 					line3 += " ";
-				}
-				line3 += " ";
-				if (bearings.containsKey(135)) {
-					line3 += bearings.get(135);
-				} else {
+					if (bearings.containsKey(135)) {
+						line3 += bearings.get(135);
+					} else {
+						line3 += " ";
+					}
 					line3 += " ";
-				}
-				line3 += " ";
-				if (bearings.containsKey(120)) {
-					line3 += bearings.get(120);
-				} else {
-					line3 += " ";
-				}
+					if (bearings.containsKey(120)) {
+						line3 += bearings.get(120);
+					} else {
+						line3 += " ";
+					}
 
-				sign.setLine(3, line3);
+					sign.setLine(3, line3);
 
-				sign.update();
-				
-				firstRadarSign = sign; 
-						
-				}else { //duplicate radar sign			
+					sign.update();
+
+					firstRadarSign = sign;
+
+				} else { // duplicate radar sign
 					sign.setLine(0, firstRadarSign.getLine(0));
 					sign.setLine(1, firstRadarSign.getLine(1));
 					sign.setLine(2, firstRadarSign.getLine(2));
 					sign.setLine(3, firstRadarSign.getLine(3));
 					sign.update();
-					
+
 				}
 			} else // radar not on
 			{
@@ -3081,20 +3046,20 @@ public class CraftMover {
 
 		} else if (craftTypeName.equalsIgnoreCase("sonar")) {
 			if (craft.sonarOn && !craft.sinking && (craft.type.canNavigate || craft.type.canDive)) {
-				if( firstSonarSign == null ) {
+				if (firstSonarSign == null) {
 					if (((System.currentTimeMillis() - craft.lastSonarPulse) / 1000) > 3) {
-	
+
 						craft.lastSonarPulse = System.currentTimeMillis();
 						sonarPingThread(sign.getLocation());
 						pingOtherSigns = true;
-						
+
 						HashMap<Integer, String> bearings = new HashMap<>();
 						for (Craft c : Craft.craftList) {
 							if ((c != craft) && (c.world == craft.world) && !c.sinking && (c.type.canNavigate || c.type.canDive)) {
 								float xDist = (c.minX + (c.sizeX / 2.0f)) - (craft.minX + (craft.sizeX / 2.0f));
 								float zDist = (c.minZ + (c.sizeZ / 2.0f)) - (craft.minZ + (craft.sizeZ / 2.0f));
 								float dist = (float) Math.sqrt((xDist * xDist) + (zDist * zDist));
-	
+
 								if (dist < 300) {
 									double trueBearing = 0;
 									if ((xDist >= 0) && (zDist < 0)) {
@@ -3156,12 +3121,12 @@ public class CraftMover {
 									} else {
 										trueBearing = 0;
 									}
-	
+
 									int relBearing = (int) trueBearing - craft.rotation;
 									if (relBearing < 0) {
 										relBearing = relBearing + 360;
 									}
-	
+
 									String distanceStr = "";
 									if (dist < 50) {
 										distanceStr = "X";
@@ -3176,7 +3141,7 @@ public class CraftMover {
 										} else {
 											depthChance = 1 - (((Math.abs(craft.minY - c.minY)) / 100.0f) * .4f);
 										}
-	
+
 										float totalChance = depthChance * speedChance;
 										if (Math.random() > totalChance) {
 											continue;
@@ -3192,7 +3157,7 @@ public class CraftMover {
 										} else {
 											depthChance = 1 - (((Math.abs(craft.minY - c.minY)) / 200.0f) * .6f);
 										}
-	
+
 										float totalChance = depthChance * speedChance;
 										if (Math.random() > totalChance) {
 											continue;
@@ -3209,13 +3174,13 @@ public class CraftMover {
 										} else {
 											depthChance = 1 - (((Math.abs(craft.minY - c.minY)) / 300.0f) * .6f);
 										}
-	
+
 										float totalChance = distChance * depthChance * speedChance;
 										if (Math.random() > totalChance) {
 											continue;
 										}
 									}
-	
+
 									if (bearings.containsKey(relBearing)) {
 										if (bearings.get(relBearing).equalsIgnoreCase(".") && (distanceStr.equalsIgnoreCase("*") || distanceStr.equalsIgnoreCase("X"))) {
 											bearings.put(relBearing, distanceStr);
@@ -3225,27 +3190,27 @@ public class CraftMover {
 									} else {
 										bearings.put(relBearing, distanceStr);
 									}
-									
-									if( distanceStr.equalsIgnoreCase("X") ) {
+
+									if (distanceStr.equalsIgnoreCase("X")) {
 										sonarReturnThread(sign.getLocation(), 1.6f);
 										sonarReturnThread(c.getLocation(), 1.6f);
-										returnPingStrength=1.6f;
-									}else if( distanceStr.equalsIgnoreCase("*") ) {
+										returnPingStrength = 1.6f;
+									} else if (distanceStr.equalsIgnoreCase("*")) {
 										sonarReturnThread(sign.getLocation(), 1.2f);
 										sonarReturnThread(c.getLocation(), 1.2f);
-										returnPingStrength=1.2f;
-									}else if( distanceStr.equalsIgnoreCase(".") ) {
+										returnPingStrength = 1.2f;
+									} else if (distanceStr.equalsIgnoreCase(".")) {
 										sonarReturnThread(sign.getLocation(), 0.8f);
 										sonarReturnThread(c.getLocation(), 0.8f);
-										returnPingStrength=0.8f;
-									}else{
+										returnPingStrength = 0.8f;
+									} else {
 										sonarReturnThread(c.getLocation(), 0.8f);
 									}
-									
+
 								}
 							}
 						}
-	
+
 						String line1;
 						line1 = "";
 						if (bearings.containsKey(300)) {
@@ -3265,14 +3230,14 @@ public class CraftMover {
 						} else {
 							line1 += " ";
 						}
-	
+
 						line1 += " ";
 						if (bearings.containsKey(0)) {
 							line1 += bearings.get(0);
 						} else {
 							line1 += "0";
 						}
-	
+
 						line1 += " ";
 						if (bearings.containsKey(30)) {
 							line1 += bearings.get(30);
@@ -3291,9 +3256,9 @@ public class CraftMover {
 						} else {
 							line1 += " ";
 						}
-	
+
 						sign.setLine(1, line1);
-	
+
 						String line2;
 						line2 = "";
 						if (bearings.containsKey(270)) {
@@ -3301,15 +3266,15 @@ public class CraftMover {
 						} else {
 							line2 += "270          ";
 						}
-	
+
 						if (bearings.containsKey(90)) {
 							line2 += bearings.get(90) + " ";
 						} else {
 							line2 += "90";
 						}
-	
+
 						sign.setLine(2, line2);
-	
+
 						String line3;
 						line3 = "";
 						if (bearings.containsKey(240)) {
@@ -3329,13 +3294,13 @@ public class CraftMover {
 						} else {
 							line3 += " ";
 						}
-	
+
 						if (bearings.containsKey(180)) {
 							line3 += " " + bearings.get(180) + " ";
 						} else {
 							line3 += "180";
 						}
-	
+
 						if (bearings.containsKey(150)) {
 							line3 += bearings.get(150);
 						} else {
@@ -3353,25 +3318,27 @@ public class CraftMover {
 						} else {
 							line3 += " ";
 						}
-						
+
 						firstSonarSign = sign;
-	
+
 						sign.setLine(3, line3);
-	
+
 						sign.update();
 					}
-				}else { //duplicate sonar sign
-					if( pingOtherSigns )
+				} else { // duplicate sonar sign
+					if (pingOtherSigns) {
 						sonarPingThread(sign.getLocation());
-					if( returnPingStrength > 0 )
+					}
+					if (returnPingStrength > 0) {
 						sonarReturnThread(sign.getLocation(), returnPingStrength);
-						
+					}
+
 					sign.setLine(0, firstSonarSign.getLine(0));
 					sign.setLine(1, firstSonarSign.getLine(1));
 					sign.setLine(2, firstSonarSign.getLine(2));
 					sign.setLine(3, firstSonarSign.getLine(3));
 					sign.update();
-					
+
 				}
 			} else // radar not on
 			{
@@ -3666,7 +3633,7 @@ public class CraftMover {
 			}
 		} else if (craftTypeName.equalsIgnoreCase("detector")) {
 			if (!craft.sinking && (craft.maxY > 63)) {
-				if( firstDetectSign == null ) {
+				if (firstDetectSign == null) {
 					HashMap<Integer, String> bearings = new HashMap<>();
 					for (Craft c : Craft.craftList) {
 						boolean radarEcho = (((System.currentTimeMillis() - c.lastRadarPulse) / 1000) < 20);
@@ -3675,7 +3642,7 @@ public class CraftMover {
 							float xDist = (c.minX + (c.sizeX / 2.0f)) - (craft.minX + (craft.sizeX / 2.0f));
 							float zDist = (c.minZ + (c.sizeZ / 2.0f)) - (craft.minZ + (craft.sizeZ / 2.0f));
 							float dist = (float) Math.sqrt((xDist * xDist) + (zDist * zDist));
-	
+
 							radarEcho = (radarEcho && (dist < 1000));
 							radioEcho = (radioEcho && (dist < 600));
 							if (radarEcho || radioEcho) {
@@ -3739,12 +3706,12 @@ public class CraftMover {
 								} else {
 									trueBearing = 0;
 								}
-	
+
 								int relBearing = (int) trueBearing - craft.rotation;
 								if (relBearing < 0) {
 									relBearing = relBearing + 360;
 								}
-	
+
 								String distanceStr = "";
 								if (radarEcho) {
 									if (dist < 200) {
@@ -3769,7 +3736,7 @@ public class CraftMover {
 										}
 									}
 								}
-	
+
 								if (bearings.containsKey(relBearing)) {
 									if (radarEcho) {
 										if (bearings.get(relBearing).equalsIgnoreCase(".") && (distanceStr.equalsIgnoreCase("*") || distanceStr.equalsIgnoreCase("X"))) {
@@ -3787,11 +3754,11 @@ public class CraftMover {
 								} else {
 									bearings.put(relBearing, distanceStr);
 								}
-	
+
 							}
 						}
 					}
-	
+
 					String line1;
 					line1 = "";
 					if (bearings.containsKey(300)) {
@@ -3811,14 +3778,14 @@ public class CraftMover {
 					} else {
 						line1 += " ";
 					}
-	
+
 					line1 += " ";
 					if (bearings.containsKey(0)) {
 						line1 += bearings.get(0);
 					} else {
 						line1 += "0";
 					}
-	
+
 					line1 += " ";
 					if (bearings.containsKey(30)) {
 						line1 += bearings.get(30);
@@ -3837,9 +3804,9 @@ public class CraftMover {
 					} else {
 						line1 += " ";
 					}
-	
+
 					sign.setLine(1, line1);
-	
+
 					String line2;
 					line2 = "";
 					if (bearings.containsKey(270)) {
@@ -3847,15 +3814,15 @@ public class CraftMover {
 					} else {
 						line2 += "270          ";
 					}
-	
+
 					if (bearings.containsKey(90)) {
 						line2 += bearings.get(90) + " ";
 					} else {
 						line2 += "90";
 					}
-	
+
 					sign.setLine(2, line2);
-	
+
 					String line3;
 					line3 = "";
 					if (bearings.containsKey(240)) {
@@ -3875,13 +3842,13 @@ public class CraftMover {
 					} else {
 						line3 += " ";
 					}
-	
+
 					if (bearings.containsKey(180)) {
 						line3 += " " + bearings.get(180) + " ";
 					} else {
 						line3 += "180";
 					}
-	
+
 					if (bearings.containsKey(150)) {
 						line3 += bearings.get(150);
 					} else {
@@ -3899,20 +3866,20 @@ public class CraftMover {
 					} else {
 						line3 += " ";
 					}
-	
+
 					sign.setLine(3, line3);
-	
+
 					sign.update();
-					
+
 					firstDetectSign = sign;
-					
-				}else { //duplicate detector sign			
+
+				} else { // duplicate detector sign
 					sign.setLine(0, firstDetectSign.getLine(0));
 					sign.setLine(1, firstDetectSign.getLine(1));
 					sign.setLine(2, firstDetectSign.getLine(2));
 					sign.setLine(3, firstDetectSign.getLine(3));
 					sign.update();
-					
+
 				}
 			} else // detector not on
 			{
@@ -3924,14 +3891,14 @@ public class CraftMover {
 
 		} else if (craftTypeName.equalsIgnoreCase("hydrophone")) {
 			if (!craft.sinking && (craft.type.canNavigate || craft.type.canDive)) {
-				if( firstHydroSign == null ) {
+				if (firstHydroSign == null) {
 					HashMap<Integer, String> bearings = new HashMap<>();
 					for (Craft c : Craft.craftList) {
 						if ((c != craft) && (c.world == craft.world) && ((((System.currentTimeMillis() - c.lastSonarPulse) / 1000) < 10) || ((c.type.canNavigate || c.type.canDive) && c.enginesOn))) {
 							float xDist = (c.minX + (c.sizeX / 2.0f)) - (craft.minX + (craft.sizeX / 2.0f));
 							float zDist = (c.minZ + (c.sizeZ / 2.0f)) - (craft.minZ + (craft.sizeZ / 2.0f));
 							float dist = (float) Math.sqrt((xDist * xDist) + (zDist * zDist));
-	
+
 							if (dist < 1000) {
 								double trueBearing = 0;
 								if ((xDist >= 0) && (zDist < 0)) {
@@ -3993,12 +3960,12 @@ public class CraftMover {
 								} else {
 									trueBearing = 0;
 								}
-	
+
 								int relBearing = (int) trueBearing - craft.rotation;
 								if (relBearing < 0) {
 									relBearing = relBearing + 360;
 								}
-	
+
 								String distanceStr = "";
 								if (((System.currentTimeMillis() - c.lastSonarPulse) / 1000) < 10) {
 									if (dist < 50) {
@@ -4020,7 +3987,7 @@ public class CraftMover {
 									} else {
 										depthChance = 1 - (((Math.abs(craft.minY - c.minY)) / 60.0f) * .5f);
 									}
-	
+
 									float totalChance = speed1Chance * speed2Chance * depthChance;
 									if (Math.random() > totalChance) {
 										continue;
@@ -4037,7 +4004,7 @@ public class CraftMover {
 									} else {
 										depthChance = 1 - (((Math.abs(craft.minY - c.minY)) / 60.0f) * .5f);
 									}
-	
+
 									float totalChance = speed1Chance * speed2Chance * depthChance;
 									if (Math.random() > totalChance) {
 										continue;
@@ -4055,14 +4022,14 @@ public class CraftMover {
 									} else {
 										depthChance = 1 - (((Math.abs(craft.minY - c.minY)) / 45.0f) * .7f);
 									}
-	
+
 									float totalChance = distChance * speed1Chance * speed2Chance * depthChance;
-	
+
 									if (Math.random() > totalChance) {
 										continue;
 									}
 								}
-	
+
 								if (bearings.containsKey(relBearing)) {
 									if (bearings.get(relBearing).equalsIgnoreCase(".") && (distanceStr.equalsIgnoreCase("*") || distanceStr.equalsIgnoreCase("X"))) {
 										bearings.put(relBearing, distanceStr);
@@ -4072,11 +4039,11 @@ public class CraftMover {
 								} else {
 									bearings.put(relBearing, distanceStr);
 								}
-	
+
 							}
 						}
 					}
-	
+
 					String line1;
 					line1 = "";
 					if (bearings.containsKey(300)) {
@@ -4096,14 +4063,14 @@ public class CraftMover {
 					} else {
 						line1 += " ";
 					}
-	
+
 					line1 += " ";
 					if (bearings.containsKey(0)) {
 						line1 += bearings.get(0);
 					} else {
 						line1 += "0";
 					}
-	
+
 					line1 += " ";
 					if (bearings.containsKey(30)) {
 						line1 += bearings.get(30);
@@ -4122,9 +4089,9 @@ public class CraftMover {
 					} else {
 						line1 += " ";
 					}
-	
+
 					sign.setLine(1, line1);
-	
+
 					String line2;
 					line2 = "";
 					if (bearings.containsKey(270)) {
@@ -4132,15 +4099,15 @@ public class CraftMover {
 					} else {
 						line2 += "270          ";
 					}
-	
+
 					if (bearings.containsKey(90)) {
 						line2 += bearings.get(90) + " ";
 					} else {
 						line2 += "90";
 					}
-	
+
 					sign.setLine(2, line2);
-	
+
 					String line3;
 					line3 = "";
 					if (bearings.containsKey(240)) {
@@ -4160,13 +4127,13 @@ public class CraftMover {
 					} else {
 						line3 += " ";
 					}
-	
+
 					if (bearings.containsKey(180)) {
 						line3 += " " + bearings.get(180) + " ";
 					} else {
 						line3 += "180";
 					}
-	
+
 					if (bearings.containsKey(150)) {
 						line3 += bearings.get(150);
 					} else {
@@ -4184,17 +4151,17 @@ public class CraftMover {
 					} else {
 						line3 += " ";
 					}
-	
+
 					sign.setLine(3, line3);
-	
+
 					sign.update();
-				}else { //duplicate hydrophone sign			
+				} else { // duplicate hydrophone sign
 					sign.setLine(0, firstHydroSign.getLine(0));
 					sign.setLine(1, firstHydroSign.getLine(1));
 					sign.setLine(2, firstHydroSign.getLine(2));
 					sign.setLine(3, firstHydroSign.getLine(3));
 					sign.update();
-					
+
 				}
 			} else // hydrophone not on
 			{
@@ -4528,21 +4495,21 @@ public class CraftMover {
 
 					BlockFace bf;
 					switch (sign.getBlock().getData()) {
-						case (byte) 0x2:// n
-							bf = BlockFace.WEST;
-							break;
-						case (byte) 0x3:// s
-							bf = BlockFace.EAST;
-							break;
-						case (byte) 0x4:// w
-							bf = BlockFace.SOUTH;
-							break;
-						case (byte) 0x5:// e
-							bf = BlockFace.NORTH;
-							break;
-						default:
-							bf = BlockFace.NORTH;
-							break;
+					case (byte) 0x2:// n
+						bf = BlockFace.WEST;
+						break;
+					case (byte) 0x3:// s
+						bf = BlockFace.EAST;
+						break;
+					case (byte) 0x4:// w
+						bf = BlockFace.SOUTH;
+						break;
+					case (byte) 0x5:// e
+						bf = BlockFace.NORTH;
+						break;
+					default:
+						bf = BlockFace.NORTH;
+						break;
 					}
 
 					if (sign2.getBlock().getRelative(bf).getTypeId() == 68) {
@@ -4597,36 +4564,36 @@ public class CraftMover {
 				int lrDir, start, forDir, horizCenter, vertCenter;
 				boolean lrX = false;
 				switch (sign.getBlock().getData()) {
-					case (byte) 0x2:// n
-						horizCenter = (int) (craft.minX + (craft.sizeX / 2.0f));
-						vertCenter = (int) (craft.minY + (craft.sizeY / 2.0f));
-						lrDir = -1;
-						lrX = true;
-						start = craft.maxZ;
-						forDir = 1;
-						break;
-					case (byte) 0x3:// s
-						horizCenter = (int) (craft.minX + (craft.sizeX / 2.0f));
-						vertCenter = (int) (craft.minY + (craft.sizeY / 2.0f));
-						lrDir = 1;
-						lrX = true;
-						start = craft.minZ;
-						forDir = -1;
-						break;
-					case (byte) 0x4:// w
-						horizCenter = (int) (craft.minZ + (craft.sizeZ / 2.0f));
-						vertCenter = (int) (craft.minY + (craft.sizeY / 2.0f));
-						lrDir = 1;
-						start = craft.maxX;
-						forDir = 1;
-						break;
-					default: // case (byte) 0x5://e
-						horizCenter = (int) (craft.minZ + (craft.sizeZ / 2.0f));
-						vertCenter = (int) (craft.minY + (craft.sizeY / 2.0f));
-						lrDir = -1;
-						start = craft.minX;
-						forDir = -1;
-						break;
+				case (byte) 0x2:// n
+					horizCenter = (int) (craft.minX + (craft.sizeX / 2.0f));
+					vertCenter = (int) (craft.minY + (craft.sizeY / 2.0f));
+					lrDir = -1;
+					lrX = true;
+					start = craft.maxZ;
+					forDir = 1;
+					break;
+				case (byte) 0x3:// s
+					horizCenter = (int) (craft.minX + (craft.sizeX / 2.0f));
+					vertCenter = (int) (craft.minY + (craft.sizeY / 2.0f));
+					lrDir = 1;
+					lrX = true;
+					start = craft.minZ;
+					forDir = -1;
+					break;
+				case (byte) 0x4:// w
+					horizCenter = (int) (craft.minZ + (craft.sizeZ / 2.0f));
+					vertCenter = (int) (craft.minY + (craft.sizeY / 2.0f));
+					lrDir = 1;
+					start = craft.maxX;
+					forDir = 1;
+					break;
+				default: // case (byte) 0x5://e
+					horizCenter = (int) (craft.minZ + (craft.sizeZ / 2.0f));
+					vertCenter = (int) (craft.minY + (craft.sizeY / 2.0f));
+					lrDir = -1;
+					start = craft.minX;
+					forDir = -1;
+					break;
 				}
 
 				int[][] displayArray = new int[26][8];
@@ -4685,21 +4652,21 @@ public class CraftMover {
 
 				BlockFace bf2;
 				switch (sign.getBlock().getData()) {
-					case (byte) 0x2:// n
-						bf2 = BlockFace.WEST;
-						break;
-					case (byte) 0x3:// s
-						bf2 = BlockFace.EAST;
-						break;
-					case (byte) 0x4:// w
-						bf2 = BlockFace.SOUTH;
-						break;
-					case (byte) 0x5:// e
-						bf2 = BlockFace.NORTH;
-						break;
-					default:
-						bf2 = BlockFace.NORTH;
-						break;
+				case (byte) 0x2:// n
+					bf2 = BlockFace.WEST;
+					break;
+				case (byte) 0x3:// s
+					bf2 = BlockFace.EAST;
+					break;
+				case (byte) 0x4:// w
+					bf2 = BlockFace.SOUTH;
+					break;
+				case (byte) 0x5:// e
+					bf2 = BlockFace.NORTH;
+					break;
+				default:
+					bf2 = BlockFace.NORTH;
+					break;
 				}
 
 				String line11 = "Status:";
@@ -4950,20 +4917,21 @@ public class CraftMover {
 		}
 	}
 
-	
 	public void removeSupportBlocks() {
 		short blockId;
 		Block block;
-		if( craft.matrix == null )
+		if (craft.matrix == null) {
 			return;
-		
+		}
+
 		for (int x = 0; x < craft.sizeX; x++) {
 			for (int z = 0; z < craft.sizeZ; z++) {
 				for (int y = craft.sizeY - 1; y > -1; y--) {
 					// for (int y = 0; y < craft.sizeY; y++) {
-					
-					if( craft.matrix == null )
+
+					if (craft.matrix == null) {
 						return;
+					}
 					blockId = craft.matrix[x][y][z];
 
 					// craft block, replace by air
@@ -5051,7 +5019,6 @@ public class CraftMover {
 		}
 		pVel = pVel.add(new Vector(dx, dy, dz));
 
-
 		if ((pVel.getX() > 10) || (pVel.getZ() > 10) || (pVel.getY() > 10)) {
 
 			System.out.println("Velocity is too high, have to teleport " + p.getEntityId());
@@ -5065,7 +5032,6 @@ public class CraftMover {
 		}
 	}
 
-	
 	public void railMove() {
 		Byte deets = craft.railBlock.getData();
 
@@ -5081,7 +5047,6 @@ public class CraftMover {
 		// if so, prep another move?
 	}
 
-	
 	public void sinkingThread() {
 		if (craft.signLoc != null) {
 			craft.signLoc.getBlock().setTypeId(0);
@@ -5105,16 +5070,18 @@ public class CraftMover {
 				try {
 					int i = 0;
 					while ((i < 120) && (craft != null) && (craft.minY > 2) && !stopSink) {
-						if (NavyCraft.shutDown) { return; }
+						if (NavyCraft.shutDown) {
+							return;
+						}
 
 						if (!sinkUpdate) {
-							sinkUpdate(false,i);
-							
+							sinkUpdate(false, i);
+
 						}
 						sleep(sleepTime);
 						i++;
 					}
-					sinkUpdate(true,i);
+					sinkUpdate(true, i);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -5124,22 +5091,26 @@ public class CraftMover {
 
 	public void sinkUpdate(final boolean lastRun, final int i) {
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			if (NavyCraft.shutDown) { return; }
+			if (NavyCraft.shutDown) {
+				return;
+			}
 
 			if (craft != null) {
-				if (sinkUpdate) { return; }
-				
+				if (sinkUpdate) {
+					return;
+				}
+
 				sinkUpdate = true;
-				if( i%4==0 ) {
+				if ((i % 4) == 0) {
 					playEngineSound(craft.getLocation(), Sound.ENTITY_WITHER_BREAK_BLOCK, 2.0f, 0.7f);
-				}else if( i%4==1 ) {
+				} else if ((i % 4) == 1) {
 					playEngineSound(craft.getLocation(), Sound.BLOCK_PORTAL_AMBIENT, 2.0f, 0.7f);
-				}else if( i%4==2 ) {
+				} else if ((i % 4) == 2) {
 					playEngineSound(craft.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 2.0f, 0.7f);
-				}else if( i%4==3 ) {
+				} else if ((i % 4) == 3) {
 					playEngineSound(craft.getLocation(), Sound.BLOCK_PORTAL_TRIGGER, 2.0f, 0.7f);
 				}
-				
+
 				if ((craft.minY > 2) && checkSink()) {
 					if (!craft.type.canFly) {
 						move(0, -1, 0);
@@ -5158,7 +5129,6 @@ public class CraftMover {
 		});
 	}
 
-	
 	public boolean checkSink() {
 		int blockId;
 		Block newBlock;
@@ -5191,7 +5161,9 @@ public class CraftMover {
 
 		wgp = (WorldGuardPlugin) plugin.getServer().getPluginManager().getPlugin("WorldGuard");
 		if ((wgp != null) && (loc != null)) {
-			if ( !PermissionInterface.CheckEnabledWorld(loc) ) { return true; }
+			if (!PermissionInterface.CheckEnabledWorld(loc)) {
+				return true;
+			}
 			RegionManager regionManager = wgp.getRegionManager(craft.world);
 
 			ApplicableRegionSet set = regionManager.getApplicableRegions(loc);
@@ -5202,7 +5174,9 @@ public class CraftMover {
 
 				String[] splits = id.split("_");
 				if (splits.length == 2) {
-					if (splits[1].equalsIgnoreCase("safedock") || splits[1].equalsIgnoreCase("red") || splits[1].equalsIgnoreCase("blue")) { return true; }
+					if (splits[1].equalsIgnoreCase("safedock") || splits[1].equalsIgnoreCase("red") || splits[1].equalsIgnoreCase("blue")) {
+						return true;
+					}
 				}
 			}
 			return false;
@@ -5224,7 +5198,9 @@ public class CraftMover {
 
 				String[] splits = id.split("_");
 				if (splits.length == 2) {
-					if (splits[1].equalsIgnoreCase("safedock")) { return true; }
+					if (splits[1].equalsIgnoreCase("safedock")) {
+						return true;
+					}
 				}
 			}
 			return false;
@@ -5265,9 +5241,9 @@ public class CraftMover {
 		return false;
 	}
 
-	//updates if vehicle is moving and has stopped, 
-	//calls cruiseUpdate
-	
+	// updates if vehicle is moving and has stopped,
+	// calls cruiseUpdate
+
 	public void moveUpdate() {
 
 		if ((craft.noCaptain < 200)) {
@@ -5303,12 +5279,14 @@ public class CraftMover {
 
 	}
 
+	// cruise movement update, update turn progress, update vehicle engines power
+	// and speed, update autocrafts
+	// calls calculateMove, called by moveUpdate
+	public void cruiseUpdate() {
 
-	//cruise movement update, update turn progress, update vehicle engines power and speed, update autocrafts
-	//calls calculateMove, called by moveUpdate
-	public void cruiseUpdate() { 
-
-		if (craft.isDestroying || cruiseUpdate || ((craft.speed == 0) && (craft.setSpeed == 0))) { return; }
+		if (craft.isDestroying || cruiseUpdate || ((craft.speed == 0) && (craft.setSpeed == 0))) {
+			return;
+		}
 		cruiseUpdate = true;
 
 		int dx = 0;
@@ -5505,14 +5483,15 @@ public class CraftMover {
 			float totalActualSetSpeed = 0;
 			for (int i : craft.engineIDLocs.keySet()) {
 				if (craft.engineIDSetOn.get(i) && !craft.engineIDIsOn.get(i) && (craft.engineIDLocs.get(i) != null)) {
-					if ( (craft.maxY >= 64)) {
+					if ((craft.maxY >= 64)) {
 						int engineType = craft.engineIDTypes.get(i);
 						if ((engineType != 1) || (((engineType == 0) || (engineType == 2) || (engineType == 4)) && craft.submergedMode)) {
 							craft.engineIDIsOn.put(i, true);
 						}
 					}
 				} else if (craft.engineIDIsOn.get(i) && (craft.engineIDLocs.get(i) != null)) {
-					//if ((craft.maxY < 70 && craft.sizeY > 10) ||  (craft.maxY < 63) || craft.submergedMode) {
+					// if ((craft.maxY < 70 && craft.sizeY > 10) || (craft.maxY < 63) ||
+					// craft.submergedMode) {
 					if ((craft.maxY < 64) || craft.submergedMode) {
 						int engineType = craft.engineIDTypes.get(i);
 						if (((engineType != 0) || !craft.submergedMode) && (engineType != 1) && ((engineType != 2) || !craft.submergedMode) && ((engineType != 4) || !craft.submergedMode) && (engineType != 9)) {
@@ -5528,8 +5507,9 @@ public class CraftMover {
 							} else {
 								craftWeight = craft.weightStart;
 							}
-							//System.out.println("Engine " + i + " status=" + craft.engineIDOn.get(i) + " powerRating=" +
-							//powerRating );
+							// System.out.println("Engine " + i + " status=" + craft.engineIDOn.get(i) + "
+							// powerRating=" +
+							// powerRating );
 							if (craft.submergedMode && (engType != 9) && (engType != 1)) {
 								totalActualSetSpeed += ((maxTypeSpd * powerRating * powerRating) / craftWeight / craftWeight) / 2;
 							} else {
@@ -5667,7 +5647,6 @@ public class CraftMover {
 		}
 	}
 
-	
 	public void sinkBroadcast() {
 		String broadcastMsg = "";
 		String logEntry = "";
@@ -5845,18 +5824,20 @@ public class CraftMover {
 
 			if (PermissionInterface.CheckEnabledWorld(craft.getLocation()) && (!craft.crewNames.isEmpty() || (((System.currentTimeMillis() - craft.abandonTime) / 1000) < 180))) {
 				if (topPlayer != null) {
-					if (craft.crewHistory.contains(topPlayer.getName()) && !topPlayer.isOp()) { return; }
+					if (craft.crewHistory.contains(topPlayer.getName()) && !topPlayer.isOp()) {
+						return;
+					}
 					int newExp = craft.blockCountStart;
 					plugin.getServer().broadcastMessage(ChatColor.GREEN + topPlayer.getName() + " receives " + ChatColor.YELLOW + newExp + ChatColor.GREEN + " rank points!");
 					{
 						NavyCraft_BlockListener.rewardExpPlayer(newExp, topPlayer);
 					}
-					
-					
-					
+
 				} else if ((topCraft != null) && (topCraft != craft)) {
 					for (String s : topCraft.crewNames) {
-						if (craft.crewHistory.contains(s) && !plugin.getServer().getPlayer(s).isOp()) { return; }
+						if (craft.crewHistory.contains(s) && !plugin.getServer().getPlayer(s).isOp()) {
+							return;
+						}
 					}
 
 					int newExp = craft.blockCountStart;
@@ -5875,63 +5856,63 @@ public class CraftMover {
 			}
 		}
 	}
-	
+
 	public String idIntToString(int id) {
 		switch (id % 26) {
-			case 0:
-				return "A";
-			case 1:
-				return "B";
-			case 2:
-				return "C";
-			case 3:
-				return "D";
-			case 4:
-				return "E";
-			case 5:
-				return "F";
-			case 6:
-				return "G";
-			case 7:
-				return "H";
-			case 8:
-				return "I";
-			case 9:
-				return "J";
-			case 10:
-				return "K";
-			case 11:
-				return "L";
-			case 12:
-				return "M";
-			case 13:
-				return "N";
-			case 14:
-				return "O";
-			case 15:
-				return "P";
-			case 16:
-				return "Q";
-			case 17:
-				return "R";
-			case 18:
-				return "S";
-			case 19:
-				return "T";
-			case 20:
-				return "U";
-			case 21:
-				return "V";
-			case 22:
-				return "W";
-			case 23:
-				return "X";
-			case 24:
-				return "Y";
-			case 25:
-				return "Z";
-			default:
-				return "&";
+		case 0:
+			return "A";
+		case 1:
+			return "B";
+		case 2:
+			return "C";
+		case 3:
+			return "D";
+		case 4:
+			return "E";
+		case 5:
+			return "F";
+		case 6:
+			return "G";
+		case 7:
+			return "H";
+		case 8:
+			return "I";
+		case 9:
+			return "J";
+		case 10:
+			return "K";
+		case 11:
+			return "L";
+		case 12:
+			return "M";
+		case 13:
+			return "N";
+		case 14:
+			return "O";
+		case 15:
+			return "P";
+		case 16:
+			return "Q";
+		case 17:
+			return "R";
+		case 18:
+			return "S";
+		case 19:
+			return "T";
+		case 20:
+			return "U";
+		case 21:
+			return "V";
+		case 22:
+			return "W";
+		case 23:
+			return "X";
+		case 24:
+			return "Y";
+		case 25:
+			return "Z";
+		default:
+			return "&";
 		}
 	}
 
@@ -5961,19 +5942,25 @@ public class CraftMover {
 					int sleep = 1000;
 					int i = 0;
 					while (!stopSound && !c.isDestroying && !c.sinking) {
-						if (NavyCraft.shutDown) { return; }
-						/*if ((i % 4) == 0) {
-							sleep = (2000 - (int) ((1000 * (float) (c.setSpeed * Math.abs(c.gear))) / (c.type.maxEngineSpeed * c.type.maxForwardGear))) / 4;
-							if (c.type.canFly) {
-								sleep = (1000 - (int) ((500 * (float) (c.setSpeed * Math.abs(c.gear))) / (c.type.maxEngineSpeed * c.type.maxForwardGear))) / 4;
-							}
-						}*/
-						if (c.type.canFly)
-							sleep = 500 - (int)(200.0f*((float)c.setSpeed / 6.0f));
-						else
+						if (NavyCraft.shutDown) {
+							return;
+						}
+						/*
+						 * if ((i % 4) == 0) { sleep = (2000 - (int) ((1000 * (float) (c.setSpeed *
+						 * Math.abs(c.gear))) / (c.type.maxEngineSpeed * c.type.maxForwardGear))) / 4;
+						 * if (c.type.canFly) { sleep = (1000 - (int) ((500 * (float) (c.setSpeed *
+						 * Math.abs(c.gear))) / (c.type.maxEngineSpeed * c.type.maxForwardGear))) / 4; }
+						 * }
+						 */
+						if (c.type.canFly) {
+							sleep = 500 - (int) (200.0f * (c.setSpeed / 6.0f));
+						} else {
 							sleep = 500;
+						}
 						sleep(sleep);
-						if (NavyCraft.shutDown) { return; }
+						if (NavyCraft.shutDown) {
+							return;
+						}
 						soundUpdate(c, engineIndex, i);
 						i++;
 
@@ -5986,18 +5973,25 @@ public class CraftMover {
 	}
 
 	public void soundUpdate(final Craft c, final int engineIndex, final int i) {
-		if (NavyCraft.shutDown) { return; }
+		if (NavyCraft.shutDown) {
+			return;
+		}
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			if (NavyCraft.shutDown) { return; }
+			if (NavyCraft.shutDown) {
+				return;
+			}
 
 			Location noEngineLoc = null;
 
 			// return if engine not on
 			if ((engineIndex != -1) && (c.engineIDIsOn.containsKey(engineIndex) && (!c.engineIDIsOn.get(engineIndex) || (c.type.canFly && (c.driverName == null))))) {
-				if( c.type.canFly )
+				if (c.type.canFly) {
 					playEngineSound(c.getLocation(), Sound.ENTITY_WITHER_AMBIENT, 0.3f, 0.5f);
+				}
 				return;
-			} else if ((engineIndex == -1) && (c.type.canFly && (c.driverName == null))) { return; }
+			} else if ((engineIndex == -1) && (c.type.canFly && (c.driverName == null))) {
+				return;
+			}
 
 			if (engineIndex == -1) {
 				noEngineLoc = new Location(c.world, c.minX + (c.sizeX / 2), c.minY + (c.sizeY / 2), c.minZ + (c.sizeZ / 2));
@@ -6007,76 +6001,83 @@ public class CraftMover {
 				}
 			}
 
-			float volume = ((float) (c.setSpeed) / 6.0f) + 1.0f;
+			float volume = ((c.setSpeed) / 6.0f) + 1.0f;
 
-			/*if (c.type.canFly) {
-				volume = ((2.0f * (c.setSpeed * Math.abs(c.gear))) / (c.type.maxEngineSpeed * c.type.maxForwardGear)) + 1.0f;
-
-			}*/
+			/*
+			 * if (c.type.canFly) { volume = ((2.0f * (c.setSpeed * Math.abs(c.gear))) /
+			 * (c.type.maxEngineSpeed * c.type.maxForwardGear)) + 1.0f;
+			 *
+			 * }
+			 */
 
 			Location cLoc = null;
 
 			if (engineIndex > -1) {
 				cLoc = c.engineIDLocs.get(engineIndex);
 			}
-			if ((cLoc == null) && (noEngineLoc == null)) { return; }
+			if ((cLoc == null) && (noEngineLoc == null)) {
+				return;
+			}
 
 			// System.out.println("Play engine sound-" + engineIndex);
 			if (c.setSpeed > 0) {
 				if (noEngineLoc != null) {
-					float pitch3 = ((float) c.setSpeed / 6.0f) + 0.5f;
+					float pitch3 = (c.setSpeed / 6.0f) + 0.5f;
 					if ((i % 5) == 0) {
 
 						if (craft.type.canFly) {
-							playEngineSound(noEngineLoc, Sound.ENTITY_WITHER_AMBIENT, volume*0.5f, 0.5f);
+							playEngineSound(noEngineLoc, Sound.ENTITY_WITHER_AMBIENT, volume * 0.5f, 0.5f);
 						} else if (craft.type.isTerrestrial) {
 							playEngineSound(noEngineLoc, Sound.BLOCK_GRAVEL_STEP, volume, pitch3);
 						} else {
 							playEngineSound(noEngineLoc, Sound.BLOCK_WATER_AMBIENT, volume, pitch3);
 						}
 					}
-				} else if (c.submergedMode && c.engineIDTypes.get(engineIndex) != 9 && c.engineIDTypes.get(engineIndex) != 1 ) {
-					float pitch4 = ((float) c.setSpeed / (float) 6.0f)*0.5f + 0.5f;
+				} else if (c.submergedMode && (c.engineIDTypes.get(engineIndex) != 9) && (c.engineIDTypes.get(engineIndex) != 1)) {
+					float pitch4 = ((c.setSpeed / 6.0f) * 0.5f) + 0.5f;
 					playEngineSound(cLoc, Sound.ENTITY_SKELETON_HORSE_DEATH, volume, pitch4);
 				} else {
 					int engType = c.engineIDTypes.get(engineIndex);
-					if (engType == 0 || engType == 2 || engType == 4) // Diesels
+					if ((engType == 0) || (engType == 2) || (engType == 4)) // Diesels
 					{
-						float pitch = ((float) c.setSpeed / (float) 6.0f)*1.5f + 0.5f;
+						float pitch = ((c.setSpeed / 6.0f) * 1.5f) + 0.5f;
 						playEngineSound(cLoc, Sound.ENTITY_MINECART_INSIDE, volume, pitch);
 
-					}else if (engType == 1) // Motors
+					} else if (engType == 1) // Motors
 					{
-						float pitch = ((float) c.setSpeed / (float) 6.0f)*0.5f + 0.5f;
+						float pitch = ((c.setSpeed / 6.0f) * 0.5f) + 0.5f;
 						playEngineSound(cLoc, Sound.ENTITY_SKELETON_HORSE_DEATH, volume, pitch);
-					}else if (engType == 3 || engType == 6 || engType == 7) // Boilers
+					} else if ((engType == 3) || (engType == 6) || (engType == 7)) // Boilers
 					{
-						float pitch = ((float) c.setSpeed / (float) 6.0f)*0.5f + 0.5f;
-						if( i%2 == 0 )
+						float pitch = ((c.setSpeed / 6.0f) * 0.5f) + 0.5f;
+						if ((i % 2) == 0) {
 							playEngineSound(cLoc, Sound.ENTITY_IRONGOLEM_HURT, volume, pitch);
-						else
+						} else {
 							playEngineSound(cLoc, Sound.ENTITY_POLAR_BEAR_WARNING, volume, 0.5f);
-					}else if (engType == 5 || engType == 8) // Gasolines
+						}
+					} else if ((engType == 5) || (engType == 8)) // Gasolines
 					{
-						float pitch = ((float) c.setSpeed / (float) 6.0f)*1.0f + 1.0f;
+						float pitch = ((c.setSpeed / 6.0f) * 1.0f) + 1.0f;
 						playEngineSound(cLoc, Sound.ENTITY_MINECART_RIDING, volume, pitch);
-					}else if (engType == 9) // Nuclear
+					} else if (engType == 9) // Nuclear
 					{
-						float pitch = ((float) c.setSpeed / (float) 6.0f)*0.5f + 0.5f;
+						float pitch = ((c.setSpeed / 6.0f) * 0.5f) + 0.5f;
 						playEngineSound(cLoc, Sound.ENTITY_WITHER_SPAWN, volume, pitch);
-					}else if ((engType >= 10) && (engType <= 17)) // Airplanes
+					} else if ((engType >= 10) && (engType <= 17)) // Airplanes
 					{
 						float pitch = 0.5f;
-						float pitch2 = ((float) c.setSpeed / (float) 6.0f)*1.5f + 0.5f;
-						if( i%4 == 0 )
+						float pitch2 = ((c.setSpeed / 6.0f) * 1.5f) + 0.5f;
+						if ((i % 4) == 0) {
 							playEngineSound(cLoc, Sound.ENTITY_WOLF_GROWL, volume, pitch);
-						else
+						} else {
 							playEngineSound(cLoc, Sound.ENTITY_IRONGOLEM_HURT, volume, pitch2);
-						if( c.type.canFly && !c.onGround && i%3 == 0)
+						}
+						if (c.type.canFly && !c.onGround && ((i % 3) == 0)) {
 							playEngineSound(c.getLocation(), Sound.ENTITY_WITHER_AMBIENT, 0.3f, 0.5f);
-					}else if ((engType == 18) || (engType == 19)) // Tanks
+						}
+					} else if ((engType == 18) || (engType == 19)) // Tanks
 					{
-						float pitch = ((float) c.setSpeed / (float) 6.0f)*0.3f + 0.5f;
+						float pitch = ((c.setSpeed / 6.0f) * 0.3f) + 0.5f;
 						playEngineSound(cLoc, Sound.ENTITY_STRAY_DEATH, volume, pitch);
 					}
 
@@ -6085,35 +6086,34 @@ public class CraftMover {
 
 		});
 	}
-	
-	public static void playEngineSound( Location loc, Sound sound, float volume, float pitch )
-	{
-		for( Player p : loc.getWorld().getPlayers() )
-		{
-			if( NavyCraft.playerEngineVolumes.containsKey(p) )
-				p.playSound(loc,  sound,  volume*NavyCraft.playerEngineVolumes.get(p)*.01f,  pitch);
-			else
-				p.playSound(loc,  sound,  volume,  pitch);
+
+	public static void playEngineSound(Location loc, Sound sound, float volume, float pitch) {
+		for (Player p : loc.getWorld().getPlayers()) {
+			if (NavyCraft.playerEngineVolumes.containsKey(p)) {
+				p.playSound(loc, sound, volume * NavyCraft.playerEngineVolumes.get(p) * .01f, pitch);
+			} else {
+				p.playSound(loc, sound, volume, pitch);
+			}
 		}
 	}
-	public static void playWeaponSound( Location loc, Sound sound, float volume, float pitch )
-	{
-		for( Player p : loc.getWorld().getPlayers() )
-		{
-			if( NavyCraft.playerWeaponVolumes.containsKey(p) )
-				p.playSound(loc,  sound,  volume*NavyCraft.playerWeaponVolumes.get(p)*.01f,  pitch);
-			else
-				p.playSound(loc,  sound,  volume,  pitch);
+
+	public static void playWeaponSound(Location loc, Sound sound, float volume, float pitch) {
+		for (Player p : loc.getWorld().getPlayers()) {
+			if (NavyCraft.playerWeaponVolumes.containsKey(p)) {
+				p.playSound(loc, sound, volume * NavyCraft.playerWeaponVolumes.get(p) * .01f, pitch);
+			} else {
+				p.playSound(loc, sound, volume, pitch);
+			}
 		}
 	}
-	public static void playOtherSound( Location loc, Sound sound, float volume, float pitch )
-	{
-		for( Player p : loc.getWorld().getPlayers() )
-		{
-			if( NavyCraft.playerOtherVolumes.containsKey(p) )
-				p.playSound(loc,  sound,  volume*NavyCraft.playerOtherVolumes.get(p)*.01f,  pitch);
-			else
-				p.playSound(loc,  sound,  volume,  pitch);
+
+	public static void playOtherSound(Location loc, Sound sound, float volume, float pitch) {
+		for (Player p : loc.getWorld().getPlayers()) {
+			if (NavyCraft.playerOtherVolumes.containsKey(p)) {
+				p.playSound(loc, sound, volume * NavyCraft.playerOtherVolumes.get(p) * .01f, pitch);
+			} else {
+				p.playSound(loc, sound, volume, pitch);
+			}
 		}
 	}
 
@@ -6132,19 +6132,20 @@ public class CraftMover {
 
 		}, 1);
 	}
-	
-	public boolean checkForWeapons()
-	{
-		for( Weapon w : AimCannon.weapons )
-		{
-			if( w.warhead.getLocation().getBlockX() >= (craft.minX-1) && w.warhead.getLocation().getBlockX() < (craft.maxX+1) )
-				if( w.warhead.getLocation().getBlockZ() >= (craft.minZ-1) && w.warhead.getLocation().getBlockZ() < (craft.maxZ+1) )
-					if( w.warhead.getLocation().getBlockY() >= (craft.minY-1) && w.warhead.getLocation().getBlockY() < (craft.maxY+1) )
+
+	public boolean checkForWeapons() {
+		for (Weapon w : AimCannon.weapons) {
+			if ((w.warhead.getLocation().getBlockX() >= (craft.minX - 1)) && (w.warhead.getLocation().getBlockX() < (craft.maxX + 1))) {
+				if ((w.warhead.getLocation().getBlockZ() >= (craft.minZ - 1)) && (w.warhead.getLocation().getBlockZ() < (craft.maxZ + 1))) {
+					if ((w.warhead.getLocation().getBlockY() >= (craft.minY - 1)) && (w.warhead.getLocation().getBlockY() < (craft.maxY + 1))) {
 						return true;
+					}
+				}
+			}
 		}
 		return false;
 	}
-	
+
 	public static void sonarPingThread(final Location loc) {
 		new Thread() {
 
@@ -6157,10 +6158,11 @@ public class CraftMover {
 				try {
 					for (int i = 0; i < 2; i++) {
 						sleep(400);
-						if( i==0 )
+						if (i == 0) {
 							playEngineSound(loc, Sound.BLOCK_NOTE_PLING, 2.0f, 1.6f);
-						else
+						} else {
 							playEngineSound(loc, Sound.BLOCK_NOTE_PLING, 2.0f, 2.0f);
+						}
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -6168,6 +6170,7 @@ public class CraftMover {
 			}
 		}.start(); // , 20L);
 	}
+
 	public static void sonarReturnThread(final Location loc, float strength) {
 		new Thread() {
 
@@ -6180,10 +6183,11 @@ public class CraftMover {
 				try {
 					sleep(1000);
 					for (int i = 0; i < 2; i++) {
-						if( i==0 )
+						if (i == 0) {
 							playEngineSound(loc, Sound.BLOCK_NOTE_BASS, 2.0f, strength);
-						else
+						} else {
 							playEngineSound(loc, Sound.BLOCK_NOTE_BASS, 2.0f, strength + 0.4f);
+						}
 						sleep(400);
 					}
 				} catch (InterruptedException e) {
@@ -6192,6 +6196,5 @@ public class CraftMover {
 			}
 		}.start(); // , 20L);
 	}
-	
 
 }

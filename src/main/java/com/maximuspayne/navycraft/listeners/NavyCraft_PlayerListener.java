@@ -41,7 +41,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import com.earth2me.essentials.Essentials;
 import com.maximuspayne.aimcannon.AimCannon;
 import com.maximuspayne.aimcannon.AimCannonPlayerListener;
 import com.maximuspayne.aimcannon.OneCannon;
@@ -64,15 +63,11 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
-import net.ess3.api.MaxMoneyException;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
-
 @SuppressWarnings("deprecation")
 public class NavyCraft_PlayerListener implements Listener {
 
 	private static NavyCraft plugin;
 	public WorldGuardPlugin wgp;
-	public static PermissionsEx pex;
 	public WorldEditPlugin wep;
 
 	Thread timerThread;
@@ -142,19 +137,7 @@ public class NavyCraft_PlayerListener implements Listener {
 		}
 		String worldName = player.getWorld().getName();
 
-		pex = (PermissionsEx) plugin.getServer().getPluginManager().getPlugin("PermissionsEx");
-		if (pex == null) {
-			return;
-		}
-
 		if (!NavyCraft.playerPayDays.containsKey(player.getName()) || (NavyCraft.playerPayDays.containsKey(player.getName()) && (((System.currentTimeMillis() - NavyCraft.playerPayDays.get(player.getName())) / 1000) > 86400))) {
-			Essentials ess;
-			ess = (Essentials) plugin.getServer().getPluginManager().getPlugin("Essentials");
-			if (ess == null) {
-				player.sendMessage(ChatColor.RED + "Essentials Economy Error");
-				return;
-			}
-
 			for (String s : PermissionsEx.getUser(player).getPermissions(worldName)) {
 				if (s.contains("navycraft")) {
 					if (s.contains("pay")) {
@@ -2759,20 +2742,10 @@ public class NavyCraft_PlayerListener implements Listener {
 							signString2 = signString2.replaceAll(ChatColor.BLUE.toString(), "");
 							if (signString0.equalsIgnoreCase(NavyCraft.playerLastBoughtSignString0.get(player)) && signString1.equalsIgnoreCase(NavyCraft.playerLastBoughtSignString1.get(player)) && signString2.equalsIgnoreCase(NavyCraft.playerLastBoughtSignString2.get(player))) {
 								NavyCraft.playerLastBoughtSign.get(player).setTypeId(0);
-								Essentials ess;
-								ess = (Essentials) plugin.getServer().getPluginManager().getPlugin("Essentials");
-								if (ess == null) {
-									player.sendMessage(ChatColor.RED + "Essentials Economy error");
-									event.setCancelled(true);
-									return;
-								}
 								player.sendMessage(ChatColor.RED + "Undoing sign and refunding player.");
-								try {
-									ess.getUser(player).giveMoney(new BigDecimal(NavyCraft.playerLastBoughtCost.get(player)));
-								} catch (MaxMoneyException e) {
-
-									e.printStackTrace();
-								}
+								NavyCraft.econ.depositPlayer(player, NavyCraft.playerLastBoughtCost.get(player));
+								// ess.getUser(player).giveMoney(new
+								// BigDecimal(NavyCraft.playerLastBoughtCost.get(player)));
 								NavyCraft.playerLastBoughtSign.remove(player);
 								NavyCraft.playerLastBoughtCost.remove(player);
 								NavyCraft.playerLastBoughtSignString0.remove(player);
@@ -4919,12 +4892,6 @@ public class NavyCraft_PlayerListener implements Listener {
 		String winLogStr = "";
 		String scoreLogStr = "";
 
-		Essentials ess;
-		ess = (Essentials) plugin.getServer().getPluginManager().getPlugin("Essentials");
-		if (ess == null) {
-			return;
-		}
-
 		if (NavyCraft.redPoints > NavyCraft.bluePoints) {
 			winStr = ChatColor.RED + "" + ChatColor.BOLD + "Red Team Wins!!";
 			scoreStr = "Final Team Scores: " + ChatColor.RED + NavyCraft.redPoints + " Red  " + ChatColor.BLUE + NavyCraft.bluePoints + " Blue";
@@ -4958,12 +4925,6 @@ public class NavyCraft_PlayerListener implements Listener {
 		String scoreStr = "";
 		String winLogStr = "";
 		String scoreLogStr = "";
-
-		Essentials ess;
-		ess = (Essentials) plugin.getServer().getPluginManager().getPlugin("Essentials");
-		if (ess == null) {
-			return;
-		}
 
 		if (NavyCraft.redPoints > NavyCraft.bluePoints) {
 			winStr = ChatColor.RED + "" + ChatColor.BOLD + "Red Team Wins!!";
