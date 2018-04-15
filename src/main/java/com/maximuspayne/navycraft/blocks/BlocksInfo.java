@@ -93,7 +93,7 @@ public class BlocksInfo {
 		blocks[74] = new BlockInfo(74,"redstone ore", false, false, false, 331, 4, false);
 		blocks[75] = new BlockInfo(75,"redstone torch", true, true, false, false);
 		blocks[76] = new BlockInfo(76,"redstone torch", true, true, false, false);
-		blocks[77] = new BlockInfo(77,"stone button", true, true, false, false);
+		blocks[77] = new BlockInfo(77,"stone button", true, true, false, new byte[] {4, 2, 5, 3});
 		blocks[78] = new BlockInfo(78,"snow", true, true, false, 332, 1, true);
 		blocks[79] = new BlockInfo(79,"ice", false, false, false, false);
 		blocks[80] = new BlockInfo(80,"snow block", false, false, false, false);
@@ -160,7 +160,7 @@ public class BlocksInfo {
 		blocks[141] = new BlockInfo(141,"carrots", true, true, false, false);
 		blocks[142] = new BlockInfo(142,"potatoes", true, true, false, false);
 		blocks[143] = new BlockInfo(143,"wood button", true, true, false, false);
-		blocks[144] = new BlockInfo(144,"head", true, true, false, false);
+		blocks[144] = new BlockInfo(144,"head", true, true, true, false);
 		blocks[145] = new BlockInfo(145,"anvil", true, true, false, false);
 		blocks[146] = new BlockInfo(146,"trapped chest", true, false, true, false);
 		blocks[147] = new BlockInfo(147,"weighted light pressure plate", true, true, false, false);
@@ -177,6 +177,8 @@ public class BlocksInfo {
 		blocks[158] = new BlockInfo(158,"dropper", true, false, true, new byte[] {4, 2, 5, 3});
 		blocks[159] = new BlockInfo(159,"stained clay", true, false, false, false);
 		blocks[160] = new BlockInfo(160,"stained glass pane", true, false, false, false);
+		blocks[168] = new BlockInfo(168,"prismarine", false, false, false, 168, 1, false);
+		blocks[169] = new BlockInfo(169,"sea lantern", false, false, false, false);
 		blocks[170] = new BlockInfo(170,"hay bale", true, false, false, false);
 		blocks[171] = new BlockInfo(171,"carpet", true, true, false, false);
 		blocks[172] = new BlockInfo(172,"hardened clay", false, false, false, false);
@@ -261,7 +263,6 @@ public class BlocksInfo {
 		blocks[251] = new BlockInfo(251,"concrete", true, false, false, false);
 		blocks[252] = new BlockInfo(252,"concrete powder", true, false, false, false);
 		blocks[255] = new BlockInfo(255,"structure block", true, false, true, false);
-		
 		//bed
 		blocks[26].cardinalDirections = new byte[] {1, 2, 3, 0};
 		//torch
@@ -290,7 +291,6 @@ public class BlocksInfo {
 		//ladder
 		blocks[65].cardinalDirections = new byte[] {4, 2, 5, 3};
 		//blocks[65].cardinalDirections = new byte[] {5, 3, 4, 2};
-		
 		//wall sign
 		//blocks[68].cardinalDirections = new byte[] {4, 2, 5, 3};
 		blocks[68].cardinalDirections = new byte[] {5, 3, 4, 2};
@@ -311,6 +311,8 @@ public class BlocksInfo {
 		blocks[93].cardinalDirections = new byte[] {2, 3, 0, 1};
 		//repeater (on?)		
 		blocks[94].cardinalDirections = new byte[] {2, 3, 0, 1};
+		//head
+		blocks[144].cardinalDirections = new byte[] {5, 3, 4, 2};
 		//comparator	
 		blocks[149].cardinalDirections = new byte[] {2, 3, 0, 1};
 		//comparator (on?)		

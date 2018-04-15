@@ -66,7 +66,15 @@ public class PermissionInterface {
 		}
 	}
 	
-	
+	@SuppressWarnings("deprecation")
+	public static String getUUIDfromPlayer(String player) {
+		String UUID = NavyCraft.instance.getServer().getOfflinePlayer(player).getUniqueId().toString();
+		if(UUID == null) {
+			return null;
+		} else {
+			return UUID;
+		}
+}
 	
 	public static boolean CheckPerm(Player player, String command) {		
 		command = command.replace(" ", ".");
@@ -105,7 +113,7 @@ public class PermissionInterface {
 	}
 	
 	public static boolean CheckEnabledWorld(Location loc) {
-		if(!plugin.getConfig().getString("EnabledWorlds").equalsIgnoreCase("null")) {
+		if(!NavyCraft.instance.getConfig().getString("EnabledWorlds").equalsIgnoreCase("null")) {
 			String[] worlds = NavyCraft.instance.getConfig().getString("EnabledWorlds").split(",");
 			for(int i = 0; i < worlds.length; i++) {
 				if( loc.getWorld().getName().equalsIgnoreCase(worlds[i]) )
@@ -119,7 +127,7 @@ public class PermissionInterface {
 		return true;
 	}
 	public static boolean CheckBattleWorld(Location loc) {
-		if(!plugin.getConfig().getString("BattleWorld").equalsIgnoreCase("null")) {
+		if(!NavyCraft.instance.getConfig().getString("BattleWorld").equalsIgnoreCase("null")) {
 			String[] worlds = NavyCraft.instance.getConfig().getString("BattleWorld").split(",");
 			for(int i = 0; i < worlds.length; i++) {
 				if( loc.getWorld().getName().equalsIgnoreCase(worlds[i]) )
