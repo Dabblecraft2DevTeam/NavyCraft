@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -5615,37 +5616,37 @@ public class NavyCraft_PlayerListener implements Listener {
 			}
 		});
 	}
-
 	{
-		@EventHandler(priority = EventPriority.HIGH)
-		public void onPlayerMove1(PlayerMoveEvent event) {
-			Player player = event.getPlayer();
-
-			Craft craft = Craft.getPlayerCraft(player);
-
-			if ((NavyCraft.checkSafeDockRegion(player.getLocation())
-					&& !PermissionInterface.CheckBattleWorld(player.getLocation()))
-					|| !PermissionInterface.CheckEnabledWorld(player.getLocation())) {
-				if (NavyCraft.playerChatRegions.containsKey(player.getName())) {
-					if (NavyCraft.playerChatRegions.get(player.getName()) != 0) {
-						player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Joining [Global] channel...");
-						NavyCraft.playerChatRegions.put(player.getName(), 0);
+		boolean checkProtectedRegion(Player player, Location loc) {
+			if ((player != null) && (loc != null)) {
+				wgp = (WorldGuardPlugin) plugin.getServer().getPluginManager().getPlugin("WorldGuard");
+				if (wgp != null) {
+					if (!PermissionInterface.CheckEnabledWorld(loc)) {
+						return;
 					}
-				} else {
-					player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Joining [Global] channel...");
-					NavyCraft.playerChatRegions.put(player.getName(), 0);
-				}
-			} else {
-				if (NavyCraft.playerChatRegions.containsKey(player.getName())) {
-					if (NavyCraft.playerChatRegions.get(player.getName()) != 1) {
-						player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Joining [Talk] channel...");
-						NavyCraft.playerChatRegions.put(player.getName(), 1);
+					RegionManager regionManager = wgp.getRegionManager(player.getWorld());
+
+					ApplicableRegionSet set = regionManager.getApplicableRegions(loc);
+
+					Iterator<ProtectedRegion> it = set.iterator();
+					while (it.hasNext()) {
+						String id = it.next().getId();
+						String[] splits = id.split("_");
+						if (splits.length == 2) {
+							if (splits[1].equalsIgnoreCase("safedock") || splits[1].equalsIgnoreCase("red")
+									|| splits[1].equalsIgnoreCase("blue")) {
+								return;
+								player.sendMessage(Color.YELLOW + "Joining [Global] Channel");
+							}
+						}
+
 					}
-				} else {
-					player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Joining [Talk] channel...");
-					NavyCraft.playerChatRegions.put(player.getName(), 1);
+					return;
 				}
+				return;
 			}
+			return; // reach here in error, return true to protect property
+		}
 
 	}
 }
