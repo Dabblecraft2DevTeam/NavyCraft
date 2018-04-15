@@ -65,6 +65,10 @@
 			<id>Multiverse-Core</id>
 			<url>http://repo.onarandombox.com/content/repositories/multiverse/</url>
 		</repository>
+		<repository>
+			<id>pex-repo</id>
+			<url>http://pex-repo.aoeu.xyz</url>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -103,6 +107,11 @@
 			<groupId>com.onarandombox.multiversecore</groupId>
 			<artifactId>Multiverse-Core</artifactId>
 			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>ru.tehkode</groupId>
+			<artifactId>PermissionsEx</artifactId>
+			<version>1.23.1</version>
 		</dependency>
 	</dependencies>
 </project>
