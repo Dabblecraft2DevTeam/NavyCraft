@@ -160,7 +160,6 @@ public class NavyCraft extends JavaPlugin {
 	public static HashMap<Player, Float> playerEngineVolumes = new HashMap<Player, Float>();
 	public static HashMap<Player, Float> playerWeaponVolumes = new HashMap<Player, Float>();
 	public static HashMap<Player, Float> playerOtherVolumes = new HashMap<Player, Float>();
-	public static Object playerChatRegions;
 
 	public void loadProperties() {
 		getConfig().options().copyDefaults(true);
@@ -317,7 +316,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !PermissionInterface.CheckBattleWorld(loc) )
+    		if( !loc.getWorld().getName().equalsIgnoreCase("warworld1") &&  !loc.getWorld().getName().equalsIgnoreCase("warworld2") &&  !loc.getWorld().getName().equalsIgnoreCase("warworld3") )
     		{
     			return 0;
     		}
