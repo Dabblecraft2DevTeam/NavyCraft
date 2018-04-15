@@ -202,11 +202,8 @@ public class NavyCraft extends JavaPlugin {
 		instance = this;
 		shutDown = false;
 
-<<<<<<< HEAD
 		saveDefaultConfig();
-=======
-		this.saveDefaultConfig();
->>>>>>> 6cc884c29f73ea56678e0b07cae99f38f2ab74b2
+		saveDefaultConfig();
 
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(playerListener, this);
@@ -215,11 +212,7 @@ public class NavyCraft extends JavaPlugin {
 		pm.registerEvents(inventoryListener, this);
 		pm.registerEvents(fileListener, this);
 
-<<<<<<< HEAD
 		PluginDescriptionFile pdfFile = getDescription();
-=======
-		PluginDescriptionFile pdfFile = this.getDescription();
->>>>>>> 6cc884c29f73ea56678e0b07cae99f38f2ab74b2
 		version = pdfFile.getVersion();
 
 		BlocksInfo.loadBlocksInfo();
@@ -228,11 +221,8 @@ public class NavyCraft extends JavaPlugin {
 
 		PluginManager manager = getServer().getPluginManager();
 
-<<<<<<< HEAD
 		manager.registerEvents(new TeleportFix(this, getServer()), this);
-=======
-		manager.registerEvents(new TeleportFix(this, this.getServer()), this);
->>>>>>> 6cc884c29f73ea56678e0b07cae99f38f2ab74b2
+		manager.registerEvents(new TeleportFix(this, getServer()), this);
 
 		structureUpdateScheduler();
 
@@ -241,11 +231,9 @@ public class NavyCraft extends JavaPlugin {
 		System.out.println(pdfFile.getName() + " " + version + " plugin enabled");
 
 		if (!setupEconomy()) {
-<<<<<<< HEAD
+
 			getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
-=======
-			log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
->>>>>>> 6cc884c29f73ea56678e0b07cae99f38f2ab74b2
+
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
@@ -272,12 +260,13 @@ public class NavyCraft extends JavaPlugin {
 		 */
 
 		// if(this.DebugMode == true)
-<<<<<<< HEAD
+
 		if (Integer.parseInt(getConfig().getString("LogLevel")) >= messageLevel) {
-=======
-		if (Integer.parseInt(this.getConfig().getString("LogLevel")) >= messageLevel) {
->>>>>>> 6cc884c29f73ea56678e0b07cae99f38f2ab74b2
-			System.out.println(message);
+
+			if (Integer.parseInt(getConfig().getString("LogLevel")) >= messageLevel) {
+
+				System.out.println(message);
+			}
 		}
 		return DebugMode;
 	}
@@ -548,7 +537,7 @@ public class NavyCraft extends JavaPlugin {
 	}
 
 	public void structureUpdateScheduler() {
-<<<<<<< HEAD
+
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
 			if ((Craft.craftList == null) || Craft.craftList.isEmpty()) {
 				if (!Craft.addCraftList.isEmpty()) {
@@ -559,69 +548,69 @@ public class NavyCraft extends JavaPlugin {
 				}
 				return;
 			}
-			int vehicleCount = Craft.craftList.size();
-			int vehicleNum = (schedulerCounter) % vehicleCount;
-			int updateNum = (schedulerCounter / vehicleCount) % 4;
+			int vehicleCount1 = Craft.craftList.size();
+			int vehicleNum1 = (schedulerCounter) % vehicleCount1;
+			int updateNum1 = (schedulerCounter / vehicleCount1) % 4;
 
 			try {
-				if (vehicleCount < 10) {
-					updateCraft(vehicleNum, updateNum);
+				if (vehicleCount1 < 10) {
+					updateCraft(vehicleNum1, updateNum1);
 					schedulerCounter++;
-				} else if ((vehicleCount >= 10) && (vehicleCount < 20)) {
+				} else if ((vehicleCount1 >= 10) && (vehicleCount1 < 20)) {
 					// vehicleNum = (vehicleNum + vehicleCount/2)%vehicleCount;
-					updateCraft(vehicleNum, updateNum);
-					vehicleNum = (vehicleNum + 1) % vehicleCount;
+					updateCraft(vehicleNum1, updateNum1);
+					vehicleNum1 = (vehicleNum1 + 1) % vehicleCount1;
 					schedulerCounter = schedulerCounter + 4;
-					updateCraft(vehicleNum, updateNum);
+					updateCraft(vehicleNum1, updateNum1);
 					schedulerCounter = schedulerCounter - 4;
 
-					if (updateNum == 3) {
+					if (updateNum1 == 3) {
 						schedulerCounter += 5;
 					} else {
 						schedulerCounter++;
 					}
-				} else if ((vehicleCount >= 20) && (vehicleCount < 30)) {
+				} else if ((vehicleCount1 >= 20) && (vehicleCount1 < 30)) {
 					// vehicleNum = (vehicleNum + vehicleCount/3)%vehicleCount;
-					vehicleNum = (vehicleNum + 1) % vehicleCount;
+					vehicleNum1 = (vehicleNum1 + 1) % vehicleCount1;
 					schedulerCounter = schedulerCounter + 4;
-					updateCraft(vehicleNum, updateNum);
-					vehicleNum = (vehicleNum + 1) % vehicleCount;
+					updateCraft(vehicleNum1, updateNum1);
+					vehicleNum1 = (vehicleNum1 + 1) % vehicleCount1;
 					schedulerCounter = schedulerCounter + 4;
 					// vehicleNum = (vehicleNum + vehicleCount/3)%vehicleCount;
-					updateCraft(vehicleNum, updateNum);
+					updateCraft(vehicleNum1, updateNum1);
 					schedulerCounter = schedulerCounter - 4;
 					schedulerCounter = schedulerCounter - 4;
 
-					if (updateNum == 3) {
+					if (updateNum1 == 3) {
 						schedulerCounter += 9;
 					} else {
 						schedulerCounter++;
 					}
 				} else {
 					// vehicleNum = (vehicleNum + vehicleCount/4)%vehicleCount;
-					vehicleNum = (vehicleNum + 1) % vehicleCount;
+					vehicleNum1 = (vehicleNum1 + 1) % vehicleCount1;
 					schedulerCounter = schedulerCounter + 4;
-					updateCraft(vehicleNum, updateNum);
+					updateCraft(vehicleNum1, updateNum1);
 					// vehicleNum = (vehicleNum + vehicleCount/4)%vehicleCount;
-					vehicleNum = (vehicleNum + 1) % vehicleCount;
+					vehicleNum1 = (vehicleNum1 + 1) % vehicleCount1;
 					schedulerCounter = schedulerCounter + 4;
-					updateCraft(vehicleNum, updateNum);
+					updateCraft(vehicleNum1, updateNum1);
 					// vehicleNum = (vehicleNum + vehicleCount/4)%vehicleCount;
-					vehicleNum = (vehicleNum + 1) % vehicleCount;
+					vehicleNum1 = (vehicleNum1 + 1) % vehicleCount1;
 					schedulerCounter = schedulerCounter + 4;
-					updateCraft(vehicleNum, updateNum);
+					updateCraft(vehicleNum1, updateNum1);
 					schedulerCounter = schedulerCounter - 4;
 					schedulerCounter = schedulerCounter - 4;
 					schedulerCounter = schedulerCounter - 4;
 
-					if (updateNum == 3) {
+					if (updateNum1 == 3) {
 						schedulerCounter += 13;
 					} else {
 						schedulerCounter++;
 					}
 				}
 
-				if (updateNum == 3) {
+				if (updateNum1 == 3) {
 					if (!Craft.addCraftList.isEmpty()) {
 						for (Craft c2 : Craft.addCraftList) {
 							Craft.addCraft(c2);
@@ -629,97 +618,10 @@ public class NavyCraft extends JavaPlugin {
 						Craft.addCraftList.clear();
 					}
 				}
-			} catch (Exception e) {
+			} catch (Exception e1) {
 				schedulerCounter++;
-=======
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-			// new Thread() {
-			// @Override
-			public void run() {
-				if ((Craft.craftList == null) || Craft.craftList.isEmpty()) {
-					if (!Craft.addCraftList.isEmpty()) {
-						for (Craft c : Craft.addCraftList) {
-							Craft.addCraft(c);
-						}
-						Craft.addCraftList.clear();
-					}
-					return;
-				}
-				int vehicleCount = Craft.craftList.size();
-				int vehicleNum = (schedulerCounter) % vehicleCount;
-				int updateNum = (schedulerCounter / vehicleCount) % 4;
-
-				try {
-					if (vehicleCount < 10) {
-						updateCraft(vehicleNum, updateNum);
-						schedulerCounter++;
-					} else if ((vehicleCount >= 10) && (vehicleCount < 20)) {
-						// vehicleNum = (vehicleNum + vehicleCount/2)%vehicleCount;
-						updateCraft(vehicleNum, updateNum);
-						vehicleNum = (vehicleNum + 1) % vehicleCount;
-						schedulerCounter = schedulerCounter + 4;
-						updateCraft(vehicleNum, updateNum);
-						schedulerCounter = schedulerCounter - 4;
-
-						if (updateNum == 3) {
-							schedulerCounter += 5;
-						} else {
-							schedulerCounter++;
-						}
-					} else if ((vehicleCount >= 20) && (vehicleCount < 30)) {
-						// vehicleNum = (vehicleNum + vehicleCount/3)%vehicleCount;
-						vehicleNum = (vehicleNum + 1) % vehicleCount;
-						schedulerCounter = schedulerCounter + 4;
-						updateCraft(vehicleNum, updateNum);
-						vehicleNum = (vehicleNum + 1) % vehicleCount;
-						schedulerCounter = schedulerCounter + 4;
-						// vehicleNum = (vehicleNum + vehicleCount/3)%vehicleCount;
-						updateCraft(vehicleNum, updateNum);
-						schedulerCounter = schedulerCounter - 4;
-						schedulerCounter = schedulerCounter - 4;
-
-						if (updateNum == 3) {
-							schedulerCounter += 9;
-						} else {
-							schedulerCounter++;
-						}
-					} else {
-						// vehicleNum = (vehicleNum + vehicleCount/4)%vehicleCount;
-						vehicleNum = (vehicleNum + 1) % vehicleCount;
-						schedulerCounter = schedulerCounter + 4;
-						updateCraft(vehicleNum, updateNum);
-						// vehicleNum = (vehicleNum + vehicleCount/4)%vehicleCount;
-						vehicleNum = (vehicleNum + 1) % vehicleCount;
-						schedulerCounter = schedulerCounter + 4;
-						updateCraft(vehicleNum, updateNum);
-						// vehicleNum = (vehicleNum + vehicleCount/4)%vehicleCount;
-						vehicleNum = (vehicleNum + 1) % vehicleCount;
-						schedulerCounter = schedulerCounter + 4;
-						updateCraft(vehicleNum, updateNum);
-						schedulerCounter = schedulerCounter - 4;
-						schedulerCounter = schedulerCounter - 4;
-						schedulerCounter = schedulerCounter - 4;
-
-						if (updateNum == 3) {
-							schedulerCounter += 13;
-						} else {
-							schedulerCounter++;
-						}
-					}
-
-					if (updateNum == 3) {
-						if (!Craft.addCraftList.isEmpty()) {
-							for (Craft c : Craft.addCraftList) {
-								Craft.addCraft(c);
-							}
-							Craft.addCraftList.clear();
-						}
-					}
-				} catch (Exception e) {
-					schedulerCounter++;
-				}
->>>>>>> 6cc884c29f73ea56678e0b07cae99f38f2ab74b2
 			}
+
 		}, 4, 1);
 	}
 
