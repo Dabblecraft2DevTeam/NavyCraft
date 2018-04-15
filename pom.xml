@@ -41,58 +41,85 @@
 					<finalName>${project.name}</finalName>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<relocations>
+						<relocation>
+							<pattern>com.sk89q.worldedit.bukkit</pattern>
+							<!-- Replace this with your package! -->
+							<shadedPattern>com.sk89q.worldedit</shadedPattern>
+						</relocation>
+					</relocations>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	<url>https://github.com/Dabblecraft2DevTeam/NavyCraft</url>
+	<repositories>
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+		<repository>
+			<id>sk89q-repo</id>
+			<url>http://maven.sk89q.com/repo/</url>
+		</repository>
+		<repository>
+			<id>vault-repo</id>
+			<url>http://nexus.hc.to/content/repositories/pub_releases</url>
+		</repository>
+		<repository>
+			<id>dmulloy2-repo</id>
+			<url>http://repo.dmulloy2.net/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>Multiverse-Core</id>
+			<url>http://repo.onarandombox.com/content/repositories/multiverse/</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>LATEST</version>
-			<systemPath>${project.basedir}/jars/spigot-1.12.2.jar</systemPath>
-			<scope>system</scope>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>1.12.2-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.sk89q</groupId>
-			<artifactId>worldguard</artifactId>
-			<version>LATEST</version>
-			<systemPath>${project.basedir}/jars/worldguard-legacy-6.2.2-SNAPSHOT-dist.jar</systemPath>
-			<scope>system</scope>
+			<groupId>com.sk89q.worldedit</groupId>
+			<artifactId>worldedit-bukkit</artifactId>
+			<version>6.1.5</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sk89q</groupId>
-			<artifactId>worldedit</artifactId>
-			<version>LATEST</version>
-			<systemPath>${project.basedir}/jars/worldedit-bukkit-6.1.9-SNAPSHOT-dist.jar</systemPath>
-			<scope>system</scope>
+			<groupId>com.sk89q.worldguard</groupId>
+			<artifactId>worldguard-legacy</artifactId>
+			<version>6.2</version>
 		</dependency>
 		<dependency>
-			<groupId>net.ess3</groupId>
-			<artifactId>Essentials</artifactId>
-			<version>LATEST</version>
-			<systemPath>${project.basedir}/jars/Essentials-2.x-SNAPSHOT.jar</systemPath>
-			<scope>system</scope>
+			<groupId>net.milkbowl.vault</groupId>
+			<artifactId>VaultAPI</artifactId>
+			<version>1.6</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.comphenix</groupId>
+			<groupId>com.comphenix.protocol</groupId>
 			<artifactId>ProtocolLib</artifactId>
-			<version>LATEST</version>
-			<systemPath>${project.basedir}/jars/ProtocolLib.jar</systemPath>
-			<scope>system</scope>
+			<version>4.3.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.bergerkiller</groupId>
-			<artifactId>BKCommonLib</artifactId>
-			<version>LATEST</version>
-			<systemPath>${project.basedir}/jars/BKCommonLib.jar</systemPath>
-			<scope>system</scope>
-		</dependency>
-		<dependency>
-			<groupId>ru.tehkode</groupId>
-			<artifactId>PermissionsEx</artifactId>
-			<version>LATEST</version>
-			<systemPath>${project.basedir}/jars/PermissionsEx-1.23.4.jar</systemPath>
-			<scope>system</scope>
+			<groupId>com.onarandombox.multiversecore</groupId>
+			<artifactId>Multiverse-Core</artifactId>
+			<version>2.5</version>
 		</dependency>
 	</dependencies>
 </project>
