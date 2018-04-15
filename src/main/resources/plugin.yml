@@ -1,6 +1,6 @@
-name: NavyCraft
-main: com.maximuspayne.navycraft.NavyCraft
-version: ${project.version}
+name: ${name}
+main: ${groupId}.${artifactId}.${name}
+version: ${version}
 authors: [Maximuspayne, keough99, Pocketkid2]
 depend: [WorldGuard,WorldEdit,Vault,PermissionsEx]
 
