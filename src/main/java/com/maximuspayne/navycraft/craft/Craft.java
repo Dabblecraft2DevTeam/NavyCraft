@@ -40,7 +40,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
  * my consent. If you do cool modifications, please tell me so I can integrate
  * it :)
  */
-@SuppressWarnings({ "deprecation" })
+@SuppressWarnings("deprecation")
 public class Craft {
 
 	// list of craft
