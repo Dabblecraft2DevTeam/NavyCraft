@@ -80,13 +80,6 @@
                 <scope>system</scope>
         </dependency>
 	<dependency>
-           	 <groupId>org.anjocadio</groupId>
-           	 <artifactId>EssesntialsGroupManager</artifactId>
-            	<version>LATEST</version>
-          	<systemPath>${project.basedir}/jars/EssentialsXGroupManager-2.0.1.jar</systemPath>
-                <scope>system</scope>
-        </dependency>
-	<dependency>
            	 <groupId>com.bergerkiller</groupId>
            	 <artifactId>BKCommonLib</artifactId>
             	<version>LATEST</version>
