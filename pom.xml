@@ -41,28 +41,6 @@
 					<finalName>${project.name}</finalName>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.1.0</version>
-				<configuration>
-					<relocations>
-						<relocation>
-							<pattern>com.sk89q.worldedit.bukkit</pattern>
-							<!-- Replace this with your package! -->
-							<shadedPattern>com.sk89q.worldedit</shadedPattern>
-						</relocation>
-					</relocations>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 	<url>https://github.com/Dabblecraft2DevTeam/NavyCraft</url>
@@ -97,7 +75,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.sk89q.worldedit</groupId>
-<<<<<<< HEAD
 			<artifactId>worldedit-core</artifactId>
 			<version>6.1</version>
 		</dependency>
@@ -118,23 +95,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-=======
-			<artifactId>worldedit-bukkit</artifactId>
-			<version>6.1.5</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sk89q.worldguard</groupId>
-			<artifactId>worldguard-legacy</artifactId>
-			<version>6.2</version>
-		</dependency>
-		<dependency>
-			<groupId>net.milkbowl.vault</groupId>
-			<artifactId>VaultAPI</artifactId>
-			<version>1.6</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
->>>>>>> 6cc884c29f73ea56678e0b07cae99f38f2ab74b2
 			<groupId>com.comphenix.protocol</groupId>
 			<artifactId>ProtocolLib</artifactId>
 			<version>4.3.0</version>
