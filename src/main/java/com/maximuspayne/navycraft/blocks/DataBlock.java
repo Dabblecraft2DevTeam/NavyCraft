@@ -31,7 +31,7 @@ public class DataBlock {
 		//items[slot] = new ItemStack(itemType);
 		if( slot >= 27 )
 			return;
-		items[slot] = new ItemStack(origItem.getTypeId());
+		items[slot] = new ItemStack(origItem.getType());
 		items[slot].setAmount(origItem.getAmount());
 		items[slot].setData(origItem.getData());
 		items[slot].setDurability(origItem.getDurability());

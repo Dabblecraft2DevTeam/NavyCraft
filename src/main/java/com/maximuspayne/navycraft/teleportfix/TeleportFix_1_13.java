@@ -1,6 +1,6 @@
 package com.maximuspayne.navycraft.teleportfix;
 //Commented out until 1.13 release
-/*
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,26 +8,26 @@ import net.minecraft.server.v1_13_R1.PacketPlayOutMapChunk;
 import net.minecraft.server.v1_13_R1.PlayerConnection;
 import net.minecraft.server.v1_13_R1.BlockPosition;
 import net.minecraft.server.v1_13_R1.EnumSkyBlock;
-import net.minecraft.server.v1_13_R1_R1.EntityHuman;
+import net.minecraft.server.v1_13_R1.EntityHuman;
 import net.minecraft.server.v1_13_R1.EntityTracker;
 import net.minecraft.server.v1_13_R1.EntityTrackerEntry;
 import net.minecraft.server.v1_13_R1.WorldServer;
 
 import org.bukkit.craftbukkit.v1_13_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-*/
+
 import org.bukkit.event.Listener;
 public class TeleportFix_1_13 implements Listener {
 	
 	
-/*	
+	
 	public static void updateEntities(List<Player> observers) {
 		
 		// Refresh every single player
@@ -63,7 +63,7 @@ public class TeleportFix_1_13 implements Listener {
 		return nsmPlayers;
 	}
 	
-	public static void updateNMSChunks(Craft craft) {
+	public static void updateNMSChunks(CraftWorld craft) {
 		for (Chunk c : craft.chunkList ) {
 			for (Player p : c.getWorld().getPlayers() ){
 				//EntityPlayer ep = (EntityPlayer)p;
@@ -157,5 +157,5 @@ public class TeleportFix_1_13 implements Listener {
 			light.getWorld().refreshChunk(c.getX(), c.getZ()-1);
 		}
 	}
-*/
+
 }
