@@ -468,7 +468,7 @@ public class CraftRotator {
 								Location cannonLoc = new Location(craft.world, dataBlock.x + craft.minX, dataBlock.y + craft.minY, dataBlock.z + craft.minZ);
 								for (OneCannon onec : AimCannon.getCannons()) 
 								{
-									if (onec.isThisCannon(cannonLoc, false)) 
+									if (onec.isThisCannon(cannonLoc, false, false)) 
 									{
 										cannonLocs.put(new Location(craft.world,x, y, z),cannonLoc);
 									}
@@ -944,18 +944,19 @@ public class CraftRotator {
 					}
 				}
 				
-				if( theBlock.getTypeId() == 23) //cannon block
+				if( theBlock.getTypeId() == 23 || theBlock.getTypeId() == 158 ) //cannon block
 				{
 					OneCannon oc = new OneCannon(theBlock.getLocation(), NavyCraft.instance);
-					if (oc.isValidCannon(theBlock)) 
+					if ((oc.isValidCannon(theBlock, false) && theBlock.getTypeId() == 23) || (oc.isValidCannon(theBlock, true) && theBlock.getTypeId() == 158)) 
 					{
 						for (OneCannon onec : AimCannon.getCannons()) 
 						{
 							Location testLoc = new Location(craft.world, dataBlock.x,dataBlock.y,dataBlock.z);
 							if( cannonLocs.containsKey(testLoc) )
 							{
-								boolean oldCannonFound = onec.isThisCannon(cannonLocs.get(testLoc), true);
-								if(oldCannonFound) 
+								boolean oldCannonFound = onec.isThisCannon(cannonLocs.get(testLoc), true, false);
+								boolean oldCannonFound2 = onec.isThisCannon(cannonLocs.get(testLoc), true, true);
+								if(oldCannonFound || oldCannonFound2) 
 								{
 									Location newLoc = theBlock.getLocation();
 									onec.setLocation(newLoc);

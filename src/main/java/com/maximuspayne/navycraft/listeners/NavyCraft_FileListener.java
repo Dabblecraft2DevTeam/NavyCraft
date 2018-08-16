@@ -23,9 +23,7 @@ public class NavyCraft_FileListener implements Listener {
 	}
 	
 	public static void loadShipyardData() {
-		File shipyarddata = new File(
-		NavyCraft.instance.getServer().getPluginManager().getPlugin("NavyCraft").getDataFolder(),
-		File.separator + "shipyarddata");
+		File shipyarddata = new File(NavyCraft.instance.getServer().getPluginManager().getPlugin("NavyCraft").getDataFolder(),File.separator + "shipyarddata");
 		File f = new File(shipyarddata, File.separator + "signs.yml");
 		FileConfiguration syData = YamlConfiguration.loadConfiguration(f);
 		
@@ -33,7 +31,6 @@ public class NavyCraft_FileListener implements Listener {
 		if (!f.exists()) {
 			try {
 				syData.createSection("Signs");
-				
 				syData.save(f);
 			} catch (IOException exception) {
 				exception.printStackTrace();
@@ -41,9 +38,7 @@ public class NavyCraft_FileListener implements Listener {
 	}
 }
 	public static void loadShipyardConfig() {
-		File shipyarddata = new File(
-		NavyCraft.instance.getServer().getPluginManager().getPlugin("NavyCraft").getDataFolder(),
-		File.separator + "shipyarddata");
+		File shipyarddata = new File(NavyCraft.instance.getServer().getPluginManager().getPlugin("NavyCraft").getDataFolder(),File.separator + "shipyarddata");
 		File c = new File(shipyarddata, File.separator + "config.yml");
 		FileConfiguration syConfig = YamlConfiguration.loadConfiguration(c);
 		if (!c.exists()) {
@@ -168,6 +163,7 @@ public class NavyCraft_FileListener implements Listener {
 				syConfig.set("SHIP1SZ", -408);
 				syConfig.set("SHIP1EZ", -852);
 				syConfig.set("SHIP1WZ", 37);
+				
 				syConfig.set("SHIP2World", "Shipyard");
 				syConfig.set("SHIP2SX", 601);
 				syConfig.set("SHIP2EX", 1421);
@@ -176,6 +172,7 @@ public class NavyCraft_FileListener implements Listener {
 				syConfig.set("SHIP2SZ", -356);
 				syConfig.set("SHIP2EZ", -148);
 				syConfig.set("SHIP2WZ", 52);
+				
 				syConfig.set("SHIP3World", "Shipyard");
 				syConfig.set("SHIP3SX", 549);
 				syConfig.set("SHIP3EX", 21);
@@ -184,6 +181,7 @@ public class NavyCraft_FileListener implements Listener {
 				syConfig.set("SHIP3SZ", -329);
 				syConfig.set("SHIP3EZ", -92);
 				syConfig.set("SHIP3WZ", 79);
+				
 				syConfig.set("SHIP4World", "Shipyard");
 				syConfig.set("SHIP4SX", 543);
 				syConfig.set("SHIP4EX", 21);
@@ -192,6 +190,7 @@ public class NavyCraft_FileListener implements Listener {
 				syConfig.set("SHIP4SZ", -408);
 				syConfig.set("SHIP4EZ", -600);
 				syConfig.set("SHIP4WZ", 64);
+				
 				syConfig.set("SHIP5World", "Shipyard");
 				syConfig.set("SHIP5SX", 656);
 				syConfig.set("SHIP5EX", 1426);
@@ -200,6 +199,7 @@ public class NavyCraft_FileListener implements Listener {
 				syConfig.set("SHIP5SZ", 142);
 				syConfig.set("SHIP5EZ", 37);
 				syConfig.set("SHIP5WZ", 105);
+				
 				syConfig.set("HANGAR1World", "Shipyard");
 				syConfig.set("HANGAR1SX", 553);
 				syConfig.set("HANGAR1EX", -137);
@@ -208,6 +208,7 @@ public class NavyCraft_FileListener implements Listener {
 				syConfig.set("HANGAR1SZ", -766);
 				syConfig.set("HANGAR1EZ", -1191);
 				syConfig.set("HANGAR1WZ", 25);
+				
 				syConfig.set("HANGAR2World", "Shipyard");
 				syConfig.set("HANGAR2SX", -99);
 				syConfig.set("HANGAR2EX", -1177);
@@ -216,6 +217,7 @@ public class NavyCraft_FileListener implements Listener {
 				syConfig.set("HANGAR2SZ", 67);
 				syConfig.set("HANGAR2EZ", -117);
 				syConfig.set("HANGAR2WZ", 46);
+				
 				syConfig.set("TANK1World", "Shipyard");
 				syConfig.set("TANK1SX", 602);
 				syConfig.set("TANK1EX", 926);
@@ -224,6 +226,7 @@ public class NavyCraft_FileListener implements Listener {
 				syConfig.set("TANK1SZ", -953);
 				syConfig.set("TANK1EZ", -1385);
 				syConfig.set("TANK1WZ", 24);
+				
 				syConfig.set("TANK2World", "Shipyard");
 				syConfig.set("TANK2SX", 960);
 				syConfig.set("TANK2EX", 1436);
@@ -241,9 +244,7 @@ public class NavyCraft_FileListener implements Listener {
 }
 
 	public static void loadSignData() {
-		File shipyarddata = new File(
-				NavyCraft.instance.getServer().getPluginManager().getPlugin("NavyCraft").getDataFolder(),
-				File.separator + "shipyarddata");
+		File shipyarddata = new File(NavyCraft.instance.getServer().getPluginManager().getPlugin("NavyCraft").getDataFolder(),File.separator + "shipyarddata");
 		File f = new File(shipyarddata, File.separator + "signs.yml");
 		FileConfiguration syData = YamlConfiguration.loadConfiguration(f);
 		List<String> list = new ArrayList<String>(syData.getConfigurationSection("Signs").getKeys(false));
@@ -491,9 +492,7 @@ public class NavyCraft_FileListener implements Listener {
 }
 
 	public static Block findSignOpen(String type) {
-		File shipyarddata = new File(
-				NavyCraft.instance.getServer().getPluginManager().getPlugin("NavyCraft").getDataFolder(),
-				File.separator + "shipyarddata");
+		File shipyarddata = new File(NavyCraft.instance.getServer().getPluginManager().getPlugin("NavyCraft").getDataFolder(),File.separator + "shipyarddata");
 		File f = new File(shipyarddata, File.separator + "signs.yml");
 		FileConfiguration syData = YamlConfiguration.loadConfiguration(f);
 		Block selectSignBlock = null;
@@ -783,8 +782,7 @@ public class NavyCraft_FileListener implements Listener {
 				File.separator + "userdata");
 		File f = new File(userdata, File.separator + UUID + ".yml");
 		FileConfiguration playerData = YamlConfiguration.loadConfiguration(f);
-		NavyCraft.playerExp.clear();
-		NavyCraft.playerExp.put(player, Integer.valueOf(playerData.get("exp").toString()));
+		NavyCraft.playerExp.put(player, playerData.getInt("exp"));
 	}
 	
 	public static void saveExperience(String player) {
@@ -795,7 +793,7 @@ public class NavyCraft_FileListener implements Listener {
 		File f = new File(userdata, File.separator + UUID + ".yml");
 		FileConfiguration playerData = YamlConfiguration.loadConfiguration(f);
 		if (NavyCraft.playerExp.containsKey(player)) {
-		playerData.set("exp", Integer.valueOf(NavyCraft.playerExp.get(player).toString()));
+		playerData.set("exp", NavyCraft.playerExp.get(player));
 		}
 		try {
 			playerData.save(f);
@@ -814,6 +812,9 @@ public class NavyCraft_FileListener implements Listener {
 		NavyCraft.playerEngineVolumes.put(NavyCraft.instance.getServer().getPlayer(player),Float.valueOf(playerData.get("engvolume").toString()));
 		NavyCraft.playerWeaponVolumes.put(NavyCraft.instance.getServer().getPlayer(player),Float.valueOf(playerData.get("wepvolume").toString()));
 		NavyCraft.playerOtherVolumes.put(NavyCraft.instance.getServer().getPlayer(player),Float.valueOf(playerData.get("othervolume").toString()));
+		NavyCraft.instance.DebugMessage("Engine V:" + NavyCraft.playerEngineVolumes.get(NavyCraft.instance.getServer().getPlayer(player)).toString(), 3);
+		NavyCraft.instance.DebugMessage("Weapon V:" + NavyCraft.playerWeaponVolumes.get(NavyCraft.instance.getServer().getPlayer(player)).toString(), 3);
+		NavyCraft.instance.DebugMessage("Other V:" + NavyCraft.playerOtherVolumes.get(NavyCraft.instance.getServer().getPlayer(player)).toString(), 3);
 	}
 	
 	public static void saveVolume(String player) {

@@ -11,6 +11,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 import com.maximuspayne.navycraft.NavyCraft;
+import com.maximuspayne.navycraft.PermissionInterface;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class AimCannonPlayerListener implements Listener {
     public static AimCannon plugin;
@@ -23,6 +26,7 @@ public class AimCannonPlayerListener implements Listener {
     ///////stone button
 	if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK ) {
 	    if (event.getClickedBlock().getType() == Material.STONE_BUTTON) {
+			NavyCraft.instance.DebugMessage("Plugin found stone button!", 3);
 		Block b = null;
 		if (event.getClickedBlock().getRelative(BlockFace.NORTH_EAST).getType() == Material.DISPENSER) {
 		    b = event.getClickedBlock().getRelative(BlockFace.NORTH_EAST);
@@ -41,7 +45,7 @@ public class AimCannonPlayerListener implements Listener {
 		{
 		    for (OneCannon onec : AimCannon.getCannons()) 
 		    {
-				if (onec.isThisCannon(b.getLocation(), false)) 
+				if (onec.isThisCannon(b.getLocation(), false, false)) 
 				{
 					if( onec.cannonType == 2 )
 					{
@@ -49,7 +53,7 @@ public class AimCannonPlayerListener implements Listener {
 							onec.fireCannonButton(event.getPlayer(), true);
 						else
 							onec.fireCannonButton(event.getPlayer(), false);
-					}else if( onec.cannonType == 4 || onec.cannonType == 5 || onec.cannonType == 9)
+					}else if( onec.cannonType == 4 || onec.cannonType == 5 || onec.cannonType == 9 || onec.cannonType == 10)
 					{
 						if( event.getAction() == Action.LEFT_CLICK_BLOCK )
 							onec.fireDCButton(event.getPlayer(), true);
@@ -69,7 +73,7 @@ public class AimCannonPlayerListener implements Listener {
 					}
 				}
 			}
-		   ////else not gun, maybe torpedo?
+		   ////else not gun, maybe torpedo or missile?
 		}else
 		{
 			if( event.getClickedBlock().getRelative(BlockFace.NORTH).getRelative(BlockFace.DOWN).getType() == Material.DISPENSER ) 
@@ -84,25 +88,71 @@ public class AimCannonPlayerListener implements Listener {
 			}else if( event.getClickedBlock().getRelative(BlockFace.WEST).getRelative(BlockFace.DOWN).getType() == Material.DISPENSER ) 
 			{
 				b = event.getClickedBlock().getRelative(BlockFace.WEST).getRelative(BlockFace.DOWN);
+			}else if( event.getClickedBlock().getRelative(BlockFace.NORTH).getType() == Material.DISPENSER ) 
+			{
+				b = event.getClickedBlock().getRelative(BlockFace.NORTH);
+			}else if( event.getClickedBlock().getRelative(BlockFace.SOUTH).getType() == Material.DISPENSER ) 
+			{
+				b = event.getClickedBlock().getRelative(BlockFace.SOUTH);
+			}else if( event.getClickedBlock().getRelative(BlockFace.EAST).getType() == Material.DISPENSER ) 
+			{
+				b = event.getClickedBlock().getRelative(BlockFace.EAST);
+			}else if( event.getClickedBlock().getRelative(BlockFace.WEST).getType() == Material.DISPENSER ) 
+			{
+				b = event.getClickedBlock().getRelative(BlockFace.WEST);
 			}
 			
 			if( b != null )
 			{
+				NavyCraft.instance.DebugMessage("Block wasn't null!", 3);
 				for (OneCannon onec : AimCannon.getCannons()) 
 				{
-					if (onec.isThisCannon(b.getLocation(), false))
+					if (onec.isThisCannon(b.getLocation(), false, false) && ( onec.cannonType == 3 || onec.cannonType == 7 || onec.cannonType == 8))
 					{
 						if( event.getAction() == Action.LEFT_CLICK_BLOCK )
 							onec.fireTorpedoButton(event.getPlayer());
 						else
 							onec.setTorpedoMode(event.getPlayer());
+					} else if (onec.isThisCannon(b.getLocation(), false, false) && (onec.cannonType == 11 || onec.cannonType == 12 )) {
+							if( event.getAction() == Action.LEFT_CLICK_BLOCK )
+							onec.fireMissileButton(event.getPlayer(), false);
+							else
+							onec.setMissileMode(event.getPlayer());
 					}
+			}
+		} else {
+			NavyCraft.instance.DebugMessage("Got to dropper detection", 3);
+			if( event.getClickedBlock().getRelative(BlockFace.NORTH).getType() == Material.DROPPER ) 
+		{
+			b = event.getClickedBlock().getRelative(BlockFace.NORTH);
+		}else if( event.getClickedBlock().getRelative(BlockFace.SOUTH).getType() == Material.DROPPER ) 
+		{
+			b = event.getClickedBlock().getRelative(BlockFace.SOUTH);
+		}else if( event.getClickedBlock().getRelative(BlockFace.EAST).getType() == Material.DROPPER ) 
+		{
+			b = event.getClickedBlock().getRelative(BlockFace.EAST);
+		}else if( event.getClickedBlock().getRelative(BlockFace.WEST).getType() == Material.DROPPER ) 
+		{
+			b = event.getClickedBlock().getRelative(BlockFace.WEST);
+		}
+			if( b != null )
+			{
+				NavyCraft.instance.DebugMessage("Got to cannon detection method", 3);
+				for (OneCannon onec : AimCannon.getCannons()) 
+				{
+					NavyCraft.instance.DebugMessage("Got to type detection", 3);
+				if (onec.isThisCannon(b.getLocation(), false, true) && (onec.cannonType == 13 || onec.cannonType == 14 )) {
+					NavyCraft.instance.DebugMessage("Got to left click detection method", 3);
+					if( event.getAction() == Action.LEFT_CLICK_BLOCK )
+					onec.fireMissileButton(event.getPlayer(), true);
+					else
+					onec.setMissileRange(event.getPlayer());
 				}
 			}
 		}
-		
-	    }
-
+	}
+}
+	}
 	    //////Levers
 	    if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK ) {
 		    if (event.getClickedBlock().getType() == Material.LEVER) {
@@ -227,11 +277,50 @@ public class AimCannonPlayerListener implements Listener {
 					torpedoAction = 3;
 				}
 				
+				//outer missile door lever
+				//north
+				if (event.getClickedBlock().getRelative(BlockFace.NORTH,1).getRelative(BlockFace.DOWN, 2).getType() == Material.DROPPER) 
+				{
+					b = event.getClickedBlock().getRelative(BlockFace.NORTH,1).getRelative(BlockFace.DOWN, 2);
+					torpedoAction = 10;
+				}//south
+				if (event.getClickedBlock().getRelative(BlockFace.SOUTH,1).getRelative(BlockFace.DOWN, 2).getType() == Material.DROPPER) {
+					b = event.getClickedBlock().getRelative(BlockFace.SOUTH,1).getRelative(BlockFace.DOWN, 2);
+					torpedoAction = 10;
+				}//east
+				if (event.getClickedBlock().getRelative(BlockFace.EAST,1).getRelative(BlockFace.DOWN, 2).getType() == Material.DROPPER) {
+					b = event.getClickedBlock().getRelative(BlockFace.EAST,1).getRelative(BlockFace.DOWN, 2);
+					torpedoAction = 10;
+				}//west
+				if (event.getClickedBlock().getRelative(BlockFace.WEST,1).getRelative(BlockFace.DOWN, 2).getType() == Material.DROPPER) {
+					b = event.getClickedBlock().getRelative(BlockFace.WEST,1).getRelative(BlockFace.DOWN, 2);
+					torpedoAction = 10;
+				}
+				
+				//rotate lever
+				//north
+				if (event.getClickedBlock().getRelative(BlockFace.NORTH,1).getRelative(BlockFace.DOWN,1).getType() == Material.DISPENSER) 
+				{
+					b = event.getClickedBlock().getRelative(BlockFace.NORTH,1).getRelative(BlockFace.DOWN,1);
+					torpedoAction = 11;
+				}//south
+				if (event.getClickedBlock().getRelative(BlockFace.SOUTH,1).getRelative(BlockFace.DOWN,1).getType() == Material.DISPENSER) {
+					b = event.getClickedBlock().getRelative(BlockFace.SOUTH,1).getRelative(BlockFace.DOWN,1);
+					torpedoAction = 11;
+				}//east
+				if (event.getClickedBlock().getRelative(BlockFace.EAST,1).getRelative(BlockFace.DOWN,1).getType() == Material.DISPENSER) {
+					b = event.getClickedBlock().getRelative(BlockFace.EAST,1).getRelative(BlockFace.DOWN,1);
+					torpedoAction = 11;
+				}//west
+				if (event.getClickedBlock().getRelative(BlockFace.WEST,1).getRelative(BlockFace.DOWN,1).getType() == Material.DISPENSER) {
+					b = event.getClickedBlock().getRelative(BlockFace.WEST,1).getRelative(BlockFace.DOWN,1);
+					torpedoAction = 11;
+				}
 				
 				if( b != null )
 				{
 				for (OneCannon onec : AimCannon.getCannons()) {
-					if (onec.isThisCannon(b.getLocation(), false)) {
+					if (onec.isThisCannon(b.getLocation(), false, true) || onec.isThisCannon(b.getLocation(), false, false)) {
 						//Do torpedo action
 						if( torpedoAction > 0 )
 						{
@@ -250,6 +339,19 @@ public class AimCannonPlayerListener implements Listener {
 							}else if( torpedoAction == 7 )
 							{
 								onec.openTorpedoDoors(event.getPlayer(), true, false);
+							}else if( torpedoAction == 10 )
+							{
+								onec.openMissileDoorsV(event.getPlayer());
+							}else if( torpedoAction == 11 )
+							{
+							    if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+								    onec.turnCannon(true,event.getPlayer()); 
+								}  else  {
+								    onec.turnCannon(false,event.getPlayer());
+								}
+							    event.getPlayer().sendMessage("Cannon turned..");
+							    event.setCancelled(true);
+							    return;
 							}
 						}
 					}
@@ -257,8 +359,9 @@ public class AimCannonPlayerListener implements Listener {
 				}
 				
 			}else { //b != null
+				if (PermissionInterface.CheckEnabledWorld(event.getPlayer().getLocation())) {
 			    for (OneCannon onec : AimCannon.getCannons()) {
-				if (onec.isThisCannon(b.getLocation(), false)) {
+				if (onec.isThisCannon(b.getLocation(), false, false)) {
 				    if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
 					    onec.turnCannon(true,event.getPlayer()); 
 					}  else  {
@@ -269,34 +372,45 @@ public class AimCannonPlayerListener implements Listener {
 				    return;
 				}
 			    }
+			} else {
+				event.getPlayer().sendMessage(ChatColor.RED + "Can't turn cannons outside of the main world!");
 			}
 		    }
-		
+		    }
 	    }
 
 	    ///Dispenser
-	    if (event.getClickedBlock().getType() == Material.DISPENSER) {
+	    if (event.getClickedBlock().getType() == Material.DISPENSER || event.getClickedBlock().getType() == Material.DROPPER) {
 		for (OneCannon onec : AimCannon.getCannons()) 
 		{
-		    if (onec.isThisCannon(event.getClickedBlock().getLocation(), false)) 
-		    {
+		    if (onec.isThisCannon(event.getClickedBlock().getLocation(), false, false) || onec.isThisCannon(event.getClickedBlock().getLocation(), false, true)) {
+		    	if (PermissionInterface.CheckEnabledWorld(event.getClickedBlock().getLocation()) && !NavyCraft.checkSafeDockRegion(event.getClickedBlock().getLocation())) {
 		    	if( event.getAction() == Action.LEFT_CLICK_BLOCK )
 		    		onec.Charge(event.getPlayer(), true);
 				else
 					onec.Charge(event.getPlayer(), false);
 			    
 			    return;
+		    } else {
+		    	event.getPlayer().sendMessage(ChatColor.RED + "You can't load cannons inside safedock!");
+		    	return;
 		    }
 		}
+	}
 		
 		// new Cannon
 		OneCannon oc = new OneCannon(event.getClickedBlock().getLocation(), NavyCraft.instance);
-		if (oc.isValidCannon(event.getClickedBlock())) {
+		if ((oc.isValidCannon(event.getClickedBlock(), false) && event.getClickedBlock().getType() == Material.DISPENSER) || (oc.isValidCannon(event.getClickedBlock(), true) && event.getClickedBlock().getType() == Material.DROPPER)) {
+			if (PermissionInterface.CheckEnabledWorld(event.getClickedBlock().getLocation()) && !NavyCraft.checkSafeDockRegion(event.getClickedBlock().getLocation())) {
 			if( event.getAction() == Action.LEFT_CLICK_BLOCK )
 				oc.Charge(event.getPlayer(), true);
 			else
 				oc.Charge(event.getPlayer(), false);
 		    AimCannon.cannons.add(oc);
+		    } else {
+		    	event.getPlayer().sendMessage(ChatColor.RED + "You can't load cannons inside safedock!");
+		    	return;
+		    }
 		}
 	    }
 	    
@@ -311,7 +425,7 @@ public class AimCannonPlayerListener implements Listener {
     	{
 	    	for (OneCannon onec : AimCannon.getCannons()) 
 			{
-			    if (onec.isThisCannon(event.getBlock().getLocation(), true)) 
+			    if (onec.isThisCannon(event.getBlock().getLocation(), true, false)) 
 			    {
 			    	event.setCancelled(true);
 			    	return;

@@ -696,23 +696,6 @@ public class CraftBuilder {
 							return false;
 						}
 
-				//an airship needs to have x percent of flystone to be able to move
-				/*if(craft.type.flyBlockType != 0 && craft.type.flyBlockPercent > 0) {
-					//int flyBlocksNeeded = (int)Math.floor((blockCount - flyBlockCount) * ((float)type.flyBlockPercent * 0.01));
-
-					//let's hope it is correct :P
-					int flyBlocksNeeded = (int)Math.floor((craft.blockCount - craft.flyBlockCount) * ((float)craft.type.flyBlockPercent * 0.01) / (1 - ((float)craft.type.flyBlockPercent * 0.01)));
-
-					if(flyBlocksNeeded < 1)
-						flyBlocksNeeded = 1;
-
-					if(craft.flyBlockCount < flyBlocksNeeded){
-						NavyCraft.instance.getServer().getPlayer(craft.captainName).sendMessage(ChatColor.RED + "Not enough " + BlocksInfo.getName(craft.type.flyBlockType) + " to make this " + craft.name + " move");
-						NavyCraft.instance.getServer().getPlayer(craft.captainName).sendMessage(ChatColor.RED + "You need to add " + (flyBlocksNeeded - craft.flyBlockCount) + " more" );
-						return false;
-					}
-				}*/
-
 				//drill needs to have a diamond block
 				if(craft.type.canDig && craft.type.digBlockId != 0){
 					//plugin.DebugMessage("Drill flyblock is " + Integer.toString(craft.type.flyBlockType));

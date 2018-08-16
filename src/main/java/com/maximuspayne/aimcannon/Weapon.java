@@ -13,6 +13,8 @@ public class Weapon {
 	int rudderSetting=0;
 	int turnProgress = -1;
 	int torpSetHeading=-1;
+	int torpRotation;
+	int setRange;
 	boolean doubleTurn=false;
 	int tubeNum=0;
 	boolean active=false;
@@ -21,12 +23,14 @@ public class Weapon {
 	int dcDirection=0;
 	public int weaponType = 0;  //0=torpedo, 1=depth charge
 	
-	public Weapon(Block b, BlockFace bf, int depth)
+	public Weapon(Block b, BlockFace bf, int depth, int range)
 	{
 		weaponType = 0;
 		warhead = b;
 		hdg = bf;
 		setDepth = depth;
+		torpRotation = 0;
+		setRange = range;
 	}
 	
 	public Weapon(Block b, int dcdirectionIn, int depth)
