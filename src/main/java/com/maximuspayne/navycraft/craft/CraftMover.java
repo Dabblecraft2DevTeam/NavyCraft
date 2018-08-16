@@ -347,11 +347,8 @@ public class CraftMover {
 
 			return;
 		}
-
-		// Return if active weapon within vehicle grid
-		if (checkForWeapons()) {
-			return;
-		}
+		
+		
 
 		if (craft.sinking) {
 			if (craft.driverName != null) {
