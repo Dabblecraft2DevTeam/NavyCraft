@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
 import java.util.logging.*;
-import java.io.File;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Egg;
@@ -28,11 +27,13 @@ import com.maximuspayne.navycraft.craft.CraftMover;
 import com.maximuspayne.navycraft.craft.CraftType;
 import com.maximuspayne.navycraft.listeners.NavyCraft_BlockListener;
 import com.maximuspayne.navycraft.listeners.NavyCraft_EntityListener;
-import com.maximuspayne.navycraft.listeners.NavyCraft_FileListener;
 import com.maximuspayne.navycraft.listeners.NavyCraft_InventoryListener;
 import com.maximuspayne.navycraft.listeners.NavyCraft_PlayerListener;
 import com.maximuspayne.navycraft.PermissionInterface;
 import com.maximuspayne.navycraft.teleportfix.TeleportFix;
+import com.maximuspayne.shipyard.Plot;
+import com.maximuspayne.shipyard.PlotType;
+import com.maximuspayne.shipyard.Reward;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -64,9 +65,13 @@ public class NavyCraft extends JavaPlugin {
 	public boolean DebugMode = false;
 
 	public static ArrayList<Player> aaGunnersList = new ArrayList<Player>();
+	public static ArrayList<Skeleton> aaSkelesList = new ArrayList<Skeleton>();
 	public static ArrayList<Player> flakGunnersList = new ArrayList<Player>();
 	public static ArrayList<Skeleton> flakSkelesList = new ArrayList<Skeleton>();
-	public static ArrayList<Skeleton> aaSkelesList = new ArrayList<Skeleton>();
+	public static ArrayList<Player> ciwsGunnersList = new ArrayList<Player>();
+	public static ArrayList<Player> ciwsFiringList = new ArrayList<Player>();
+	public static HashMap<Player, Long> ciwsCooldown = new HashMap<Player, Long>();
+	public static ArrayList<Skeleton> ciwsSkelesList = new ArrayList<Skeleton>();
 	public static ArrayList<Egg> explosiveEggsList = new ArrayList<Egg>();
 	public static HashMap<UUID, Player> shotTNTList = new HashMap<UUID, Player>();
 	
@@ -93,35 +98,9 @@ public class NavyCraft extends JavaPlugin {
 	
 	public static int spawnTime=10;
 	
-	public static HashMap<String, ArrayList<Sign>> playerSHIP1Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerSHIP2Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerSHIP3Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerSHIP4Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerSHIP5Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerHANGAR1Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerHANGAR2Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerTANK1Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerTANK2Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerMAP1Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerMAP2Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerMAP3Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerMAP4Signs = new HashMap<String, ArrayList<Sign>>();
-	public static HashMap<String, ArrayList<Sign>> playerMAP5Signs = new HashMap<String, ArrayList<Sign>>();
+	public static HashMap<String, ArrayList<Plot>> playerSigns = new HashMap<String, ArrayList<Plot>>();
 	
-	public static HashMap<String, Integer> playerSHIP1Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerSHIP2Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerSHIP3Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerSHIP4Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerSHIP5Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerHANGAR1Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerHANGAR2Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerTANK1Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerTANK2Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerMAP1Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerMAP2Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerMAP3Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerMAP4Rewards = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> playerMAP5Rewards = new HashMap<String, Integer>();
+	public static HashMap<String, ArrayList<Reward>> playerRewards = new HashMap<String, ArrayList<Reward>>();
 	
 	public static HashMap<Sign, Integer> playerSignIndex = new HashMap<Sign, Integer>();
 	
@@ -139,18 +118,26 @@ public class NavyCraft extends JavaPlugin {
 	public static HashMap<Player, Float> playerEngineVolumes = new HashMap<Player, Float>();
 	public static HashMap<Player, Float> playerWeaponVolumes = new HashMap<Player, Float>();
 	public static HashMap<Player, Float> playerOtherVolumes = new HashMap<Player, Float>();
+	
+	private ConfigManager cfgm;
 
+	public static HashMap<String, ArrayList<Reward>> getRewards() {
+		return playerRewards;
+	}
+	
 	public void loadProperties() {
 		getConfig().options().copyDefaults(true);
-		File dir = getDataFolder();
-		if (!dir.exists())
-			dir.mkdir();
-		NavyCraft_FileListener.loadShipyardData();
-		NavyCraft_FileListener.loadShipyardConfig();
 
-		CraftType.loadTypes(dir);
-		CraftType.saveTypes(dir);
+		loadConfigManager();
+		PlotType.initialize();
 		
+		CraftType.setupCraftConfig();
+	}
+	
+	public void loadConfigManager() {
+		cfgm = new ConfigManager();
+		cfgm.setupsyConfig();
+		cfgm.setupsyData();
 	}
 
 	public void onEnable() {
@@ -270,7 +257,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !!PermissionInterface.CheckEnabledWorld(loc) )
+    		if( !!Utils.CheckEnabledWorld(loc) )
     		{
     			return false;
     		}
@@ -300,7 +287,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !!PermissionInterface.CheckEnabledWorld(loc) )
+    		if( !Utils.CheckEnabledWorld(loc) )
     		{
     			return false;
     		}
@@ -330,7 +317,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !PermissionInterface.CheckEnabledWorld(loc) )
+    		if( !Utils.CheckEnabledWorld(loc) )
     		{
     			return false;
     		}
@@ -360,7 +347,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !PermissionInterface.CheckEnabledWorld(loc) )
+    		if( !Utils.CheckEnabledWorld(loc) )
     		{
     			return false;
     		}
@@ -390,7 +377,7 @@ public class NavyCraft extends JavaPlugin {
     	wgp = (WorldGuardPlugin) instance.getServer().getPluginManager().getPlugin("WorldGuard");
     	if( wgp != null && loc != null)
     	{
-    		if( !PermissionInterface.CheckEnabledWorld(loc) )
+    		if( !Utils.CheckEnabledWorld(loc) )
     		{
     			return false;
     		}

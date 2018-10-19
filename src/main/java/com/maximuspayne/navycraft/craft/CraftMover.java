@@ -35,6 +35,7 @@ import com.maximuspayne.navycraft.NavyCraft;
 import com.maximuspayne.navycraft.Periscope;
 import com.maximuspayne.navycraft.PermissionInterface;
 import com.maximuspayne.navycraft.Pump;
+import com.maximuspayne.navycraft.Utils;
 import com.maximuspayne.navycraft.blocks.BlocksInfo;
 import com.maximuspayne.navycraft.blocks.DataBlock;
 import com.maximuspayne.navycraft.listeners.NavyCraft_BlockListener;
@@ -218,7 +219,7 @@ public class CraftMover {
 
 					if (!stopSearch) {
 						OneCannon oc = new OneCannon(theBlock.getLocation(), NavyCraft.instance);
-						if ((oc.isValidCannon(theBlock, false) && theBlock.getTypeId() == 23) || (oc.isValidCannon(theBlock, true) && theBlock.getTypeId() == 158)) {
+						if (oc.isValidCannon(theBlock, false) && (theBlock.getTypeId() == 23 || theBlock.getTypeId() == 158)) {
 
 							for (OneCannon onec : AimCannon.getCannons()) {
 								boolean oldCannonFound = onec.isThisCannon(new Location(craft.world, dataBlock.x + craft.minX, dataBlock.y + craft.minY, dataBlock.z + craft.minZ), true, true);
@@ -1429,7 +1430,7 @@ public class CraftMover {
 
 		if (!craft.leftSafeDock && !NavyCraft.checkSpawnRegion(new Location(craft.world, craft.minX, craft.minY, craft.minZ)) && !NavyCraft.checkSpawnRegion(new Location(craft.world, craft.maxX, craft.maxY, craft.maxZ))) {
 			craft.leftSafeDock = true;
-			if (PermissionInterface.CheckEnabledWorld(craft.getLocation()) && !craft.doCost) {
+			if (Utils.CheckEnabledWorld(craft.getLocation()) && !craft.doCost) {
 				if (craft.captainName != null) {
 					Player p = plugin.getServer().getPlayer(craft.captainName);
 					if ((p != null) && craft.isNameOnBoard.get(craft.captainName)) {
@@ -1693,15 +1694,15 @@ public class CraftMover {
 								} else if (oc.cannonType == 1) {
 									cost = 250;
 								} else if (oc.cannonType == 3) {
-									cost = 600;
+									cost = 650;
 								} else if (oc.cannonType == 4) {
-									cost = 850;
+									cost = 650;
 								} else if (oc.cannonType == 5) {
-									cost = 1250;
+									cost = 850;
 								} else if (oc.cannonType == 6) {
-									cost = 1250;
+									cost = 850;
 								} else if (oc.cannonType == 7) {
-									cost = 1250;
+									cost = 850;
 								} else if (oc.cannonType == 8) {
 									cost = 250;
 								} else if (oc.cannonType == 9) {
@@ -1709,13 +1710,13 @@ public class CraftMover {
 								} else if (oc.cannonType == 10) {
 									cost = 500;
 								} else if (oc.cannonType == 11) {
-									cost = 600;
+									cost = 650;
 								} else if (oc.cannonType == 12) {
-									cost = 1250;
+									cost = 850;
 								} else if (oc.cannonType == 13) {
-									cost = 600;
+									cost = 650;
 								} else if (oc.cannonType == 14) {
-									cost = 1250;
+									cost = 850;
 								}
 								craft.vehicleCost += cost;
 								initWeaponDispensers.add(newBlock);
@@ -2214,7 +2215,7 @@ public class CraftMover {
 			String line3 = "Fathometer:" + dukString;
 
 			String line1 = "Grid: ";
-			if (PermissionInterface.CheckEnabledWorld(craft.getLocation())) {
+			if (Utils.CheckEnabledWorld(craft.getLocation())) {
 				for (int i = 0; i < 2; i++) {
 					int cord = 0;
 					if (i == 0) {
@@ -4795,6 +4796,8 @@ public class CraftMover {
 				cost = 100;
 			} else if (craftTypeName.equalsIgnoreCase("flak-gun")) {
 				cost = 200;
+			} else if (craftTypeName.equalsIgnoreCase("ciws")) {
+				cost = 1250;
 			} else if (craftTypeName.equalsIgnoreCase("radar")) {
 				cost = 200;
 			} else if (craftTypeName.equalsIgnoreCase("radio")) {
@@ -5127,7 +5130,7 @@ public class CraftMover {
 
 		wgp = (WorldGuardPlugin) plugin.getServer().getPluginManager().getPlugin("WorldGuard");
 		if ((wgp != null) && (loc != null)) {
-			if ( !PermissionInterface.CheckEnabledWorld(loc) ) { return true; }
+			if ( !Utils.CheckEnabledWorld(loc) ) { return true; }
 			RegionManager regionManager = wgp.getRegionManager(craft.world);
 
 			ApplicableRegionSet set = regionManager.getApplicableRegions(loc);
@@ -5646,7 +5649,7 @@ public class CraftMover {
 					broadcastMsg = "";
 					int score = (int) (((float) uncrewedPlayers.get(p) / (float) totalDamage) * 100.0f);
 					int damage = (int) (((float) uncrewedPlayers.get(p) / (float) totalDamage) * totalBlocks);
-					if (PermissionInterface.CheckEnabledWorld(craft.getLocation()) && (!craft.crewNames.isEmpty() || (((System.currentTimeMillis() - craft.abandonTime) / 1000) < 180))) {
+					if (Utils.CheckEnabledWorld(craft.getLocation()) && (!craft.crewNames.isEmpty() || (((System.currentTimeMillis() - craft.abandonTime) / 1000) < 180))) {
 						if (craft.crewHistory.contains(p.getName()) && !p.isOp()) { return; }
 					NavyCraft_BlockListener.rewardExpPlayer(damage, p);
 					}
@@ -5873,13 +5876,10 @@ public class CraftMover {
 					}else if (engType == 3 || engType == 6 || engType == 7) // Boilers
 					{
 						float pitch = ((float) c.setSpeed / (float) 6.0f)*0.5f + 0.5f;
-						if( i%2 == 0 )
-							playEngineSound(cLoc, Sound.ENTITY_IRONGOLEM_HURT, volume, pitch);
-						else
-							playEngineSound(cLoc, Sound.ENTITY_POLAR_BEAR_WARNING, volume, 0.5f);
+						playEngineSound(cLoc, Sound.ENTITY_POLAR_BEAR_WARNING, volume, pitch);
 					}else if (engType == 5 || engType == 8) // Gasolines
 					{
-						float pitch = ((float) c.setSpeed / (float) 6.0f)*1.0f + 1.0f;
+						float pitch = (((float) c.setSpeed / (float) 6.0f)*1.0f + 1.0f)/2;
 						playEngineSound(cLoc, Sound.ENTITY_MINECART_RIDING, volume, pitch);
 					}else if (engType == 9) // Nuclear
 					{
@@ -5887,12 +5887,8 @@ public class CraftMover {
 						playEngineSound(cLoc, Sound.ENTITY_WITHER_SPAWN, volume, pitch);
 					}else if ((engType >= 10) && (engType <= 17)) // Airplanes
 					{
-						float pitch = 0.5f;
-						float pitch2 = ((float) c.setSpeed / (float) 6.0f)*1.5f + 0.5f;
-						if( i%4 == 0 )
-							playEngineSound(cLoc, Sound.ENTITY_WOLF_GROWL, volume, pitch);
-						else
-							playEngineSound(cLoc, Sound.ENTITY_IRONGOLEM_HURT, volume, pitch2);
+						float pitch = (((float) c.setSpeed / (float) 6.0f)*1.5f + 0.5f)/2;
+						playEngineSound(cLoc, Sound.ENTITY_WOLF_GROWL, volume, pitch);
 						if( c.type.canFly && !c.onGround && i%3 == 0)
 							playEngineSound(c.getLocation(), Sound.ENTITY_WITHER_AMBIENT, 0.3f, 0.5f);
 					}else if ((engType == 18) || (engType == 19)) // Tanks

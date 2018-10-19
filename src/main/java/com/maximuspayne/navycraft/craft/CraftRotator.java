@@ -463,7 +463,7 @@ public class CraftRotator {
 						if(dataBlock.locationMatches(newX, y, newZ)) {
 							
 							///check if cannon
-							if( dataBlock.id == 23)
+							if( dataBlock.id == 23 ||dataBlock.id == 158)
 							{
 								Location cannonLoc = new Location(craft.world, dataBlock.x + craft.minX, dataBlock.y + craft.minY, dataBlock.z + craft.minZ);
 								for (OneCannon onec : AimCannon.getCannons()) 

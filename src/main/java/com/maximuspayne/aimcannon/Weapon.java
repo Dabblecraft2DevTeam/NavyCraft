@@ -8,6 +8,7 @@ public class Weapon {
 	
 	public Block warhead;
 	BlockFace hdg;
+	BlockFace ohdg;
 	int setDepth;
 	int rudder=0;
 	int rudderSetting=0;
@@ -15,6 +16,7 @@ public class Weapon {
 	int torpSetHeading=-1;
 	int torpRotation;
 	int setRange;
+	int rangeCounter;
 	boolean doubleTurn=false;
 	int tubeNum=0;
 	boolean active=false;
@@ -28,6 +30,7 @@ public class Weapon {
 		weaponType = 0;
 		warhead = b;
 		hdg = bf;
+		ohdg = bf;
 		setDepth = depth;
 		torpRotation = 0;
 		setRange = range;

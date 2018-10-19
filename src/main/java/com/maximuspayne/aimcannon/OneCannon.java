@@ -1,6 +1,7 @@
 package com.maximuspayne.aimcannon;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -27,7 +28,8 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.maximuspayne.navycraft.NavyCraft;
 import com.maximuspayne.navycraft.Periscope;
-import com.maximuspayne.navycraft.PermissionInterface;
+import com.maximuspayne.navycraft.Utils;
+import com.maximuspayne.navycraft.blocks.BlocksInfo;
 import com.maximuspayne.navycraft.craft.Craft;
 import com.maximuspayne.navycraft.craft.CraftMover;
 
@@ -226,7 +228,7 @@ public class OneCannon{
 	    if( ignite )
 	    {
 	    	fireThreadNew(delay, p);
-	    	p.sendMessage("3 - Ready!");
+	    	p.sendMessage(ChatColor.RED + "3 - Ready!");
 	    }
     }
     
@@ -255,7 +257,7 @@ public class OneCannon{
 	  //  @Override
 	    public void run()
 	    {
-	    	p.sendMessage("2 - Aim!");
+	    	p.sendMessage(ChatColor.YELLOW + "2 - Aim!");
 	    }
 	    });
     }
@@ -265,7 +267,7 @@ public class OneCannon{
 	  //  @Override
 	    public void run()
 	    {
-	    	p.sendMessage("1 - Fire!!!");
+	    	p.sendMessage(ChatColor.GREEN + "1 - Fire!!!");
 	    }
 	    });
     }
@@ -471,15 +473,15 @@ public class OneCannon{
     	if( delay >= 2000 )
     	{
     		delay = 0;
-    		p.sendMessage("Long Flight Fuse");
+    		p.sendMessage(ChatColor.RED + "Long Flight Fuse");
     	}else if( delay == 0 )
     	{
     		delay = 1000;
-    		p.sendMessage("Medium Flight Fuse");
+    		p.sendMessage(ChatColor.GOLD + "Medium Flight Fuse");
     	}else if( delay == 1000 )
     	{
     		delay = 2000;
-    		p.sendMessage("Short Flight Fuse");
+    		p.sendMessage(ChatColor.YELLOW + "Short Flight Fuse");
     	}
     }
 
@@ -506,21 +508,6 @@ public class OneCannon{
     		fireCannon(p, loc.getBlock());
     		charged = 0;
     		
-    	}else
-    	{
-    		if( leftClick )
-    		{
-    			range = range - 10;
-    			if( range < 10 )
-    				range = 10;
-    			p.sendMessage("Range set to " + range + "m.");
-    		}else
-    		{
-    			range = range + 10;
-    			if( range > 200 )
-    				range = 200;
-    			p.sendMessage("Range set to " + range + "m.");
-    		}
     	}
     }
     
@@ -535,11 +522,11 @@ public class OneCannon{
 				//taskNum = -1;
     			try{
     				sleep(500);
-    				p.sendMessage("3 - Ready!");
+    				p.sendMessage(ChatColor.RED + "3 - Ready!");
     			    sleep(500);
-    			    p.sendMessage("2 - Aim!  ");
+    			    p.sendMessage(ChatColor.YELLOW + "2 - Aim!  ");
     			    sleep(500);
-    			    p.sendMessage("1 - Fire!!!");
+    			    p.sendMessage(ChatColor.GREEN + "1 - Fire!!!");
     			    sleep(500);
     			    Vector look;
     			    look = p.getLocation().getDirection();
@@ -833,334 +820,462 @@ public class OneCannon{
 		Dropper dropper = (Dropper) loc.getBlock().getState();
     	inventory = dropper.getInventory();
 		}
-    if (inventory != null) {
-    	if( inventory.getItem(4) == null || inventory.getItem(4).getTypeId() != 388 )
-    	{
-    		Essentials ess;
-			ess = (Essentials) nc.getServer().getPluginManager().getPlugin("Essentials");
-			if( ess == null )
-			{
-				p.sendMessage("Essentials Economy error");
-				return false;
-			}
-			
-			int cost=0;
-		    if( cannonType == 0 ) //single barrel
-		    	cost=100;
-		    else if( cannonType == 1 )//double barrel
-		    	cost=250;
-		    else if( cannonType == 3 )//torpedo mk 2
-		    	cost=600;
-		    else if( cannonType == 4 )//depth charge
-		    	cost=850;
-		    else if( cannonType == 5 )//depth charge mk2
-		    	cost=1250;
-		    else if( cannonType == 6 )//triple barrel
-		    	cost=1250;
-		    else if( cannonType == 7 )//torpedo mk 3
-		    	cost=1250;
-		    else if( cannonType == 8 )//torpedo mk 1
-		    	cost=250;
-		    else if( cannonType == 9 )//bombs mk1
-		    	cost=250;
-		    else if( cannonType == 10 )//bombs mk2
-		    	cost=500;
-		    else if( cannonType == 11 )//missiles mk1
-		    	cost=600;
-		    else if( cannonType == 12 )//missiles mk2
-		    	cost=1250;
-		    else if( cannonType == 13 )//vertical missiles mk1
-		    	cost=600;
-		    else if( cannonType == 14 )//vertical missiles mk2
-		    	cost=1250;
-		    
-			if( PermissionInterface.CheckEnabledWorld(p.getLocation()) )
-			{
-				if( ess.getUser(p).canAfford(new BigDecimal(cost)) )
+	    if (inventory != null) {
+	    	if( inventory.getItem(4) == null || inventory.getItem(4).getTypeId() != 388 )
+	    	{
+	    		Essentials ess;
+				ess = (Essentials) nc.getServer().getPluginManager().getPlugin("Essentials");
+				if( ess == null )
 				{
-					p.sendMessage("Weapon purchased.");
-					
-					inventory.setItem(4, new ItemStack( 388, 1));
-					ess.getUser(p).takeMoney(new BigDecimal(cost));
-				}else
-				{
-					p.sendMessage("You cannot afford this weapon.");
-					AimCannon.cannons.remove(this);
+					p.sendMessage("Essentials Economy error");
 					return false;
 				}
-			}else
-			{
-				inventory.setItem(4, new ItemStack( 388, 1));
-			}
-    	}
-    	
-    	//color wool for torpedoes
-		if( !leftClick && (cannonType == 3 || cannonType == 7 || cannonType == 8) )
-		{
-			if (charged == 1) {
-	    		if(depth > 0 )
-	    			depth = depth - 5;
-	    		else
-	    			depth = 0;
-	    		p.sendMessage("Torpedo System Active: Depth set to " + depth + " meters.");
-	    		colorTorpedoes();
-	    		return true;
-			} else {
-        		colorTorpedoes();
-        		return false;
-			}
-		} else if( !leftClick && (cannonType == 11 || cannonType == 12 || cannonType == 13 || cannonType == 14) )
-    		{
-			if (charged == 1) {
-	    		if(depth > 0 )
-	    			depth = depth - 5;
-	    		else
-	    			depth = 0;
-	    		p.sendMessage("Missile System Active: Y axis set to " + depth + " meters.");
-	    		if (cannonType == 13 || cannonType == 14) {
-	    			colorMissiles();
-	    			return true;
-	    		} else {
-	    		colorTorpedoes();
-	    		return true;
-	    		}
-			} else {
-	    		if (cannonType == 13 || cannonType == 14) {
-	    			colorMissiles();
-	    			return false;
-	    		} else {
-	    		colorTorpedoes();
-	    		return false;
-	    		}
-			}
-		}else if( cannonType == 2 )
-		{
-			if( leftClick )
-			{
-				if ((p.getInventory().contains(46) || charged > 0) && p.getInventory().contains(289)) 
-			    {
-			    	if( charged == 0 )
-			    		p.getInventory().removeItem(new ItemStack(46, 1));
-			    	p.getInventory().removeItem(new ItemStack(289, 1));
-			    	charged = 1;
-			    	p.sendMessage("Cannon Loaded!");
-			    	return true;
-			   
-			    } else
-			    {
-			    	p.sendMessage("You need 1xGunpowder and 1xTNT to Load the cannon!");
-			    	return false;
-			    }
-			}else
-			{
-				range = 10;
-				p.sendMessage("Range Reset to 10m.");
-				return false;
-			}
-		}else if( charged < 4 )
-    	{
-	    	if( cannonType == 0 )
-	    	{
-	    		
-			    if( charged == 0 )
-			    {
-			    	if( ammunition > 0 )
-			    	{
-			    		ammunition = ammunition - 1;
-			    	}else
-			    	{
-			    		p.sendMessage( ChatColor.RED + "Cannon out of ammo!");
-			    		return false;
-			    	}
-			    	charged=1;
-			    	p.sendMessage("Cannon Loaded! " + ammunition + " shots remaining. Cannon Power X" + charged);
-			    }else{
-			    	charged++;
-			    	p.sendMessage("Cannon Power X" + charged);
-			    }
-		    	
-			    return true;
+				
+				int cost=0;
+			    if( cannonType == 0 ) //single barrel
+			    	cost=100;
+			    else if( cannonType == 1 )//double barrel
+			    	cost=250;
+			    else if( cannonType == 3 )//torpedo mk 2
+			    	cost=650;
+			    else if( cannonType == 4 )//depth charge
+			    	cost=850;
+			    else if( cannonType == 5 )//depth charge mk2
+			    	cost=850;
+			    else if( cannonType == 6 )//triple barrel
+			    	cost=850;
+			    else if( cannonType == 7 )//torpedo mk 3
+			    	cost=850;
+			    else if( cannonType == 8 )//torpedo mk 1
+			    	cost=250;
+			    else if( cannonType == 9 )//bombs mk1
+			    	cost=250;
+			    else if( cannonType == 10 )//bombs mk2
+			    	cost=500;
+			    else if( cannonType == 11 )//missiles mk1
+			    	cost=650;
+			    else if( cannonType == 12 )//missiles mk2
+			    	cost=850;
+			    else if( cannonType == 13 )//vertical missiles mk1
+			    	cost=650;
+			    else if( cannonType == 14 )//vertical missiles mk2
+			    	cost=850;
 			    
-	    	} else if( cannonType == 1 )
-	    	{
-	    		if( charged == 0 )
-			    {
-			    	if( ammunition > 0 )
-			    	{
-			    		ammunition = ammunition - 1;
-			    	}else
-			    	{
-			    		p.sendMessage( ChatColor.RED + "Cannon out of ammo!");
-			    		return false;
-			    	}
-			    	charged=1;
-			    	p.sendMessage("Cannon Loaded! " + ammunition + " shots remaining. Cannon Power X" + charged);
-			    }else{
-			    	charged++;
-			    	p.sendMessage("Cannon Power X" + charged);
-			    }
-		    	
-			    return true;
-	    	}else if( cannonType == 6 )
-	    	{
-	    		if( charged == 0 )
-			    {
-			    	if( ammunition > 0 )
-			    	{
-			    		ammunition = ammunition - 1;
-			    	}else
-			    	{
-			    		p.sendMessage( ChatColor.RED + "Cannon out of ammo!");
-			    		return false;
-			    	}
-			    	charged=1;
-			    	p.sendMessage("Cannon Loaded! " + ammunition + " shots remaining. Cannon Power X" + charged);
-			    }else{
-			    	charged++;
-			    	p.sendMessage("Cannon Power X" + charged);
-			    }
-		    	
-			    return true;
-			}else if( cannonType == 3 || cannonType == 7 || cannonType == 8 )
-	    	{
-				colorTorpedoes();
-	    		charged=1;
-	    		if( depth < 5 )
-	    			depth++;
-	    		else if( depth == 5 )
-	    			depth = 10;
-	    		else if( depth >= 10 && depth < 50 )
-	    			depth = depth + 5;
-	    		else
-	    			depth = 0;
-	    		p.sendMessage("Torpedo System Active: Depth set to " + depth + " meters.");
-	   		
-	    		return true;
-	    	}else if( cannonType == 11 || cannonType == 12 || cannonType == 13 || cannonType == 14)
-	    	{
-	    		if (cannonType == 13 || cannonType == 14) {
-	    		colorMissiles();
-	    		} else {
-	    		colorTorpedoes();
-	    		}
-	    		charged=1;
-	    		if(depth < 240 )
-	    			depth = depth + 5;
-	    		else
-	    			depth = 0;
-	    		p.sendMessage("Missile System Active: Y axis set to " + depth + " meters.");
-	   		
-	    		return true;
+				if( Utils.CheckEnabledWorld(p.getLocation()) )
+				{
+					if( ess.getUser(p).canAfford(new BigDecimal(cost)) )
+					{
+						p.sendMessage(ChatColor.GREEN + "Weapon purchased.");
+						
+						inventory.setItem(4, new ItemStack( 388, 1));
+						ess.getUser(p).takeMoney(new BigDecimal(cost));
+					}else
+					{
+						p.sendMessage(ChatColor.RED + "You cannot afford this weapon.");
+						AimCannon.cannons.remove(this);
+						return false;
+					}
+				}else
+				{
+					inventory.setItem(4, new ItemStack( 388, 1));
+				}
 	    	}
-	    	else if( cannonType == 4 )
+	    	
+	    	//color wool for torpedoes
+			if( !leftClick && (cannonType == 3 || cannonType == 7 || cannonType == 8) )
+			{
+				if (charged == 1) {
+		    		if(depth > 0 )
+		    			depth = depth - 5;
+		    		else
+		    			depth = 0;
+		    		p.sendMessage(ChatColor.GREEN + "Torpedo System Active: Depth set to " + ChatColor.YELLOW + depth + ChatColor.YELLOW + " meters.");
+		    		colorTorpedoes();
+		    		return true;
+				} else {
+	        		colorTorpedoes();
+	        		return false;
+				}
+			} else if( !leftClick && (cannonType == 11 || cannonType == 12 || cannonType == 13 || cannonType == 14) )
+	    		{
+				if (charged == 1) {
+		    		if(depth > 0 )
+		    			depth = depth - 5;
+		    		else
+		    			depth = 0;
+		    		p.sendMessage(ChatColor.GREEN + "Missile System Active: Y axis set to " + ChatColor.YELLOW + depth + ChatColor.YELLOW + ".");
+		    		if (cannonType == 13 || cannonType == 14) {
+		    			colorMissiles();
+		    			return true;
+		    		} else {
+		    		colorTorpedoes();
+		    		return true;
+		    		}
+				} else {
+		    		if (cannonType == 13 || cannonType == 14) {
+		    			colorMissiles();
+		    			return false;
+		    		} else {
+		    		colorTorpedoes();
+		    		return false;
+		    		}
+				}
+			}else if( charged < 4 )
 	    	{
-	    		if( charged == 0 )
-			    {
-	    			Craft theCraft = Craft.getCraft(p.getTargetBlock(null, 100).getX(), p.getTargetBlock(null, 100).getY(), p.getTargetBlock(null, 100).getZ());
-	    			if (theCraft != null) {
-	    				if (theCraft.type.canFly || theCraft.type.isTerrestrial) {
-	    					p.sendMessage(ChatColor.RED + "You can't use Depth Charges on an aircraft!");
-	    					return false;
-	    				}
-	    			}
-			    	if( ammunition > 0 && ammunition <= 10)
-			    	{
-			    		ammunition = ammunition - 1;
-			    	}else
-			    	{
-			    		p.sendMessage( ChatColor.RED + "Out of depth charges!");
-			    		return false;
-			    	}
+		    	if( cannonType == 0 )
+		    	{
+		    		
+				    if( charged == 0 )
+				    {
+				    	if( ammunition > 0 )
+				    	{
+				    		ammunition = ammunition - 1;
+				    	}else
+				    	{
+			    			Craft theCraft = Craft.getCraft(p.getTargetBlock(null, 100).getX(), p.getTargetBlock(null, 100).getY(), p.getTargetBlock(null, 100).getZ());
+			    			Block block;
+			    			if (theCraft != null) {
+			    				for (int x = 0; x < theCraft.sizeX; x++) {
+			    					for (int z = 0; z < theCraft.sizeZ; z++) {
+			    						for (int y = 0; y < theCraft.sizeY; y++) {
+
+			    							if( theCraft.matrix == null )
+			    								return false;
+			    
+			    							block = theCraft.world.getBlockAt(theCraft.minX + x, theCraft.minY + y, theCraft.minZ + z);
+			    							if (block.getType() == Material.EMERALD_ORE && ammunition < 1) {
+			    								reload(p);
+			    								setBlock(0, block, theCraft);
+			    								break;
+			    							}
+			    						}
+			    					}
+			    				}
+			    			}
+			    			if (ammunition < 1) {
+				    		p.sendMessage( ChatColor.RED + "Cannon out of ammo!");
+				    		return false;
+			    			}
+				    	}
+				    	charged=1;
+				    	p.sendMessage(ChatColor.GREEN + "Cannon Loaded! " + ChatColor.YELLOW + ammunition + ChatColor.GREEN + " shots remaining. Cannon Power X" + ChatColor.YELLOW + charged);
+				    }else{
+				    	charged++;
+				    	p.sendMessage(ChatColor.GREEN + "Cannon Power X" + ChatColor.YELLOW + charged);
+				    }
+			    	
+				    return true;
+				    
+		    	} else if( cannonType == 1 )
+		    	{
+		    		if( charged == 0 )
+				    {
+				    	if( ammunition > 0 )
+				    	{
+				    		ammunition = ammunition - 1;
+				    	}else
+				    	{
+			    			Craft theCraft = Craft.getCraft(p.getTargetBlock(null, 100).getX(), p.getTargetBlock(null, 100).getY(), p.getTargetBlock(null, 100).getZ());
+			    			Block block;
+			    			if (theCraft != null) {
+			    				for (int x = 0; x < theCraft.sizeX; x++) {
+			    					for (int z = 0; z < theCraft.sizeZ; z++) {
+			    						for (int y = 0; y < theCraft.sizeY; y++) {
+
+			    							if( theCraft.matrix == null )
+			    								return false;
+			    
+			    							block = theCraft.world.getBlockAt(theCraft.minX + x, theCraft.minY + y, theCraft.minZ + z);
+			    							if (block.getType() == Material.EMERALD_ORE && ammunition < 1) {
+			    								reload(p);
+			    								setBlock(0, block, theCraft);
+			    								break;
+			    							}
+			    						}
+			    					}
+			    				}
+			    			}
+			    			if (ammunition < 1) {
+				    		p.sendMessage( ChatColor.RED + "Cannon out of ammo!");
+				    		return false;
+			    			}
+				    	}
+				    	charged=1;
+				    	p.sendMessage(ChatColor.GREEN + "Cannon Loaded! " + ChatColor.YELLOW + ammunition + ChatColor.GREEN + " shots remaining. Cannon Power X" + ChatColor.YELLOW + charged);
+				    }else{
+				    	charged++;
+				    	p.sendMessage(ChatColor.GREEN + "Cannon Power X" + ChatColor.YELLOW + charged);
+				    }
+			    	
+				    return true;
+		    	}else if( cannonType == 6 )
+		    	{
+		    		if( charged == 0 )
+				    {
+				    	if( ammunition > 0 )
+				    	{
+				    		ammunition = ammunition - 1;
+				    	}else
+				    	{
+			    			Craft theCraft = Craft.getCraft(p.getTargetBlock(null, 100).getX(), p.getTargetBlock(null, 100).getY(), p.getTargetBlock(null, 100).getZ());
+			    			Block block;
+			    			if (theCraft != null) {
+			    				for (int x = 0; x < theCraft.sizeX; x++) {
+			    					for (int z = 0; z < theCraft.sizeZ; z++) {
+			    						for (int y = 0; y < theCraft.sizeY; y++) {
+
+			    							if( theCraft.matrix == null )
+			    								return false;
+			    
+			    							block = theCraft.world.getBlockAt(theCraft.minX + x, theCraft.minY + y, theCraft.minZ + z);
+			    							if (block.getType() == Material.EMERALD_ORE && ammunition < 1) {
+			    								reload(p);
+			    								setBlock(0, block, theCraft);
+			    								break;
+			    							}
+			    						}
+			    					}
+			    				}
+			    			}
+			    			if (ammunition < 1) {
+				    		p.sendMessage( ChatColor.RED + "Cannon out of ammo!");
+				    		return false;
+			    			}
+				    	}
+				    	charged=1;
+				    	p.sendMessage(ChatColor.GREEN + "Cannon Loaded! " + ChatColor.YELLOW + ammunition + ChatColor.GREEN + " shots remaining. Cannon Power X" + ChatColor.YELLOW + charged);
+				    }else{
+				    	charged++;
+				    	p.sendMessage(ChatColor.GREEN + "Cannon Power X" + ChatColor.YELLOW + charged);
+				    }
+			    	
+				    return true;
+				}else if( cannonType == 3 || cannonType == 7 || cannonType == 8 )
+		    	{
+					colorTorpedoes();
+		    		charged=1;
+		    		if( depth < 5 )
+		    			depth++;
+		    		else if( depth == 5 )
+		    			depth = 10;
+		    		else if( depth >= 10 && depth < 50 )
+		    			depth = depth + 5;
+		    		else
+		    			depth = 0;
+		    		p.sendMessage(ChatColor.GREEN + "Torpedo System Active: Depth set to " + ChatColor.YELLOW + depth + ChatColor.YELLOW + " meters.");
+		   		
+		    		return true;
+		    	}else if( cannonType == 11 || cannonType == 12 || cannonType == 13 || cannonType == 14)
+		    	{
+		    		if (cannonType == 13 || cannonType == 14) {
+		    		colorMissiles();
+		    		} else {
+		    		colorTorpedoes();
+		    		}
+		    		charged=1;
+		    		if(depth < 240 )
+		    			depth = depth + 5;
+		    		else
+		    			depth = 0;
+		    		p.sendMessage(ChatColor.GREEN + "Missile System Active: Y axis set to " + ChatColor.YELLOW + depth + ChatColor.YELLOW + ".");
+		   		
+		    		return true;
+		    	}
+		    	else if( cannonType == 4 )
+		    	{
+		    		if( charged == 0 )
+				    {
+		    			Craft theCraft = Craft.getCraft(p.getTargetBlock(null, 100).getX(), p.getTargetBlock(null, 100).getY(), p.getTargetBlock(null, 100).getZ());
+		    			if (theCraft != null) {
+		    				if (theCraft.type.canFly || theCraft.type.isTerrestrial) {
+		    					p.sendMessage(ChatColor.RED + "You can't use Depth Charges on an aircraft!");
+		    					return false;
+		    				}
+		    			}
+				    	if( ammunition > 0 && ammunition <= 10)
+				    	{
+				    		ammunition = ammunition - 1;
+				    	}else
+				    	{
+			    			Block block;
+			    			if (theCraft != null) {
+			    				for (int x = 0; x < theCraft.sizeX; x++) {
+			    					for (int z = 0; z < theCraft.sizeZ; z++) {
+			    						for (int y = 0; y < theCraft.sizeY; y++) {
+
+			    							if( theCraft.matrix == null )
+			    								return false;
+			    
+			    							block = theCraft.world.getBlockAt(theCraft.minX + x, theCraft.minY + y, theCraft.minZ + z);
+			    							if (block.getType() == Material.EMERALD_ORE && ammunition < 1) {
+			    								reload(p);
+			    								setBlock(0, block, theCraft);
+			    								break;
+			    							}
+			    						}
+			    					}
+			    				}
+			    			}
+			    			if (ammunition < 1) {
+				    		p.sendMessage( ChatColor.RED + "Out of depth charges!");
+				    		return false;
+			    			}
+				    	}
+				    	charged=1;
+				    	p.sendMessage(ChatColor.GREEN + "Depth charge dropper loaded! " + ChatColor.YELLOW + ammunition + ChatColor.GREEN + " depth charges left.");
+				    }else{
+				    	p.sendMessage(ChatColor.GREEN + "Depth charge dropper already loaded! " + ChatColor.YELLOW + ammunition + ChatColor.GREEN + " depth charges left.");
+				    }
+			    	
+				    return true;
+		    	}else if( cannonType == 5 )
+		    	{
+		    		if( charged == 0 )
+				    {
+		    			Craft theCraft = Craft.getCraft(p.getTargetBlock(null, 100).getX(), p.getTargetBlock(null, 100).getY(), p.getTargetBlock(null, 100).getZ());
+		    			if (theCraft != null) {
+		    				if (theCraft.type.canFly || theCraft.type.isTerrestrial) {
+		    					p.sendMessage(ChatColor.RED + "You can't use Depth Charges on an aircraft!");
+		    					return false;
+		    				}
+		    			}
+				    	if( ammunition > 0 && ammunition <= 15)
+				    	{
+				    		ammunition = ammunition - 1;
+				    	}else
+				    	{
+			    			Block block;
+			    			if (theCraft != null) {
+			    				for (int x = 0; x < theCraft.sizeX; x++) {
+			    					for (int z = 0; z < theCraft.sizeZ; z++) {
+			    						for (int y = 0; y < theCraft.sizeY; y++) {
+
+			    							if( theCraft.matrix == null )
+			    								return false;
+			    
+			    							block = theCraft.world.getBlockAt(theCraft.minX + x, theCraft.minY + y, theCraft.minZ + z);
+			    							if (block.getType() == Material.EMERALD_ORE && ammunition < 1) {
+			    								reload(p);
+			    								setBlock(0, block, theCraft);
+			    								break;
+			    							}
+			    						}
+			    					}
+			    				}
+			    			}
+			    			if (ammunition < 1) {
+				    		p.sendMessage( ChatColor.RED + "Out of depth charges!");
+				    		return false;
+			    			}
+				    	}
 			    	charged=1;
-			    	p.sendMessage("Depth charge dropper loaded! " + ammunition + " depth charges left.");
+			    	p.sendMessage(ChatColor.GREEN + "Depth charge launcher loaded! " + ChatColor.YELLOW + ammunition + ChatColor.GREEN + " depth charges left.");
 			    }else{
-			    	p.sendMessage("Depth charge dropper already loaded! " + ammunition + " depth charges left.");
+			    	p.sendMessage(ChatColor.GREEN + "Depth charge launcher already loaded! " + ChatColor.YELLOW + ammunition + ChatColor.GREEN + " depth charges left.");
 			    }
-		    	
-			    return true;
-	    	}else if( cannonType == 5 )
-	    	{
-	    		if( charged == 0 )
-			    {
-	    			Craft theCraft = Craft.getCraft(p.getTargetBlock(null, 100).getX(), p.getTargetBlock(null, 100).getY(), p.getTargetBlock(null, 100).getZ());
-	    			if (theCraft != null) {
-	    				if (theCraft.type.canFly || theCraft.type.isTerrestrial) {
-	    					p.sendMessage(ChatColor.RED + "You can't use Depth Charges on an aircraft!");
-	    					return false;
-	    				}
-	    			}
-			    	if( ammunition > 0 && ammunition <= 20)
-			    	{
-			    		ammunition = ammunition - 1;
-			    	}else
-			    	{
-			    		p.sendMessage( ChatColor.RED + "Out of depth charges!");
-			    		return false;
-			    	}
-			    	charged=1;
-			    	p.sendMessage("Depth charge launcher loaded! " + ammunition + " depth charge launches left.");
-			    }else{
-			    	p.sendMessage("Depth charge launcher already loaded! " + ammunition + " depth charge launches left.");
-			    }
-		    	
-			    return true;
-	    		
-	    	}else if( cannonType == 9 )
-	    	{
-	    		if( charged == 0 )
-			    {
-			    	if( ammunition > 0 && ammunition <= 2)
-			    	{
-			    		ammunition = ammunition - 1;
-			    	}else
-			    	{
-			    		p.sendMessage( ChatColor.RED + "Out of bombs!");
-			    		return false;
-			    	}
-			    	charged=1;
-			    	p.sendMessage("Bomb dropper loaded! " + ammunition + " bombs left.");
-			    }else{
-			    	p.sendMessage("Bomb dropper already loaded! " + ammunition + " bombs left.");
-			    }
-		    	
-			    return true;
-	    		
-	    	}else if( cannonType == 10 )
-	    	{
-	    		if( charged == 0 )
-			    {
-			    	if( ammunition > 0 && ammunition <= 6)
-			    	{
-			    		ammunition = ammunition - 1;
-			    	}else
-			    	{
-			    		p.sendMessage( ChatColor.RED + "Out of bombs!");
-			    		return false;
-			    	}
-			    	charged=1;
-			    	p.sendMessage("Bomb launcher loaded! " + ammunition + " bombs left.");
-			    }else{
-			    	p.sendMessage("Bomb launcher already loaded! " + ammunition + " bombs left.");
-			    }
-		    	
-			    return true;
-	    		
+			    	
+				    return true;
+		    		
+		    	}else if( cannonType == 9 )
+		    	{
+		    		if( charged == 0 )
+				    {
+				    	if( ammunition > 0 && ammunition <= 2)
+				    	{
+				    		ammunition = ammunition - 1;
+				    	}else
+				    	{
+			    			Craft theCraft = Craft.getCraft(p.getTargetBlock(null, 100).getX(), p.getTargetBlock(null, 100).getY(), p.getTargetBlock(null, 100).getZ());
+			    			Block block;
+			    			if (theCraft != null) {
+			    				for (int x = 0; x < theCraft.sizeX; x++) {
+			    					for (int z = 0; z < theCraft.sizeZ; z++) {
+			    						for (int y = 0; y < theCraft.sizeY; y++) {
+
+			    							if( theCraft.matrix == null )
+			    								return false;
+			    
+			    							block = theCraft.world.getBlockAt(theCraft.minX + x, theCraft.minY + y, theCraft.minZ + z);
+			    							if (block.getType() == Material.EMERALD_ORE && ammunition < 1) {
+			    								reload(p);
+			    								setBlock(0, block, theCraft);
+			    								break;
+			    							}
+			    						}
+			    					}
+			    				}
+			    			}
+			    			if (ammunition < 1) {
+				    		p.sendMessage( ChatColor.RED + "Out of bombs!");
+				    		return false;
+			    			}
+				    	}
+				    	charged=1;
+				    	p.sendMessage(ChatColor.GREEN + "Bomb dropper loaded! " + ChatColor.YELLOW + ammunition + ChatColor.GREEN + " bombs left.");
+				    }else{
+				    	p.sendMessage(ChatColor.GREEN + "Bomb dropper already loaded! " + ChatColor.YELLOW + ammunition + ChatColor.GREEN + " bombs left.");
+				    }
+			    	
+				    return true;
+		    		
+		    	}else if( cannonType == 10 )
+		    	{
+		    		if( charged == 0 )
+				    {
+				    	if( ammunition > 0 && ammunition <= 6)
+				    	{
+				    		ammunition = ammunition - 1;
+				    	}else
+				    	{
+			    			Craft theCraft = Craft.getCraft(p.getTargetBlock(null, 100).getX(), p.getTargetBlock(null, 100).getY(), p.getTargetBlock(null, 100).getZ());
+			    			Block block;
+			    			if (theCraft != null) {
+			    				for (int x = 0; x < theCraft.sizeX; x++) {
+			    					for (int z = 0; z < theCraft.sizeZ; z++) {
+			    						for (int y = 0; y < theCraft.sizeY; y++) {
+
+			    							if( theCraft.matrix == null )
+			    								return false;
+			    
+			    							block = theCraft.world.getBlockAt(theCraft.minX + x, theCraft.minY + y, theCraft.minZ + z);
+			    							if (block.getType() == Material.EMERALD_ORE && ammunition < 1) {
+			    								reload(p);
+			    								setBlock(0, block, theCraft);
+			    								break;
+			    							}
+			    						}
+			    					}
+			    				}
+			    			}
+			    			if (ammunition < 1) {
+				    		p.sendMessage( ChatColor.RED + "Out of bombs!");
+				    		return false;
+			    			}
+				    	}
+				    	charged=1;
+				    	p.sendMessage(ChatColor.GREEN + "Bomb launcher loaded! " + ChatColor.YELLOW + ammunition + ChatColor.GREEN + " bombs left.");
+				    }else{
+				    	p.sendMessage(ChatColor.GREEN + "Bomb launcher already loaded! " + ChatColor.YELLOW + ammunition + ChatColor.GREEN + " bombs left.");
+				    }
+			    	
+				    return true;
+		    		
+		    	}else
+		    	{
+		    		charged = 1;
+		    		return true;
+		    	}
 	    	}else
 	    	{
-	    		charged = 1;
-	    		return true;
+	    		charged=1;
+	    		p.sendMessage(ChatColor.GREEN + "Cannon Power X" + ChatColor.YELLOW + charged);
+	    		return false;
 	    	}
-    	}else
-    	{
-    		charged=1;
-    		p.sendMessage("Cannon Power X" + charged);
-    		return false;
-    	}
-	
-    } else {
-    	NavyCraft.instance.DebugMessage("Inventory was null", 3);
-    	return false;
-    }
+		
+	    } else {
+	    	NavyCraft.instance.DebugMessage("Inventory was null", 3);
+	    	return false;
+	    }
 }
     private void setTimeout() {
 	timeout = new Date().getTime();
@@ -1177,22 +1292,22 @@ public class OneCannon{
     			{
     				if( loadTorpedo(left) )
     				{
-    					p.sendMessage("Tube Loading!");
+    					p.sendMessage(ChatColor.GREEN + "Tube Loading!");
     				}else
     				{
-    					p.sendMessage("No torpedoes remaining for this tube!");
+    					p.sendMessage(ChatColor.RED + "No torpedoes remaining for this tube!");
     				}
     			}else
     			{
-    				p.sendMessage("Open inner door before loading.");
+    				p.sendMessage(ChatColor.YELLOW + "Open inner door before loading.");
     			}
     		}else
     		{
-    			p.sendMessage("Close outer doors first.");	
+    			p.sendMessage(ChatColor.YELLOW + "Close outer doors first.");	
     		}
     	}else
     	{
-    		p.sendMessage("Tube already loaded.");
+    		p.sendMessage(ChatColor.YELLOW + "Tube already loaded.");
     	}
     }
     
@@ -1564,7 +1679,7 @@ public class OneCannon{
     {
     	if( checkProtectedRegion(p, p.getLocation()) )
     	{
-    		p.sendMessage("You are in a protected region");
+    		p.sendMessage(ChatColor.RED + "You are in a protected region");
     		return;
     	}
     	
@@ -1592,14 +1707,14 @@ public class OneCannon{
 	    			{
 	    				b.setType(Material.AIR);
 	    	    		c.setType(Material.AIR);
-	    	    		p.sendMessage("Opening Outer Tube Doors!");
+	    	    		p.sendMessage(ChatColor.GREEN + "Opening Outer Tube Doors!");
 	    			}else
 	    			{
-	    				p.sendMessage("Close BOTH inner doors before opening outer doors.");
+	    				p.sendMessage(ChatColor.YELLOW + "Close BOTH inner doors before opening outer doors.");
 	    			}
 	    		}else
 	    		{
-	    			p.sendMessage("Close BOTH inner doors before opening outer doors.");
+	    			p.sendMessage(ChatColor.YELLOW + "Close BOTH inner doors before opening outer doors.");
 	    		}
 	    	}else
 	    	{
@@ -1611,7 +1726,7 @@ public class OneCannon{
 			    	testCraft.addBlock(b, true);
 			    	testCraft.addBlock(c, true);
 			    }
-	    		p.sendMessage("Closing Outer Tube Doors!");
+	    		p.sendMessage(ChatColor.GREEN + "Closing Outer Tube Doors!");
 	    	}
     	}else ///inner doors
     	{
@@ -1653,7 +1768,7 @@ public class OneCannon{
 	    	    			b.getRelative(direction,3).setType(Material.AIR);
 	    	    		if( b.getRelative(direction,4).getTypeId() >= 8 && b.getRelative(direction,4).getTypeId() <= 11)
 	    	    			b.getRelative(direction,4).setType(Material.AIR);
-	    	    		p.sendMessage("Opening Left Inner Tube Door!");
+	    	    		p.sendMessage(ChatColor.GREEN + "Opening Left Inner Tube Door!");
 	    	    	}
 	    	    	else
 	    	    	{
@@ -1666,11 +1781,11 @@ public class OneCannon{
 	    	    			c.getRelative(direction,3).setType(Material.AIR);
 	    	    		if( c.getRelative(direction,4).getTypeId() >= 8 && c.getRelative(direction,4).getTypeId() <= 11)
 	    	    			c.getRelative(direction,4).setType(Material.AIR);
-	    	    		p.sendMessage("Opening Right Inner Tube Door!");
+	    	    		p.sendMessage(ChatColor.GREEN + "Opening Right Inner Tube Door!");
 	    	    	}
 	    		}else
 	    		{
-	    			p.sendMessage("Close the OUTER doors before opening inner doors.");
+	    			p.sendMessage(ChatColor.YELLOW + "Close the OUTER doors before opening inner doors.");
 	    		}
 	    	}else
 	    	{
@@ -1681,7 +1796,7 @@ public class OneCannon{
 				    {
 				    	testCraft.addBlock(b, true);
 				    }
-	    			p.sendMessage("Closing Left Inner Tube Door!");
+	    			p.sendMessage(ChatColor.GREEN + "Closing Left Inner Tube Door!");
 	    		}
 	    		else
 	    		{
@@ -1690,7 +1805,7 @@ public class OneCannon{
 				    {
 				    	testCraft.addBlock(c, true);
 				    }
-	    			p.sendMessage("Closing Right Inner Tube Door!");
+	    			p.sendMessage(ChatColor.GREEN + "Closing Right Inner Tube Door!");
 	    		}
 	    	}
     	}
@@ -1703,13 +1818,13 @@ public class OneCannon{
     	switch( torpedoMode )
     	{
     	case 0:
-    		p.sendMessage("Firing Mode : Left Tube");
+    		p.sendMessage(ChatColor.GREEN + "Firing Mode : " + ChatColor.YELLOW + "Left Tube");
     		break;
     	case 1:
-    		p.sendMessage("Firing Mode : Right Tube");
+    		p.sendMessage(ChatColor.GREEN + "Firing Mode : " + ChatColor.YELLOW + "Right Tube");
     		break;
     	case 2:
-    		p.sendMessage("Firing Mode : Both");
+    		p.sendMessage(ChatColor.GREEN + "Firing Mode : " + ChatColor.YELLOW + "Both");
     		break;
     	}
     }
@@ -1718,7 +1833,7 @@ public class OneCannon{
     {
     	if( checkProtectedRegion(p, p.getLocation()) )
     	{
-    		p.sendMessage("You are in a protected region");
+    		p.sendMessage(ChatColor.RED + "You are in a protected region");
     		return;
     	}
     	
@@ -1731,11 +1846,11 @@ public class OneCannon{
     				fireLeft(p);
     			}else
     			{
-    				p.sendMessage("Left Tube: Open Outer Doors and Close Left Inner Door");
+    				p.sendMessage(ChatColor.YELLOW + "Left Tube: Open Outer Doors and Close Left Inner Door");
     			}
     		}else
     		{
-    			p.sendMessage("Left Tube: Tube Not Loaded");
+    			p.sendMessage(ChatColor.RED + "Left Tube: Tube Not Loaded");
     		}
     		
     	}else if( torpedoMode == 1)
@@ -1747,12 +1862,12 @@ public class OneCannon{
     				fireRight(p);
     			}else
     			{
-    				p.sendMessage("Right Tube: Open Outer Doors and Close Right Inner Door");
+    				p.sendMessage(ChatColor.YELLOW + "Right Tube: Open Outer Doors and Close Right Inner Door");
     			}
     			
     		}else
     		{
-    			p.sendMessage("Right Tube: Tube Not Loaded");
+    			p.sendMessage(ChatColor.RED + "Right Tube: Tube Not Loaded");
     		}
     		
     	}else
@@ -1764,12 +1879,12 @@ public class OneCannon{
     				fireBoth(p);
     			}else
     			{
-    				p.sendMessage("Both Tubes: Open Outer Doors and Close Both Inner Doors");
+    				p.sendMessage(ChatColor.YELLOW + "Both Tubes: Open Outer Doors and Close Both Inner Doors");
     			}
     			
     		}else
     		{
-    			p.sendMessage("Both Tubes: Both Tubes Not Loaded");
+    			p.sendMessage(ChatColor.RED + "Both Tubes: Both Tubes Not Loaded");
     		}
     	}
     }
@@ -1975,7 +2090,7 @@ public class OneCannon{
 									torp.warhead.getRelative(torp.hdg, -2).setType(Material.WATER);
 									torp.warhead.getRelative(torp.hdg, -3).setType(Material.WATER);
 								}
-								p.sendMessage("Torpedo expired.");
+								p.sendMessage(ChatColor.RED + "Torpedo expired.");
 								return;
 							}
 		    				
@@ -2015,15 +2130,15 @@ public class OneCannon{
 							}
 							
 							if( checkCraft == null )
-								p.sendMessage("Torpedo hit unknown object!");
+								p.sendMessage(ChatColor.GREEN + "Torpedo hit unknown object!");
 							else
-								p.sendMessage("Torpedo hit " + checkCraft.name + "!");
+								p.sendMessage(ChatColor.GREEN + "Torpedo hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
 										
 						
 						}else
 						{
 							torp.dead = true;
-							p.sendMessage("Torpedo Dud (Too close).");
+							p.sendMessage(ChatColor.RED + "Torpedo Dud (Too close).");
 						}
 						
 						
@@ -2093,7 +2208,7 @@ public class OneCannon{
 								if( !leftLoading && !rightLoading && !checkOuterDoorClosed() )
 									openTorpedoDoors(p, false, false);
 							}
-							p.sendMessage("Dud Torpedo! Too close.");
+							p.sendMessage(ChatColor.RED + "Dud Torpedo! Too close.");
 							torp.dead = true;
 						}
 						
@@ -2112,7 +2227,7 @@ public class OneCannon{
 					
 		    		if( !torp.active )
 		    		{
-		    			p.sendMessage("Dud Torpedo! Too close.");
+		    			p.sendMessage(ChatColor.RED + "Dud Torpedo! Too close.");
 						torp.dead = true;
 						if( firingCraft != null )
 						{
@@ -2158,9 +2273,9 @@ public class OneCannon{
 					}
 					
 					if( checkCraft == null )
-						p.sendMessage("Torpedo detonated prematurely!");
+						p.sendMessage(ChatColor.RED + "Torpedo detonated prematurely!");
 					else
-						p.sendMessage("Torpedo hit " + checkCraft.name + "!");
+						p.sendMessage(ChatColor.GREEN + "Torpedo hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
 					
 					
 					if( firingCraft != null )
@@ -2724,7 +2839,7 @@ public class OneCannon{
 									torp.warhead.getRelative(torp.hdg, -2).setType(Material.WATER);
 									torp.warhead.getRelative(torp.hdg, -3).setType(Material.WATER);
 								}
-								p.sendMessage("Torpedo expired.");
+								p.sendMessage(ChatColor.RED + "Torpedo expired.");
 								return;
 							}
 		    				
@@ -2762,13 +2877,13 @@ public class OneCannon{
 							}
 							
 							if( checkCraft == null )
-								p.sendMessage("Torpedo hit unknown object!");
+								p.sendMessage(ChatColor.YELLOW + "Torpedo hit unknown object!");
 							else
-								p.sendMessage("Torpedo hit " + checkCraft.name + "!");
+								p.sendMessage(ChatColor.GREEN + "Torpedo hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
 							
 						}else
 						{
-							p.sendMessage("Torpedo Dud (Too close).");
+							p.sendMessage(ChatColor.RED + "Torpedo Dud (Too close).");
 							torp.dead = true;
 						}
 						
@@ -2842,7 +2957,7 @@ public class OneCannon{
 									openTorpedoDoors(p, false, false);
 							}
 							torp.dead = true;
-							p.sendMessage("Dud Torpedo! Too close.");
+							p.sendMessage(ChatColor.RED + "Dud Torpedo! Too close.");
 						}
 	
 					}
@@ -2859,7 +2974,7 @@ public class OneCannon{
 					
 		    		if( !torp.active )
 		    		{
-		    			p.sendMessage("Dud Torpedo! Too close.");
+		    			p.sendMessage(ChatColor.RED + "Dud Torpedo! Too close.");
 						torp.dead = true;
 						if( firingCraft != null )
 						{
@@ -2905,9 +3020,9 @@ public class OneCannon{
 					}
 					
 					if( checkCraft == null )
-						p.sendMessage("Torpedo detonated prematurely!");
+						p.sendMessage(ChatColor.RED + "Torpedo detonated prematurely!");
 					else
-						p.sendMessage("Torpedo hit " + checkCraft.name + "!");
+						p.sendMessage(ChatColor.GREEN + "Torpedo hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
 					
 					
 					if( firingCraft != null )
@@ -3486,7 +3601,7 @@ public class OneCannon{
 									torp.warhead.getRelative(torp.hdg, -2).setType(Material.WATER);
 									torp.warhead.getRelative(torp.hdg, -3).setType(Material.WATER);
 								}
-								p.sendMessage("Torpedo expired.");
+								p.sendMessage(ChatColor.RED + "Torpedo expired.");
 								if( firingCraft != null ) {
 									firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
 									firingCraft.tubeFiringDepth.put(torp.tubeNum, 1);
@@ -3544,9 +3659,9 @@ public class OneCannon{
 							}
 							
 							if( checkCraft == null )
-								p.sendMessage("Torpedo hit unknown object!");
+								p.sendMessage(ChatColor.YELLOW + "Torpedo hit unknown object!");
 							else
-								p.sendMessage("Torpedo hit " + checkCraft.name + "!");
+								p.sendMessage(ChatColor.GREEN + "Torpedo hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
 							
 							if( firingCraft != null ) {
 								firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
@@ -3561,7 +3676,7 @@ public class OneCannon{
 							//cm.structureUpdate(null);
 						}else
 						{
-							p.sendMessage("Torpedo Dud (Inactive).");
+							p.sendMessage(ChatColor.RED + "Torpedo Dud (Inactive).");
 							if( firingCraft != null ) {
 								firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
 								firingCraft.tubeFiringDepth.put(torp.tubeNum, 1);
@@ -3621,7 +3736,7 @@ public class OneCannon{
 			    			torp.warhead.getRelative(torp.hdg, -3).setTypeIdAndData(35, (byte) 0x7, false);
 						}else
 						{
-							p.sendMessage("Dud Torpedo! Too close.");
+							p.sendMessage(ChatColor.RED + "Dud Torpedo! Too close.");
 							torp.dead=true;
 							if( firingCraft != null ) {
 								firingCraft.tubeFiringMode.put(torp.tubeNum, -2);
@@ -3656,7 +3771,7 @@ public class OneCannon{
 					
 		    		if( !torp.active )
 		    		{
-		    			p.sendMessage("Dud Torpedo! Too close.");
+		    			p.sendMessage(ChatColor.RED + "Dud Torpedo! Too close.");
 						torp.dead = true;
 						if( firingCraft != null )
 						{
@@ -3701,9 +3816,9 @@ public class OneCannon{
 					}
 					
 					if( checkCraft == null )
-						p.sendMessage("Torpedo detonated prematurely!");
+						p.sendMessage(ChatColor.YELLOW + "Torpedo detonated prematurely!");
 					else
-						p.sendMessage("Torpedo hit " + checkCraft.name + "!");
+						p.sendMessage(ChatColor.GREEN + "Torpedo hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
 					
 					
 					if( firingCraft != null )
@@ -4038,7 +4153,7 @@ public class OneCannon{
     {
     	if( checkProtectedRegion(p, p.getLocation()) )
     	{
-    		p.sendMessage("You are in a protected region");
+    		p.sendMessage(ChatColor.RED + "You are in a protected region");
     		return;
     	}
     	
@@ -4060,7 +4175,7 @@ public class OneCannon{
 	    	{
 	    				b.setType(Material.AIR);
 	    	    		c.setType(Material.AIR);
-	    	    		p.sendMessage("Opening Outer Tube Doors!");
+	    	    		p.sendMessage(ChatColor.GREEN + "Opening Outer Tube Doors!");
 	    	}else
 	    	{
 	    		b.setType(Material.CLAY);
@@ -4071,7 +4186,7 @@ public class OneCannon{
 			    	testCraft.addBlock(b, true);
 			    	testCraft.addBlock(c, true);
 			    }
-	    		p.sendMessage("Closing Outer Tube Doors!");
+	    		p.sendMessage(ChatColor.GREEN + "Closing Outer Tube Doors!");
 	    	}
     	}
     
@@ -4079,7 +4194,7 @@ public class OneCannon{
     {
     	if( checkProtectedRegion(p, p.getLocation()) )
     	{
-    		p.sendMessage("You are in a protected region");
+    		p.sendMessage(ChatColor.RED + "You are in a protected region");
     		return;
     	}
     	
@@ -4089,7 +4204,7 @@ public class OneCannon{
 	    	if( checkOuterDoorClosedV() )
 	    	{
 	    				a.setType(Material.AIR);
-	    	    		p.sendMessage("Opening Outer Tube Doors!");
+	    	    		p.sendMessage(ChatColor.GREEN + "Opening Outer Tube Doors!");
 	    	}else
 	    	{
 	    		a.setType(Material.CLAY);
@@ -4098,7 +4213,7 @@ public class OneCannon{
 			    {
 			    	testCraft.addBlock(a, true);
 			    }
-	    		p.sendMessage("Closing Outer Tube Doors!");
+	    		p.sendMessage(ChatColor.GREEN + "Closing Outer Tube Doors!");
 	    	}
     	}
 	
@@ -4109,13 +4224,13 @@ public class OneCannon{
     	switch( missileMode )
     	{
     	case 0:
-    		p.sendMessage("Firing Mode : Left Tube");
+    		p.sendMessage(ChatColor.GREEN + "Firing Mode : " + ChatColor.YELLOW + "Left Tube");
     		break;
     	case 1:
-    		p.sendMessage("Firing Mode : Right Tube");
+    		p.sendMessage(ChatColor.GREEN + "Firing Mode : " + ChatColor.YELLOW + "Right Tube");
     		break;
     	case 2:
-    		p.sendMessage("Firing Mode : Both");
+    		p.sendMessage(ChatColor.GREEN + "Firing Mode : " + ChatColor.YELLOW + "Both");
     		break;
     	}
     }
@@ -4126,15 +4241,14 @@ public class OneCannon{
 			range = range + 5;
 		else
 			range = 0;
-		p.sendMessage("Range set to " + range + "m.");
+		p.sendMessage(ChatColor.GREEN + "Range set to " + ChatColor.YELLOW + range + ChatColor.GREEN + "m.");
     }
     
     public void fireMissileButton(Player p, boolean isVertical)
     {
-		NavyCraft.instance.DebugMessage("Ran fire method, is vertical:" + isVertical, 3);
     	if( checkProtectedRegion(p, p.getLocation()) )
     	{
-    		p.sendMessage("You are in a protected region");
+    		p.sendMessage(ChatColor.RED + "You are in a protected region");
     		return;
     	}
     	
@@ -4146,11 +4260,11 @@ public class OneCannon{
         				fireVertical(p);
         			}else
         			{
-        				p.sendMessage("Missile: Open Outer Doors");
+        				p.sendMessage(ChatColor.YELLOW + "Missile: Open Outer Doors");
         			}
         		}else
         		{
-        			p.sendMessage("Missile: Tube Not Loaded");
+        			p.sendMessage(ChatColor.RED + "Missile: Tube Not Loaded");
         		}
     	} else {
     	
@@ -4163,11 +4277,11 @@ public class OneCannon{
     				fireLeft(p);
     			}else
     			{
-    				p.sendMessage("Left Tube: Open Outer Doors");
+    				p.sendMessage(ChatColor.YELLOW + "Left Tube: Open Outer Doors");
     			}
     		}else
     		{
-    			p.sendMessage("Left Tube: Tube Not Loaded");
+    			p.sendMessage(ChatColor.RED + "Left Tube: Tube Not Loaded");
     		}
     		
     	}else if( missileMode == 1)
@@ -4179,12 +4293,12 @@ public class OneCannon{
     				fireRight(p);
     			}else
     			{
-    				p.sendMessage("Right Tube: Open Outer Doors");
+    				p.sendMessage(ChatColor.YELLOW + "Right Tube: Open Outer Doors");
     			}
     			
     		}else
     		{
-    			p.sendMessage("Right Tube: Tube Not Loaded");
+    			p.sendMessage(ChatColor.RED + "Right Tube: Tube Not Loaded");
     		}
     		
     	}else
@@ -4196,12 +4310,12 @@ public class OneCannon{
     				fireBoth(p);
     			}else
     			{
-    				p.sendMessage("Both Tubes: Open Outer Doors");
+    				p.sendMessage(ChatColor.YELLOW + "Both Tubes: Open Outer Doors");
     			}
     			
     		}else
     		{
-    			p.sendMessage("Both Tubes: Both Tubes Not Loaded");
+    			p.sendMessage(ChatColor.RED + "Both Tubes: Both Tubes Not Loaded");
     		}
     	}
     }
@@ -4424,7 +4538,7 @@ public class OneCannon{
 									torp.warhead.getRelative(torp.hdg, -2).setType(Material.WATER);
 									torp.warhead.getRelative(torp.hdg, -3).setType(Material.WATER);
 								}
-								p.sendMessage("Missile expired.");
+								p.sendMessage(ChatColor.YELLOW + "Missile expired.");
 								return;
 							}
 		    				
@@ -4464,15 +4578,16 @@ public class OneCannon{
 							}
 							
 							if( checkCraft == null )
-								p.sendMessage("Missile hit unknown object!");
+								p.sendMessage(ChatColor.YELLOW + "Missile hit unknown object!");
 							else
-								p.sendMessage("Missile hit " + checkCraft.name + "!");
+								p.sendMessage(ChatColor.GREEN + "Missile hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
 										
 						
 						}else
 						{
 							torp.dead = true;
-							p.sendMessage("Missile Dud (Too close).");
+							p.sendMessage(ChatColor.RED + "Dud Missile! Too close.");
+							
 						}
 						
 						
@@ -4526,7 +4641,7 @@ public class OneCannon{
 							{
 								firingCraft.waitTorpLoading--;
 							}
-							p.sendMessage("Dud Missile! Too close.");
+							p.sendMessage(ChatColor.RED + "Dud Missile! Too close.");
 							torp.dead = true;
 						}
 						
@@ -4540,12 +4655,13 @@ public class OneCannon{
 		    		if( checkProtectedRegion(p, torp.warhead.getLocation()) )
 					{
 						p.sendMessage(ChatColor.RED + "No missile explosions in dock area.");
+						torp.dead = true;
 						return;
 					}
 					
 		    		if( !torp.active )
 		    		{
-		    			p.sendMessage("Dud Missile! Too close.");
+						p.sendMessage(ChatColor.RED + "Dud Missile! Too close.");
 						torp.dead = true;
 						if( firingCraft != null )
 						{
@@ -4575,9 +4691,9 @@ public class OneCannon{
 					}
 					
 					if( checkCraft == null )
-						p.sendMessage("Missile detonated prematurely!");
+						p.sendMessage(ChatColor.RED + "Missile detonated prematurely!");
 					else
-						p.sendMessage("Missile hit " + checkCraft.name + "!");
+						p.sendMessage(ChatColor.GREEN + "Missile hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
 					
 					
 					if( firingCraft != null )
@@ -4606,7 +4722,7 @@ public class OneCannon{
 		  //  @Override
 			public void run()
 		    {
-		    	if( !torp.dead )
+				if( !torp.dead )
 		    	{
 		    		NavyCraft.instance.DebugMessage(Integer.toString(i), 3);
 					int depthDifference = torp.setDepth - torp.warhead.getY();
@@ -4618,10 +4734,10 @@ public class OneCannon{
 					torp.torpRotation = 3;
 			    	NavyCraft.instance.DebugMessage(Integer.toString(torp.torpRotation) + ", tried to change to 3", 3);
 					}
-					}else if ( depthDifference == 0) {
-						torp.hdg = direction;
+					}else if (torp.torpRotation == 4 && depthDifference <= 0) {
+						torp.hdg = torp.ohdg;
 					}
-			    	if(( torp.warhead.getTypeId() == 35 && torp.warhead.getRelative(direction, -1).getTypeId() == 35 && torp.warhead.getRelative(direction, -2).getTypeId() == 35 && torp.warhead.getRelative(direction, -3).getTypeId() == 35) ||  (torp.warhead.getTypeId() == 35 && torp.warhead.getRelative(BlockFace.UP, -1).getTypeId() == 35 && torp.warhead.getRelative(BlockFace.UP, -2).getTypeId() == 35 && torp.warhead.getRelative(BlockFace.UP, -3).getTypeId() == 35) || (torp.warhead.getTypeId() == 35 && torp.warhead.getRelative(BlockFace.DOWN, -1).getTypeId() == 35 && torp.warhead.getRelative(BlockFace.DOWN, -2).getTypeId() == 35 && torp.warhead.getRelative(BlockFace.DOWN, -3).getTypeId() == 35))
+			    	if(( torp.warhead.getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -1).getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -2).getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -3).getTypeId() == 35) ||  (torp.warhead.getTypeId() == 35 && torp.warhead.getRelative(BlockFace.UP, -1).getTypeId() == 35 && torp.warhead.getRelative(BlockFace.UP, -2).getTypeId() == 35 && torp.warhead.getRelative(BlockFace.UP, -3).getTypeId() == 35) || (torp.warhead.getTypeId() == 35 && torp.warhead.getRelative(BlockFace.DOWN, -1).getTypeId() == 35 && torp.warhead.getRelative(BlockFace.DOWN, -2).getTypeId() == 35 && torp.warhead.getRelative(BlockFace.DOWN, -3).getTypeId() == 35))
 			    	{
 			    		CraftMover.playWeaponSound(torp.warhead.getLocation(), Sound.ENTITY_PLAYER_BREATH, 2.0f, 0.8f);
 						if( i > 15 )
@@ -4671,13 +4787,15 @@ public class OneCannon{
 								torp.torpRotation = -1;
 							}
 							
-							if (depthDifference < 0 && (torp.setRange - (i + 16) < 0)) {
-							torp.hdg = BlockFace.DOWN;
-							torp.torpRotation = 2;
-							if (depthDifference == -1) {
-							torp.torpRotation = 3;
+							if (depthDifference <= 0) torp.rangeCounter++;
+							
+							if (depthDifference < 0 && (torp.setRange - torp.rangeCounter < 0)) {
+								torp.hdg = BlockFace.DOWN;
+								torp.torpRotation = 2;
+								if (depthDifference == -1) {
+								torp.torpRotation = 3;
+								}
 							}
-						}
 								//new position
 								torp.warhead = torp.warhead.getRelative(torp.hdg);								
 							
@@ -4699,7 +4817,7 @@ public class OneCannon{
 										torp.warhead.getRelative(torp.hdg, -2).setType(Material.WATER);
 										torp.warhead.getRelative(torp.hdg, -3).setType(Material.WATER);
 									}
-									p.sendMessage("Missile expired.");
+									p.sendMessage(ChatColor.YELLOW + "Missile expired.");
 									return;
 								}
 			    				torp.warhead.setTypeIdAndData(35, (byte) 0xB, false);
@@ -4738,15 +4856,15 @@ public class OneCannon{
 								}
 								
 								if( checkCraft == null )
-									p.sendMessage("Missile hit unknown object!");
+									p.sendMessage(ChatColor.YELLOW + "Missile hit unknown object!");
 								else
-									p.sendMessage("Missile hit " + checkCraft.name + "!");
+									p.sendMessage(ChatColor.GREEN + "Missile hit " + ChatColor.YELLOW +  checkCraft.name + ChatColor.GREEN + "!");
 											
 							
 							}else
 							{
 								torp.dead = true;
-								p.sendMessage("Missile Dud (Too close).1");
+								p.sendMessage(ChatColor.RED + "Dud Missile! Too close.");
 							}
 							
 							
@@ -4817,7 +4935,7 @@ public class OneCannon{
 									if( !leftLoading && !rightLoading && !checkOuterDoorClosedV() )
 										openMissileDoorsV(p);
 								}
-								p.sendMessage("Dud Missile! Too close.2");
+								p.sendMessage(ChatColor.RED + "Dud Missile! Too close.");
 								torp.dead = true;
 							}
 							
@@ -4836,7 +4954,7 @@ public class OneCannon{
 						
 			    		if( !torp.active )
 			    		{
-			    			p.sendMessage("Dud Missile! Too close.3");
+							p.sendMessage(ChatColor.RED + "Dud Missile! Too close.");
 							torp.dead = true;
 							if( firingCraft != null )
 							{
@@ -4882,9 +5000,9 @@ public class OneCannon{
 						}
 						
 						if( checkCraft == null )
-							p.sendMessage("Missile detonated prematurely!1");
+							p.sendMessage(ChatColor.RED + "Missile detonated prematurely!");
 						else
-							p.sendMessage("Missile hit " + checkCraft.name + "!");
+							p.sendMessage(ChatColor.GREEN + "Missile hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
 						
 						
 						if( firingCraft != null )
@@ -4977,7 +5095,6 @@ public class OneCannon{
 		
 		if( testCraft != null && testCraft.tubeMk1FiringDisplay > -1 )
 		{
-			torp.setDepth = torpDepth;
 			Player onScopePlayer=null;
 			for( Periscope per: testCraft.periscopes )
 			{
@@ -5007,13 +5124,18 @@ public class OneCannon{
 			else
 			{
 				rotation = (float) Math.PI * (torpRotation+180f) / 180f;
-				
 			}
+			
+			if( onScopePlayer != null && testCraft.tubeMk1FiringMode == -1 )
+				torp.setDepth = (int) onScopePlayer.getTargetBlock(null, 250).getY();
+			else if( testCraft.lastPeriscopeLookLoc != null && testCraft.tubeMk1FiringMode == -1 )
+				torp.setDepth = (int) testCraft.lastPeriscopeLookLoc.getY();
 			
 			if( left )
 				rotation -= testCraft.tubeMk1FiringSpread*Math.PI/180f;
 			else
 				rotation += testCraft.tubeMk1FiringSpread*Math.PI/180f;
+			
 			
 			float nx = -(float) Math.sin(rotation);
 			float nz = (float) Math.cos(rotation);
@@ -5021,7 +5143,6 @@ public class OneCannon{
 		////north
 			
 			//p.sendMessage("torpRotation=" + torpRotation + " rotation=" + rotation);
-			
 					
 			if( torpRotation%360 == 0 )
 			{
@@ -5445,7 +5566,6 @@ public class OneCannon{
 						}
 						
 						
-						
 						//check new position
 						if( torp.warhead.getType() == Material.AIR )
 						{
@@ -5464,7 +5584,7 @@ public class OneCannon{
 									torp.warhead.getRelative(torp.hdg, -2).setType(Material.WATER);
 									torp.warhead.getRelative(torp.hdg, -3).setType(Material.WATER);
 								}
-								p.sendMessage("Missile expired.");
+								p.sendMessage(ChatColor.YELLOW + "Missile expired.");
 								return;
 							}
 		    				
@@ -5502,13 +5622,13 @@ public class OneCannon{
 							}
 							
 							if( checkCraft == null )
-								p.sendMessage("Missile hit unknown object!");
+								p.sendMessage(ChatColor.YELLOW +"Missile hit unknown object!");
 							else
-								p.sendMessage("Missile hit " + checkCraft.name + "!");
+								p.sendMessage(ChatColor.GREEN +"Missile hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
 							
 						}else
 						{
-							p.sendMessage("Missile Dud (Too close).");
+							p.sendMessage(ChatColor.RED + "Dud Missile! Too close.");
 							torp.dead = true;
 						}
 						
@@ -5566,7 +5686,7 @@ public class OneCannon{
 								firingCraft.waitTorpLoading--;
 							}
 							torp.dead = true;
-							p.sendMessage("Dud Missile! Too close.");
+							p.sendMessage(ChatColor.RED + "Dud Missile! Too close.");
 						}
 	
 					}
@@ -5583,7 +5703,7 @@ public class OneCannon{
 					
 		    		if( !torp.active )
 		    		{
-		    			p.sendMessage("Dud Missile! Too close.");
+		    			p.sendMessage(ChatColor.RED + "Dud Missile! Too close.");
 						torp.dead = true;
 						if( firingCraft != null )
 						{
@@ -5613,9 +5733,9 @@ public class OneCannon{
 					}
 					
 					if( checkCraft == null )
-						p.sendMessage("Missile detonated prematurely!");
+						p.sendMessage(ChatColor.RED + "Missile detonated prematurely!");
 					else
-						p.sendMessage("Missile hit " + checkCraft.name + "!");
+						p.sendMessage(ChatColor.GREEN + "Missile hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
 					
 					
 					if( firingCraft != null )
@@ -5657,8 +5777,8 @@ public class OneCannon{
     						torp.torpRotation = 3;
     				    	NavyCraft.instance.DebugMessage(Integer.toString(torp.torpRotation) + ", tried to change to 3", 3);
     						}
-    						}else if (torp.torpRotation == 4 && depthDifference == 0) {
-    							torp.hdg = direction;
+    						}else if (torp.torpRotation == 4 && depthDifference <= 0) {
+    							torp.hdg = torp.ohdg;
     						}
     				    	if(( torp.warhead.getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -1).getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -2).getTypeId() == 35 && torp.warhead.getRelative(torp.hdg, -3).getTypeId() == 35) ||  (torp.warhead.getTypeId() == 35 && torp.warhead.getRelative(BlockFace.UP, -1).getTypeId() == 35 && torp.warhead.getRelative(BlockFace.UP, -2).getTypeId() == 35 && torp.warhead.getRelative(BlockFace.UP, -3).getTypeId() == 35) || (torp.warhead.getTypeId() == 35 && torp.warhead.getRelative(BlockFace.DOWN, -1).getTypeId() == 35 && torp.warhead.getRelative(BlockFace.DOWN, -2).getTypeId() == 35 && torp.warhead.getRelative(BlockFace.DOWN, -3).getTypeId() == 35))
     				    	{
@@ -5710,7 +5830,9 @@ public class OneCannon{
     									torp.torpRotation = -1;
     								}
     								
-    								if (depthDifference < 0 && (torp.setRange - (i + 15) < 0)) {
+    								if (depthDifference <= 0) torp.rangeCounter++;
+    								
+    								if (depthDifference < 0 && (torp.setRange - torp.rangeCounter < 0)) {
     									torp.hdg = BlockFace.DOWN;
     									torp.torpRotation = 2;
     									if (depthDifference == -1) {
@@ -5721,7 +5843,7 @@ public class OneCannon{
     							//new position
     							torp.warhead = torp.warhead.getRelative(torp.hdg);
     								
-    							if (depthDifference == 0) {
+    							if (torp.torpRotation == 4) {
     								if( torp.turnProgress > -1 )
     								{
     									
@@ -5805,7 +5927,7 @@ public class OneCannon{
     											torp.warhead.getRelative(torp.hdg, -2).setType(Material.WATER);
     											torp.warhead.getRelative(torp.hdg, -3).setType(Material.WATER);
     										}
-    										p.sendMessage("Missile expired.");
+    										p.sendMessage(ChatColor.YELLOW +"Missile expired.");
     										return;
     									}
     				    				torp.warhead.setTypeIdAndData(35, (byte) 0xE, false);
@@ -5844,15 +5966,15 @@ public class OneCannon{
     									}
     									
     									if( checkCraft == null )
-    										p.sendMessage("Missile hit unknown object!");
+    										p.sendMessage(ChatColor.YELLOW + "Missile hit unknown object!");
     									else
-    										p.sendMessage("Missile hit " + checkCraft.name + "!");
+    										p.sendMessage(ChatColor.GREEN + "Missile hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
     												
     								
     								}else
     								{
     									torp.dead = true;
-    									p.sendMessage("Missile Dud (Too close).1");
+    									p.sendMessage(ChatColor.RED + "Dud Missile! Too close.");
     								}
     								
     								
@@ -5923,7 +6045,7 @@ public class OneCannon{
     										if( !leftLoading && !rightLoading && !checkOuterDoorClosedV() )
     											openMissileDoorsV(p);
     									}
-    									p.sendMessage("Dud Missile! Too close.2");
+    									p.sendMessage(ChatColor.RED + "Dud Missile! Too close.");
     									torp.dead = true;
     								}
     								
@@ -5942,7 +6064,7 @@ public class OneCannon{
     							
     				    		if( !torp.active )
     				    		{
-    				    			p.sendMessage("Dud Missile! Too close.3");
+    				    			p.sendMessage(ChatColor.RED + "Dud Missile! Too close.");
     								torp.dead = true;
     								if( firingCraft != null )
     								{
@@ -5988,9 +6110,9 @@ public class OneCannon{
     							}
     							
     							if( checkCraft == null )
-    								p.sendMessage("Missile detonated prematurely!1");
+    								p.sendMessage(ChatColor.YELLOW + "Missile detonated prematurely!");
     							else
-    								p.sendMessage("Missile hit " + checkCraft.name + "!");
+    								p.sendMessage(ChatColor.GREEN + "Missile hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
     							
     							
     							if( firingCraft != null )
@@ -6146,7 +6268,7 @@ public class OneCannon{
 		    cannonType = 0;
 		    if( ammunition == -1 )
 		    {
-		    	ammunition = 40;
+		    	ammunition = 15;
 		    	initAmmo = ammunition;
 		    }
 		    if (b.getRelative(BlockFace.NORTH, 3).getType() == Material.PUMPKIN)
@@ -6159,7 +6281,7 @@ public class OneCannon{
 		    	cannonType = 6;
 		    	if( ammunition == -1 )
 		    	{
-		    		ammunition = 20;
+		    		ammunition = 10;
 		    		initAmmo = ammunition;
 		    	}
 		    }
@@ -6171,7 +6293,7 @@ public class OneCannon{
 			cannonType = 0;
 			if( ammunition == -1 )
 			{
-				ammunition = 40;
+				ammunition = 15;
 				initAmmo = ammunition;
 	    	}
 		    if (b.getRelative(BlockFace.EAST, 3).getType() == Material.PUMPKIN)
@@ -6183,7 +6305,7 @@ public class OneCannon{
 		    	cannonType = 6;
 		    	if( ammunition == -1 )
 		    	{
-		    		ammunition = 20;
+		    		ammunition = 10;
 		    		initAmmo = ammunition;
 		    	}
 		    }
@@ -6195,7 +6317,7 @@ public class OneCannon{
 			cannonType = 0;
 			if( ammunition == -1 )
 			{
-				ammunition = 40;
+				ammunition = 15;
 				initAmmo = ammunition;
 	    	}
 		    if (b.getRelative(BlockFace.SOUTH, 3).getType() == Material.PUMPKIN)
@@ -6207,7 +6329,7 @@ public class OneCannon{
 		    {
 		    	if( ammunition == -1 )
 		    	{
-		    		ammunition = 20;
+		    		ammunition = 10;
 		    		initAmmo = ammunition;
 		    	}
 		    	cannonType = 6;
@@ -6220,7 +6342,7 @@ public class OneCannon{
 			cannonType = 0;
 			if( ammunition == -1 )
 			{
-				ammunition = 40;
+				ammunition = 10;
 				initAmmo = ammunition;
 	    	}
 		    if (b.getRelative(BlockFace.WEST, 3).getType() == Material.PUMPKIN)
@@ -6233,14 +6355,11 @@ public class OneCannon{
 		    	cannonType = 6;
 		    	if( ammunition == -1 )
 		    	{
-		    		ammunition = 20;
+		    		ammunition = 10;
 		    		initAmmo = ammunition;
 		    	}
 		    }
 		}
-		//check for cannon type 2 (fireball)
-		if( direction != null && b.getRelative(BlockFace.DOWN, 1).getType() == Material.DIAMOND_BLOCK )
-			cannonType = 2;
 		
 		
 		
@@ -6258,7 +6377,7 @@ public class OneCannon{
 		    cannonLength = 2;
 		    if( ammunition == -1 )
 		    {
-		    	ammunition = 30;
+		    	ammunition = 10;
 		    	initAmmo = ammunition;
 	    	}
 		}
@@ -6275,7 +6394,7 @@ public class OneCannon{
 		    cannonLength = 2;
 		    if( ammunition == -1 )
 		    {
-		    	ammunition = 30;
+		    	ammunition = 10;
 		    	initAmmo = ammunition;
 	    	}
 		}
@@ -6397,7 +6516,7 @@ public class OneCannon{
 			    cannonType = 5;
 			    if( ammunition == -1 )
 			    {
-			    	ammunition = 20;
+			    	ammunition = 15;
 			    	initAmmo = ammunition;
 			    }
 			}else if(b.getRelative(BlockFace.SOUTH, 1).getType() == Material.GOLD_BLOCK && b.getRelative(BlockFace.DOWN, 1).getType() == Material.LAPIS_BLOCK)
@@ -6406,7 +6525,7 @@ public class OneCannon{
 			    cannonType = 5;
 			    if( ammunition == -1 )
 			    {
-			    	ammunition = 20;
+			    	ammunition = 15;
 			    	initAmmo = ammunition;
 			    }
 			}else if(b.getRelative(BlockFace.EAST, 1).getType() == Material.GOLD_BLOCK && b.getRelative(BlockFace.DOWN, 1).getType() == Material.LAPIS_BLOCK)
@@ -6415,7 +6534,7 @@ public class OneCannon{
 			    cannonType = 5;
 			    if( ammunition == -1 )
 			    {
-			    	ammunition = 20;
+			    	ammunition = 15;
 			    	initAmmo = ammunition;
 			    }
 			}else if(b.getRelative(BlockFace.WEST, 1).getType() == Material.GOLD_BLOCK && b.getRelative(BlockFace.DOWN, 1).getType() == Material.LAPIS_BLOCK)
@@ -6424,7 +6543,7 @@ public class OneCannon{
 			    cannonType = 5;
 			    if( ammunition == -1 )
 			    {
-			    	ammunition = 20;
+			    	ammunition = 15;
 			    	initAmmo = ammunition;
 			    }
 			}
@@ -6498,168 +6617,370 @@ public class OneCannon{
 
     public byte[][] rotateRightB(byte[][] arr, int[][] arro) {
 	byte[][] result = new byte[arr.length][arr.length];
+	byte[] cardinals;
+	int blockId;
 	for (int x = 0; x < arr.length; x++) {
 	    for (int y = 0; y < arr.length; y++) {
 		result[x][y] = arr[arr.length - 1 - y][x];
-		if( arro[x][y] == 77 || arro[x][y] == 69 )
-		{
-			switch (result[x][y]) {
-			case (byte) 0x3:
-			    result[x][y] = (byte) 0x1;
-			    break;
-			case (byte) 0x4:
-			    result[x][y] = (byte) 0x2;
-			    break;
-			case (byte) 0x2:
-			    result[x][y] = (byte) 0x3;
-			    break;
-			case (byte) 0x1:
-			    result[x][y] = (byte) 0x4;
-			    break;
-			case (byte) 0x9:
-			    result[x][y] = (byte) 0x4;
-			    break;
-			case (byte) 0xA:
-			    result[x][y] = (byte) 0x3;
-			    break;
-			case (byte) 0xB:
-			    result[x][y] = (byte) 0x1;
-			    break;
-			case (byte) 0xC:
-			    result[x][y] = (byte) 0x2;
-			    break;
+		blockId = arro[x][y];
+		int dr = 270;
+		
+			//Block theBlock = craft.getWorldBlock(dataBlock.x, dataBlock.y, dataBlock.z);
+			
+			//logs
+			if( blockId == 17 && result[x][y] > 3 )
+			{
+				if( result[x][y] < 8 )
+					result[x][y] += 4;
+				else
+					result[x][y] -= 4;
 			}
-		}else if( arro[x][y] == 86 )
-		{
-			switch (result[x][y]) {
-			case (byte) 0x0:
-			    result[x][y] = (byte) 0x3;
-			    break;
-			case (byte) 0x1:
-			    result[x][y] = (byte) 0x0;
-			    break;
-			case (byte) 0x2:
-			    result[x][y] = (byte) 0x1;
-			    break;
-			case (byte) 0x3:
-			    result[x][y] = (byte) 0x2;
-			    break;
+			
+			//quartz block
+			if( blockId == 155 && result[x][y] > 2 )
+			{
+				if( result[x][y] == 3)
+					result[x][y] = 4;
+				else
+					result[x][y] = 3;
 			}
-		}else
-		{
-			switch (result[x][y]) {
-			case (byte) 0x3:
-			    result[x][y] = (byte) 0x1;
-			    break;
-			case (byte) 0x4:
-			    result[x][y] = (byte) 0x2;
-			    break;
-			case (byte) 0x2:
-			    result[x][y] = (byte) 0x3;
-			    break;
-			case (byte) 0x1:
-			    result[x][y] = (byte) 0x4;
-			    break;
-			case (byte) 0x9:
-			    result[x][y] = (byte) 0x1;
-			    break;
-			case (byte) 0xA:
-			    result[x][y] = (byte) 0x2;
-			    break;
-			case (byte) 0xB:
-			    result[x][y] = (byte) 0x3;
-			    break;
-			case (byte) 0xC:
-			    result[x][y] = (byte) 0x4;
-			    break;
+			
+			//hay bales
+			if( blockId == 170 && result[x][y] > 3 )
+			{
+				if( result[x][y] < 8 )
+					result[x][y] += 4;
+				else
+					result[x][y] -= 4;
+			}
+			
+			//torches, skip 'em if they're centered on the tile on the ground
+			if(blockId == 50 || blockId == 75 || blockId == 76) {
+				if(result[x][y] == 5)
+					continue;
+			}
+			
+			if( blockId == 33 || blockId == 29 || blockId == 34 )
+			{
+				if( result[x][y] == 0 || result[x][y] == 1 || result[x][y] == 8 || result[x][y] == 9 )
+				{
+					if( result[x][y] == 0 )
+						result[x][y] = 1;
+					if( result[x][y] == 8 )
+						result[x][y] = 9;
+					continue;
+				}
+			}
+
+			if(BlocksInfo.getCardinals(blockId) != null)
+				cardinals = Arrays.copyOf(BlocksInfo.getCardinals(blockId), 4);
+			else
+				cardinals = null;
+
+			
+			////stairs
+			if( blockId == 53 || blockId == 67 || blockId == 108 || blockId == 109 || blockId == 114 || blockId == 128 || blockId == 134 || blockId == 135 || blockId == 136 || blockId == 156 || blockId == 180 ) 
+			{	
+				if(result[x][y] > 3) 
+					{	//upside down
+						for(int c = 0; c < 4; c++) {
+							cardinals[c] += 4;
+					}
+				}
+			}
+
+			if(blockId == 26) {	//bed
+				if(result[x][y] >= 8) {
+					for(int c = 0; c < 4; c++)
+						cardinals[c] += 8;
+				}
+			}
+
+			if(blockId == 64 || blockId == 71 || blockId == 193 || blockId == 194 || blockId == 195 ||	blockId == 196 || blockId == 197//wooden or steel door
+					|| blockId == 93 || blockId == 94) {	//repeater
+
+				if(result[x][y] >= 12) {	//if the door is an open top
+					for(int c = 0; c < 4; c++)
+						cardinals[c] += 12;
+				} else if (result[x][y] >= 8) {		//if the door is a top
+					for(int c = 0; c < 4; c++)
+						cardinals[c] += 8;
+				} else if (result[x][y] >= 4) {		//not a top, but open
+					for(int c = 0; c < 4; c++)
+						cardinals[c] += 4;
+				}
+			}
+
+			if (blockId == 66 ) { // rails
+				if(result[x][y] == 0) {
+					result[x][y] = 1;
+					continue;
+				}
+				if(result[x][y] == 1) {
+					result[x][y] = 0;
+					continue;
+				}
+			}
+
+			if(blockId == 69) {	//lever
+
+				if(result[x][y] == 5 || result[x][y] == 6 ||	//if it's on the floor
+						result[x][y] == 13 || result[x][y] == 14) {
+					cardinals = new byte[]{6, 5, 14, 13};
+				}
+				else if(result[x][y] > 4) {	//switched on
+					for(int c = 0; c < 4; c++) {
+						cardinals[c] += 8;
+					}
+				}
+			}
+			
+			if(blockId == 77 || blockId == 143) {	//button
+
+				if(result[x][y] > 4) 
+					{	//switched on
+						for(int c = 0; c < 4; c++) {
+							cardinals[c] += 8;
+					}
+				}
+			}
+			
+			if(blockId == 96||blockId == 167) {	//hatch
+
+				if(result[x][y] > 4) 
+					{	//switched on
+						for(int c = 0; c < 4; c++) {
+							cardinals[c] += 4;
+					}
+				}
+			}
+
+			if(blockId == 93 || blockId == 94) {	//repeater
+				if(result[x][y] > 11) {
+					for(int c = 0; c < 4; c++)
+						cardinals[c] += 12;
+				}
+				else if(result[x][y] > 7) {
+					for(int c = 0; c < 4; c++)
+						cardinals[c] += 8;
+				}
+				else if(result[x][y] > 3) {
+					for(int c = 0; c < 4; c++)
+						cardinals[c] += 4;
+				}
+			}
+
+			if(cardinals != null) {
+				NavyCraft.instance.DebugMessage(Material.getMaterial(blockId) +
+						" Cardinals are "
+						+ cardinals[0] + ", "
+						+ cardinals[1] + ", "
+						+ cardinals[2] + ", "
+						+ cardinals[3], 2);
+
+				int i = 0;
+				for(i = 0; i < 3; i++)
+					if(result[x][y] == cardinals[i])
+						break;
+
+				NavyCraft.instance.DebugMessage("i starts as " + i + " which is " + cardinals[i], 2);
+
+				i += (dr / 90);
+
+				if(i > 3)
+					i = i - 4;
+
+				NavyCraft.instance.DebugMessage("i ends as " + i + ", which is " + cardinals[i], 2);
+
+				result[x][y] = cardinals[i];
 			}
 		}
-	    }
 	}
 	return result;
     }
 
     public byte[][] rotateLeftB(byte[][] arr, int[][] arro) {
-	byte[][] result = new byte[arr.length][arr.length];
-	for (int x = 0; x < arr.length; x++) {
-	    for (int y = 0; y < arr.length; y++) {
-		result[x][y] = arr[y][arr.length - 1 - x];
-		if( arro[x][y] == 77 || arro[x][y] == 69 )
-		{
-			switch (result[x][y]) {
-			case (byte) 0x3:
-			    result[x][y] = (byte) 0x2;
-			    break;
-			case (byte) 0x4:
-			    result[x][y] = (byte) 0x1;
-			    break;
-			case (byte) 0x2:
-			    result[x][y] = (byte) 0x4;
-			    break;
-			case (byte) 0x1:
-			    result[x][y] = (byte) 0x3;
-			    break;
-			case (byte) 0x9:
-			    result[x][y] = (byte) 0x3;
-			    break;
-			case (byte) 0xA:
-			    result[x][y] = (byte) 0x4;
-			    break;
-			case (byte) 0xB:
-			    result[x][y] = (byte) 0x2;
-			    break;
-			case (byte) 0xC:
-			    result[x][y] = (byte) 0x1;
-			    break;
-			}
-		}else if( arro[x][y] == 86 )
-		{
-			switch (result[x][y]) {
-			case (byte) 0x0:
-			    result[x][y] = (byte) 0x1;
-			    break;
-			case (byte) 0x1:
-			    result[x][y] = (byte) 0x2;
-			    break;
-			case (byte) 0x2:
-			    result[x][y] = (byte) 0x3;
-			    break;
-			case (byte) 0x3:
-			    result[x][y] = (byte) 0x0;
-			    break;
-			}
-		}else
-		{
-			switch (result[x][y]) {
-			case (byte) 0x1:
-			    result[x][y] = (byte) 0x3;
-			    break;
-			case (byte) 0x2:
-			    result[x][y] = (byte) 0x4;
-			    break;
-			case (byte) 0x3:
-			    result[x][y] = (byte) 0x2;
-			    break;
-			case (byte) 0x4:
-			    result[x][y] = (byte) 0x1;
-			    break;
-			case (byte) 0x9:
-			    result[x][y] = (byte) 0x3;
-			    break;
-			case (byte) 0xA:
-			    result[x][y] = (byte) 0x4;
-			    break;
-			case (byte) 0xB:
-			    result[x][y] = (byte) 0x2;
-			    break;
-			case (byte) 0xC:
-			    result[x][y] = (byte) 0x1;
-			    break;
-			}
-		}
-	    }
-	}
-	return result;
+    	byte[][] result = new byte[arr.length][arr.length];
+    	byte[] cardinals;
+    	int blockId;
+    	for (int x = 0; x < arr.length; x++) {
+    	    for (int y = 0; y < arr.length; y++) {
+    		result[x][y] = arr[y][arr.length - 1 - x];
+    		blockId = arro[x][y];
+    		int dr = 90;
+    		
+    			//Block theBlock = craft.getWorldBlock(dataBlock.x, dataBlock.y, dataBlock.z);
+    			
+    			//logs
+    			if( blockId == 17 && result[x][y] > 3 )
+    			{
+    				if( result[x][y] < 8 )
+    					result[x][y] += 4;
+    				else
+    					result[x][y] -= 4;
+    			}
+    			
+    			//quartz block
+    			if( blockId == 155 && result[x][y] > 2 )
+    			{
+    				if( result[x][y] == 3)
+    					result[x][y] = 4;
+    				else
+    					result[x][y] = 3;
+    			}
+    			
+    			//hay bales
+    			if( blockId == 170 && result[x][y] > 3 )
+    			{
+    				if( result[x][y] < 8 )
+    					result[x][y] += 4;
+    				else
+    					result[x][y] -= 4;
+    			}
+    			
+    			//torches, skip 'em if they're centered on the tile on the ground
+    			if(blockId == 50 || blockId == 75 || blockId == 76) {
+    				if(result[x][y] == 5)
+    					continue;
+    			}
+    			
+    			if( blockId == 33 || blockId == 29 || blockId == 34 )
+    			{
+    				if( result[x][y] == 0 || result[x][y] == 1 || result[x][y] == 8 || result[x][y] == 9 )
+    				{
+    					if( result[x][y] == 0 )
+    						result[x][y] = 1;
+    					if( result[x][y] == 8 )
+    						result[x][y] = 9;
+    					continue;
+    				}
+    			}
+
+    			if(BlocksInfo.getCardinals(blockId) != null)
+    				cardinals = Arrays.copyOf(BlocksInfo.getCardinals(blockId), 4);
+    			else
+    				cardinals = null;
+
+    			
+    			////stairs
+    			if( blockId == 53 || blockId == 67 || blockId == 108 || blockId == 109 || blockId == 114 || blockId == 128 || blockId == 134 || blockId == 135 || blockId == 136 || blockId == 156 || blockId == 180 ) 
+    			{	
+    				if(result[x][y] > 3) 
+    					{	//upside down
+    						for(int c = 0; c < 4; c++) {
+    							cardinals[c] += 4;
+    					}
+    				}
+    			}
+
+    			if(blockId == 26) {	//bed
+    				if(result[x][y] >= 8) {
+    					for(int c = 0; c < 4; c++)
+    						cardinals[c] += 8;
+    				}
+    			}
+
+    			if(blockId == 64 || blockId == 71 || blockId == 193 || blockId == 194 || blockId == 195 ||	blockId == 196 || blockId == 197//wooden or steel door
+    					|| blockId == 93 || blockId == 94) {	//repeater
+
+    				if(result[x][y] >= 12) {	//if the door is an open top
+    					for(int c = 0; c < 4; c++)
+    						cardinals[c] += 12;
+    				} else if (result[x][y] >= 8) {		//if the door is a top
+    					for(int c = 0; c < 4; c++)
+    						cardinals[c] += 8;
+    				} else if (result[x][y] >= 4) {		//not a top, but open
+    					for(int c = 0; c < 4; c++)
+    						cardinals[c] += 4;
+    				}
+    			}
+
+    			if (blockId == 66 ) { // rails
+    				if(result[x][y] == 0) {
+    					result[x][y] = 1;
+    					continue;
+    				}
+    				if(result[x][y] == 1) {
+    					result[x][y] = 0;
+    					continue;
+    				}
+    			}
+
+    			if(blockId == 69) {	//lever
+
+    				if(result[x][y] == 5 || result[x][y] == 6 ||	//if it's on the floor
+    						result[x][y] == 13 || result[x][y] == 14) {
+    					cardinals = new byte[]{6, 5, 14, 13};
+    				}
+    				else if(result[x][y] > 4) {	//switched on
+    					for(int c = 0; c < 4; c++) {
+    						cardinals[c] += 8;
+    					}
+    				}
+    			}
+    			
+    			if(blockId == 77 || blockId == 143) {	//button
+
+    				if(result[x][y] > 4) 
+    					{	//switched on
+    						for(int c = 0; c < 4; c++) {
+    							cardinals[c] += 8;
+    					}
+    				}
+    			}
+    			
+    			if(blockId == 96||blockId == 167) {	//hatch
+
+    				if(result[x][y] > 4) 
+    					{	//switched on
+    						for(int c = 0; c < 4; c++) {
+    							cardinals[c] += 4;
+    					}
+    				}
+    			}
+
+    			if(blockId == 93 || blockId == 94) {	//repeater
+    				if(result[x][y] > 11) {
+    					for(int c = 0; c < 4; c++)
+    						cardinals[c] += 12;
+    				}
+    				else if(result[x][y] > 7) {
+    					for(int c = 0; c < 4; c++)
+    						cardinals[c] += 8;
+    				}
+    				else if(result[x][y] > 3) {
+    					for(int c = 0; c < 4; c++)
+    						cardinals[c] += 4;
+    				}
+    			}
+
+    			if(cardinals != null) {
+    				NavyCraft.instance.DebugMessage(Material.getMaterial(blockId) +
+    						" Cardinals are "
+    						+ cardinals[0] + ", "
+    						+ cardinals[1] + ", "
+    						+ cardinals[2] + ", "
+    						+ cardinals[3], 2);
+
+    				int i = 0;
+    				for(i = 0; i < 3; i++)
+    					if(result[x][y] == cardinals[i])
+    						break;
+
+    				NavyCraft.instance.DebugMessage("i starts as " + i + " which is " + cardinals[i], 2);
+
+    				i += (dr / 90);
+
+    				if(i > 3)
+    					i = i - 4;
+
+    				NavyCraft.instance.DebugMessage("i ends as " + i + ", which is " + cardinals[i], 2);
+
+    				result[x][y] = cardinals[i];
+    			}
+    		}
+    	}
+    	return result;
     }
 
     // 0x1: Facing south
@@ -6674,14 +6995,18 @@ public class OneCannon{
     		turnCannonLayer(right, p, 1);
     		turnCannonLayer(right, p, 2);
     	}
+    	if ( cannonType == 3 || cannonType == 7 || cannonType == 8 || cannonType == 11 || cannonType == 12 ) {
+    		turnTorpedoLayer(right, p, 1);
+        	turnTorpedoLayer(right, p, 0);
+    	} else {
     	turnCannonLayer(right, p, 0);
+    	}
     }
-    
     
     
 	public void turnCannonLayer(Boolean right, Player p, int offsetY) {
 		// Get data
-		if (PermissionInterface.CheckEnabledWorld(p.getLocation())) {
+		if (Utils.CheckEnabledWorld(p.getLocation())) {
 		int[][] arr = new int[7][7];
 		byte[][] arrb = new byte[7][7];
 		for (int x = 0; x < 7; x++) {
@@ -6693,7 +7018,7 @@ public class OneCannon{
 	
 		int[][] arro = new int[7][7];
 		byte[][] arrbo = new byte[7][7];
-		// Rotate the shit
+		// Rotate
 		if (right) {
 		    arro = rotateLeft(arr);
 		    arrbo = rotateLeftB(arrb,arro);
@@ -6702,13 +7027,12 @@ public class OneCannon{
 		    arrbo = rotateRightB(arrb,arro);
 		}
 	
-		// Cleanup Cannon (button und lever first)
+		// Cleanup Cannon (support blocks first)
 		for (int x = 0; x < 7; x++) {
 		    for (int z = 0; z < 7; z++) {
-			if (loc.getBlock().getRelative(x - 3, 0, z - 3).getRelative(BlockFace.UP, offsetY).getTypeId() == 69
-				|| loc.getBlock().getRelative(x - 3, 0, z - 3).getRelative(BlockFace.UP, offsetY).getTypeId() == 77) {
+			if (BlocksInfo.needsSupport(loc.getBlock().getRelative(x - 3, 0, z - 3).getRelative(BlockFace.UP, offsetY).getTypeId())) {
 			    loc.getBlock().getRelative(x - 3, 0, z - 3).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(0, (byte) 0, false);
-			}
+				}
 		    }
 		}
 	
@@ -6727,7 +7051,8 @@ public class OneCannon{
 		    for (int z = 0; z < 7; z++) {
 			if ((arro[x][z] != 69) && (arro[x][z] != 77) && (arro[x][z] != 23)) 
 			{
-			    loc.getBlock().getRelative(x - 3, 0, z - 3).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(arro[x][z], arrbo[x][z], false);
+				if(arro[x][z] != -1 && !BlocksInfo.needsSupport(arro[x][z]) && arro[x][z] != 52 && arro[x][z] != 34 && arro[x][z] != 36 )
+					loc.getBlock().getRelative(x - 3, 0, z - 3).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(arro[x][z], arrbo[x][z], false);
 			    if( testCraft != null )
 			    {
 			    	testCraft.addBlock(loc.getBlock().getRelative(x - 3, 0, z - 3).getRelative(BlockFace.UP, offsetY), true);
@@ -6743,8 +7068,7 @@ public class OneCannon{
 		// Place rest
 		for (int x = 0; x < 7; x++) {
 		    for (int z = 0; z < 7; z++) {
-			if ((arro[x][z] == 69) || (arro[x][z] == 77)) 
-			{
+				if (BlocksInfo.needsSupport(arro[x][z]) && arro[x][z] != 63 && arro[x][z] != 68 && arro[x][z] != 65) {
 			    loc.getBlock().getRelative(x - 3, 0, z - 3).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(arro[x][z], arrbo[x][z], false);
 			    if( testCraft != null )
 			    {
@@ -6829,11 +7153,160 @@ public class OneCannon{
     }
 }
     
+	public void turnTorpedoLayer(Boolean right, Player p, int offsetY) {
+		// Get data
+		if (Utils.CheckEnabledWorld(p.getLocation())) {
+		int[][] arr = new int[9][9];
+		byte[][] arrb = new byte[9][9];
+		for (int x = 0; x < 9; x++) {
+		    for (int z = 0; z < 9; z++) {
+			arr[x][z] = loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).getTypeId();
+			arrb[x][z] = loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).getData();
+		    }
+		}
+	
+		int[][] arro = new int[9][9];
+		byte[][] arrbo = new byte[9][9];
+		// Rotate
+		if (right) {
+		    arro = rotateLeft(arr);
+		    arrbo = rotateLeftB(arrb,arro);
+		} else {
+		    arro = rotateRight(arr);
+		    arrbo = rotateRightB(arrb,arro);
+		}
+	
+		// Cleanup Cannon (support blocks first)
+		for (int x = 0; x < 9; x++) {
+		    for (int z = 0; z < 9; z++) {
+			if (BlocksInfo.needsSupport(loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).getTypeId())) {
+			    loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(0, (byte) 0, false);
+				}
+		    }
+		}
+	
+		// Cleanup Rest
+		for (int x = 0; x < 9; x++) {
+		    for (int z = 0; z < 9; z++) {
+		    	if( !(x-4==0 && z-4==0 && offsetY==0) )
+		    		loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(0, (byte) 0, false);
+		    }
+		}
+		
+		
+		Craft testCraft = Craft.getCraft(loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
+		// Place cannon
+		for (int x = 0; x < 9; x++) {
+		    for (int z = 0; z < 9; z++) {
+			if (!BlocksInfo.needsSupport(arro[x][z])) 
+			{
+				if(arro[x][z] != -1 && arro[x][z] != 52 && arro[x][z] != 34 && arro[x][z] != 36 )
+					loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(arro[x][z], arrbo[x][z], false);
+			    if( testCraft != null )
+			    {
+			    	testCraft.addBlock(loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY), true);
+			    }
+				
+			}else if( (arro[x][z] == 23) )
+			{
+				loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).setData(arrbo[x][z]);
+		    }
+		    }
+		}
+	
+		// Place rest
+		for (int x = 0; x < 9; x++) {
+		    for (int z = 0; z < 9; z++) {
+				if (BlocksInfo.needsSupport(arro[x][z]) && arro[x][z] != 63 && arro[x][z] != 68 && arro[x][z] != 65) {
+			    loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(arro[x][z], arrbo[x][z], false);
+			    if( testCraft != null )
+			    {
+			    	testCraft.addBlock(loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY), true);
+			    }
+			}
+		    }
+		}
+	
+		if( testCraft != null )
+		{
+			//CraftMover cm = new CraftMover(testCraft, plugin);
+			//cm.structureUpdate(null);
+		}
+		// 0x2: Facing east
+		// 0x3: Facing west
+		// 0x4: Facing north
+		// 0x5: Facing south
+		
+		if( offsetY == 0 )
+		{
+			if (right) {
+		    	if (direction == BlockFace.NORTH) 
+		    	{
+		    	    direction = BlockFace.EAST;
+		    	    loc.getBlock().setData((byte) 0x3);
+		    	}else if (direction == BlockFace.EAST) 
+		    	{
+		    	    direction = BlockFace.SOUTH;
+		    	    loc.getBlock().setData((byte) 0x4);	    	 
+		    	}else if (direction == BlockFace.SOUTH) 
+		    	{
+		    	    direction = BlockFace.WEST;
+		    	    loc.getBlock().setData((byte) 0x2);
+		    	}else// if (direction == BlockFace.WEST) 
+		    	{
+		    	    direction = BlockFace.NORTH;
+		    	    loc.getBlock().setData((byte) 0x5);
+		    	}
+			} else
+			{
+			    if (direction == BlockFace.EAST)
+			    {
+			    	    direction = BlockFace.NORTH;
+			    	    loc.getBlock().setData((byte) 0x5);
+			    }else if (direction == BlockFace.SOUTH) 
+			    {
+			    	    direction = BlockFace.EAST;
+			    	    loc.getBlock().setData((byte) 0x3);
+			    }else if (direction == BlockFace.WEST) 
+			    {
+			    	    direction = BlockFace.SOUTH;
+			    	    loc.getBlock().setData((byte) 0x4);
+			    }else// if (direction == BlockFace.NORTH) 
+			    {
+			    	    direction = BlockFace.WEST;
+			    	    loc.getBlock().setData((byte) 0x2);
+			    }
+			}
+			
+			Location teleLoc = new Location(p.getWorld(), loc.getBlock().getRelative(direction, -1).getX() + 0.5, (double)loc.getBlock().getRelative(direction, -1).getY(), loc.getBlock().getRelative(direction, -1).getZ() + 0.5);
+			//p.sendMessage("player yaw=" + p.getLocation().getYaw() );
+			if( right )
+				teleLoc.setYaw(p.getLocation().getYaw() + 90);
+			else
+				teleLoc.setYaw(p.getLocation().getYaw() - 90);
+			teleLoc.setPitch(p.getLocation().getPitch());
+			p.teleport(teleLoc);
+			
+			
+			if( cannonTurnCounter < 4 && ((loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,1).getTypeId() == 5)
+					|| ( cannonType == 6 && loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,2).getTypeId() == 5)))
+			{
+				cannonTurnCounter++;
+				turnCannon(right, p);
+			}else
+			{
+				cannonTurnCounter=0;
+			}
+			
+		}
+    }
+}
+	
     public boolean checkProtectedRegion(Player player, Location loc)
     {
     	if( wgp != null )
     	{
-    		if( !PermissionInterface.CheckEnabledWorld(loc) )
+    		if( !Utils.CheckEnabledWorld(loc) )
     		{
     			return true;
     		}
@@ -6865,7 +7338,7 @@ public class OneCannon{
     {
     	if( checkProtectedRegion(p, p.getLocation()) )
     	{
-    		p.sendMessage("You are in a protected region");
+    		p.sendMessage(ChatColor.RED + "You are in a protected region");
     		return;
     	}
     	
@@ -6881,14 +7354,14 @@ public class OneCannon{
 					loc.getBlock().getRelative(direction,4).setTypeIdAndData(35, (byte) 0x8, false);
 					loc.getBlock().getRelative(direction,4).getRelative(BlockFace.DOWN).setTypeIdAndData(35, (byte) 0x8, false);
 					fireDC(p, loc.getBlock().getRelative(direction,4), depth, loc.getBlockY(), 0, 2);
-					p.sendMessage("Depth Charge Away!");
+					p.sendMessage(ChatColor.GREEN + "Depth Charge Away!");
 				}else if( cannonType == 9 || cannonType == 10 )
 				{
 					
 					loc.getBlock().getRelative(BlockFace.DOWN,5).setTypeIdAndData(35, (byte) 0x8, false);
 					loc.getBlock().getRelative(BlockFace.DOWN,5).getRelative(BlockFace.DOWN).setTypeIdAndData(35, (byte) 0x7, false);
 					fireDC(p, loc.getBlock().getRelative(BlockFace.DOWN,5), 0, loc.getBlock().getRelative(BlockFace.DOWN,5).getY(), 0, 2);
-					p.sendMessage("Bomb Away!");
+					p.sendMessage(ChatColor.GREEN + "Bomb Away!");
 				}else
 				{
 					
@@ -6913,18 +7386,18 @@ public class OneCannon{
 						loc.getBlock().getRelative(direction,6).getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH,10).setTypeIdAndData(35, (byte) 0x8, false);
 						fireDC(p, loc.getBlock().getRelative(direction,6).getRelative(BlockFace.SOUTH,10), depth, loc.getBlockY(), 1000, -1);
 					}
-					p.sendMessage("Depth Charges Away!");
+					p.sendMessage(ChatColor.GREEN + "Depth Charges Away!");
 				}
 				
 				charged = 0;
 			}else
 			{
 				if( cannonType == 4 )
-					p.sendMessage("Load Depth Charge Dropper first.");
+					p.sendMessage(ChatColor.YELLOW + "Load Depth Charge Dropper first.");
 				else if( cannonType == 5 )
-					p.sendMessage("Load Depth Charge Launcher first.");
+					p.sendMessage(ChatColor.YELLOW + "Load Depth Charge Launcher first.");
 				else
-					p.sendMessage("Load Bomb Dropper first.");
+					p.sendMessage(ChatColor.YELLOW + "Load Bomb Dropper first.");
 			}
 		}else
 		{
@@ -6932,11 +7405,11 @@ public class OneCannon{
 			if( depth > 40 )
 				depth = 10;
 			if( cannonType == 4 )
-				p.sendMessage("Depth Charge Dropper set to " + depth + " meters.");
+				p.sendMessage(ChatColor.GREEN + "Depth Charge Dropper set to " + ChatColor.YELLOW + depth + ChatColor.GREEN + " meters.");
 			else if( cannonType == 5 )
-				p.sendMessage("Depth Charge Launcher set to " + depth + " meters.");
+				p.sendMessage(ChatColor.GREEN + "Depth Charge Launcher set to " + ChatColor.YELLOW + depth + ChatColor.GREEN + " meters.");
 			else if( cannonType == 9 || cannonType == 10)
-				p.sendMessage("Left click to drop bomb.");
+				p.sendMessage(ChatColor.GREEN + "Left click to drop bomb.");
 		}
     }
     
@@ -7135,7 +7608,7 @@ public class OneCannon{
 					}
 					
 					if( checkCraft != null )
-						p.sendMessage("Depth Charge hit " + checkCraft.name + "!");
+						p.sendMessage(ChatColor.GREEN + "Depth Charge hit " + ChatColor.YELLOW + checkCraft.name + ChatColor.GREEN + "!");
 					
 							
 
@@ -7261,4 +7734,36 @@ public class OneCannon{
     	
 	);
     }
+	public void setBlock(int id, Block block, Craft craft) {
+		// if(y < 0 || y > 127 || id < 0 || id > 255){
+		if ((id < 0) || (id > 255)) {
+			// + " x=" + x + " y=" + y + " z=" + z);
+			System.out.println("Invalid block type ID. Begin panic.");
+			return;
+		}
+
+
+
+		if (block.getTypeId() == id) {
+			NavyCraft.instance.DebugMessage("Tried to change a " + id + " to itself.", 5);
+			return;
+		}
+
+		NavyCraft.instance.DebugMessage("Attempting to set block at " + block.getX() + ", " + block.getY() + ", " + block.getZ() + " to " + id, 5);
+
+
+		try {
+			if (block.setTypeId(id) == false) {
+				if (craft.world.getBlockAt(block.getLocation()).setTypeId(id) == false) {
+					System.out.println("Could not set block of type " + block.getTypeId() + " to type " + id + ". I tried to fix it, but I couldn't.");
+				} else {
+					System.out.println("I hope to whatever God you believe in that this fix worked.");
+				}
+			}
+		} catch (ClassCastException cce) {
+			System.out.println("Routine cast exception.");
+		}
+
+
+	}
 }

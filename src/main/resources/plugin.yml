@@ -1,9 +1,10 @@
-name: ${name}
-main: ${groupId}.${artifactId}.${name}
-version: ${version}
-authors: [Maximuspayne, keough99, Pocketkid2]
-depend: [WorldGuard, WorldEdit, Vault]
-
+name: NavyCraft
+main: com.maximuspayne.navycraft.NavyCraft
+version: ${project.version}
+authors: [Maximuspayne, Solmex, Keough99, PocketKid2, Premejo, SycoPrime, Yogoda]
+depend: [WorldGuard,WorldEdit,Essentials,PermissionsEx]
+website: https://dabblecraft.com
+description: NavyCraft - Reworked version of the Old NavyCraft plugin that was abandoned.
 commands:
   navycraft:
     aliases: [nc]
@@ -25,3 +26,4 @@ commands:
     description: Displays volume status message.
   volume help:
     description: Shows help for volume.
+

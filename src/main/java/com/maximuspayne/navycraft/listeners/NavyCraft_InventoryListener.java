@@ -49,7 +49,7 @@ public class NavyCraft_InventoryListener implements Listener {
     		if( event.getWhoClicked().getType() == EntityType.PLAYER )
     		{
     			Player p = (Player)event.getWhoClicked();
-    			if (p.isOp() && PermissionInterface.CheckPerm(p, "navycraft.admin")) {
+    			if (p.isOp() && PermissionInterface.CheckPerm(p, "navycraft.craftitems")) {
     			event.setCancelled(false);
     			return;
     			} else {
@@ -60,5 +60,5 @@ public class NavyCraft_InventoryListener implements Listener {
  
     }
 }
-    }
+}
 

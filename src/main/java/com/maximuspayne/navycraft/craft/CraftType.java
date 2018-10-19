@@ -2,7 +2,10 @@ package com.maximuspayne.navycraft.craft;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.maximuspayne.navycraft.NavyCraft;
@@ -15,6 +18,10 @@ import com.maximuspayne.navycraft.PermissionInterface;
  * or use part of the code for your own plugins.
  */
 public class CraftType {
+	
+	public static FileConfiguration CraftConfig;
+	public static File CraftFile;
+	
 	
 	public String name = "";
 	public String driveCommand = "drive";
@@ -103,152 +110,6 @@ public class CraftType {
 		else
 			return false;
 	}
-
-	private static void loadDefaultCraftTypes() {
-		// if the default craft types are not loaded (first execution), then
-		// load them
-		if (CraftType.getCraftType("boat") == null)
-			craftTypes.add(CraftType.getDefaultCraftType("boat"));
-		if (CraftType.getCraftType("ship") == null)
-			craftTypes.add(CraftType.getDefaultCraftType("ship"));
-		if (CraftType.getCraftType("freeship") == null)
-			craftTypes.add(CraftType.getDefaultCraftType("freeship"));
-		if (CraftType.getCraftType("halfship") == null)
-			craftTypes.add(CraftType.getDefaultCraftType("halfship"));
-		if (CraftType.getCraftType("aircraft") == null)
-			craftTypes.add(CraftType.getDefaultCraftType("aircraft"));
-		if (CraftType.getCraftType("airship") == null)
-			craftTypes.add(CraftType.getDefaultCraftType("airship"));
-		if (CraftType.getCraftType("submarine") == null)
-			craftTypes.add(CraftType.getDefaultCraftType("submarine"));
-		if (CraftType.getCraftType("tank") == null)
-			craftTypes.add(CraftType.getDefaultCraftType("tank"));
-	}
-
-	private static CraftType getDefaultCraftType(String name) {
-
-		CraftType craftType = new CraftType(name);
-		
-		if (name.equalsIgnoreCase("ship")) {
-			setAttribute(
-					craftType,
-					"structureBlocks",
-					"4,5,14,15,16,17,19,20,21,22,23,25,26,27,28,30,35,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,"
-					+ "57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,79,80,81,82,84,85,86,87,88,89,91,"
-					+ "92,93,94,95,96,98,101,102,106,107,108,109,112,113,114,118,121,123,124,125,126,129,131,132,"
-					+ "133,134,135,136,139,143,144,147,148,149,150,151,152,153,154,155,156,157,158,159,160,162,163,"
-					+ "164,165,166,167,168,169,170,172,173,174,183,184,185,186,187,188,189,190,191,192,0");
-			
-			craftType.driveCommand = "sail";
-			craftType.canNavigate = true;
-			craftType.minBlocks = 50;
-			craftType.maxBlocks = 18000;
-			craftType.maxSpeed = 6;
-			craftType.doesCruise = true;
-			craftType.maxEngineSpeed = 8;
-			craftType.maxForwardGear = 2;
-			
-		} else if (name.equalsIgnoreCase("freeship")) {
-			setAttribute(
-					craftType,
-					"structureBlocks",
-					"4,5,14,15,16,17,19,20,21,22,23,25,26,27,28,30,35,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,"
-					+ "57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,79,80,81,82,84,85,86,87,88,89,91,"
-					+ "92,93,94,95,96,98,101,102,106,107,108,109,112,113,114,118,121,123,124,125,126,129,131,132,"
-					+ "133,134,135,136,139,143,144,147,148,149,150,151,152,153,154,155,156,157,158,159,160,162,163,"
-					+ "164,165,166,167,168,169,170,172,173,174,183,184,185,186,187,188,189,190,191,192,0");
-			
-			craftType.driveCommand = "sail";
-			craftType.canNavigate = true;
-			craftType.minBlocks = 50;
-			craftType.maxBlocks = 3000;
-			craftType.maxSpeed = 6;
-			craftType.doesCruise = true;
-			craftType.maxEngineSpeed = 8;
-			craftType.maxForwardGear = 3;
-			craftType.discount = 100;
-			craftType.adminBuild = true;
-			
-		} else if (name.equalsIgnoreCase("aircraft")) {
-			setAttribute(
-					craftType,
-					"structureBlocks",
-					"4,5,14,15,16,17,20,21,22,23,25,26,27,28,30,35,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,"
-					+ "57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,79,80,81,82,84,85,86,87,88,89,91,"
-					+ "92,93,94,95,96,98,101,102,106,107,108,109,112,113,114,118,121,123,124,125,126,129,131,132,"
-					+ "133,134,135,136,139,143,144,147,148,149,150,151,152,153,154,155,156,157,158,160,162,163,"
-					+ "164,165,166,167,168,169,170,172,173,174,183,184,185,186,187,188,189,190,191,192,0");
-			craftType.driveCommand = "pilot";
-			craftType.canFly = true;
-			craftType.minBlocks = 20;
-			craftType.maxBlocks = 18000;
-			craftType.maxSpeed = 20;
-			craftType.doesCruise = true;
-			craftType.maxEngineSpeed = 8;
-			craftType.maxForwardGear = 3;
-			
-		} else if (name.equalsIgnoreCase("helicopter")) {
-			setAttribute(
-					craftType,
-					"structureBlocks",
-					"4,5,14,15,16,17,20,21,22,23,25,26,27,28,30,35,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,"
-					+ "57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,79,80,81,82,84,85,86,87,88,89,91,"
-					+ "92,93,94,95,96,98,101,102,106,107,108,109,112,113,114,118,121,123,124,125,126,129,131,132,"
-					+ "133,134,135,136,139,143,144,147,148,149,150,151,152,153,154,155,156,157,158,160,162,163,"
-					+ "164,165,166,167,168,169,170,172,173,174,183,184,185,186,187,188,189,190,191,192,0");
-			craftType.driveCommand = "pilot";
-			craftType.canFly = true;
-			craftType.minBlocks = 9;
-			craftType.maxBlocks = 18000;
-			craftType.maxSpeed = 5;
-			craftType.doesCruise = false;
-			craftType.maxForwardGear = 3;
-			
-		} else if (name.equalsIgnoreCase("submarine")) {
-			setAttribute(
-					craftType,
-					"structureBlocks",
-					"4,5,14,15,16,17,19,20,21,22,23,25,26,27,28,30,35,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,"
-					+ "57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,79,80,81,82,84,85,86,87,88,89,91,"
-					+ "92,93,94,95,96,98,101,102,106,107,108,109,112,113,114,118,121,123,124,125,126,129,131,132,"
-					+ "133,134,135,136,139,143,144,147,148,149,150,151,152,153,154,155,156,157,158,159,160,162,163,"
-					+ "164,165,166,167,168,169,170,172,173,174,183,184,185,186,187,188,189,190,191,192,0");
-			
-			craftType.driveCommand = "dive";
-			craftType.canDive = true;
-			craftType.minBlocks = 20;
-			craftType.maxBlocks = 18000;
-			craftType.maxSpeed = 3;
-			craftType.doesCruise = true;
-			craftType.maxEngineSpeed = 6;
-			craftType.maxSubmergedSpeed = 3;
-			craftType.maxForwardGear = 2;
-		} else if (name.equalsIgnoreCase("tank")) {
-		setAttribute(
-				craftType,
-				"structureBlocks",
-				"4,5,14,15,16,17,20,21,22,23,25,26,27,28,30,35,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,"
-				+ "57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,79,80,81,82,84,85,86,87,88,89,91,"
-				+ "92,93,94,95,96,98,101,102,106,107,108,109,112,113,114,118,121,123,124,125,126,129,131,132,"
-				+ "133,134,135,136,139,143,144,147,148,149,150,151,152,153,154,155,156,157,158,159,160,162,163,"
-				+ "164,165,166,167,168,169,170,172,173,174,183,184,185,186,187,188,189,190,191,192,0");
-		
-		craftType.driveCommand = "drive";
-		craftType.canNavigate = false;
-		craftType.isTerrestrial = true;
-		craftType.obeysGravity = true;
-		craftType.minBlocks = 10;
-		craftType.maxBlocks = 2000;
-		craftType.maxSpeed = 3;
-		craftType.doesCruise = true;
-		craftType.maxEngineSpeed = 4;
-		craftType.maxForwardGear = 3;
-		
-	}
-
-		return craftType;
-	}
-
 	// set the attributes of the craft type
 	private static void setAttribute(CraftType craftType, String attribute,
 			String value) {
@@ -381,144 +242,139 @@ public class CraftType {
 		}
 	}
 
-	public static void saveType(File dir, CraftType craftType, boolean force) {		
-		File craftFile = new File(dir + File.separator
-				+ craftType.name + ".txt");
-
-		if (!craftFile.exists()) {
+	
+	public static void setupCraftConfig() {
+		if (!NavyCraft.instance.getDataFolder().exists()) {
+			NavyCraft.instance.getDataFolder().mkdir();
+		}
+		CraftFile = new File(NavyCraft.instance.getDataFolder() + File.separator , "types.yml");
+		CraftConfig = YamlConfiguration.loadConfiguration(CraftFile);
+		
+		if (!CraftFile.exists()) {
 			try {
-				craftFile.createNewFile();
-			} catch (IOException ex) {
-				return;
-			}
-		} else
-			// we don't overwrite existing files
-			return;
+				CraftConfig.createSection("Types");
+				//Ship
+				CraftConfig.set("Types.ship.structureBlocks", "4,5,14,15,16,17,19,20,21,22,23,24,25,26,27,28,30,35,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,79,80,81,82,84,85,86,87,88,89,91,92,93,94,95,96,98,101,102,106,107,108,109,112,113,114,118,121,123,124,125,126,129,131,132,133,134,135,136,139,143,144,147,148,149,150,151,152,153,154,155,156,157,158,159,160,162,163,164,165,166,167,168,169,170,172,173,174,179,183,184,185,186,187,188,189,190,191,192,251,0");
+				CraftConfig.set("Types.ship.forbiddenBlocks", "29,33,416");
+				CraftConfig.set("Types.ship.driveCommand", "sail");
+				CraftConfig.set("Types.ship.canNavigate", "true");
+				CraftConfig.set("Types.ship.minBlocks", "20");
+				CraftConfig.set("Types.ship.maxBlocks", "50000");
+				CraftConfig.set("Types.ship.maxSpeed", "6");
+				CraftConfig.set("Types.ship.doesCruise", "true");
+				CraftConfig.set("Types.ship.maxEngineSpeed", "8");
+				CraftConfig.set("Types.ship.maxForwardGear", "2");
+				CraftConfig.set("Types.ship.maxReverseGear", "-2");
+				//Freeship
+				CraftConfig.set("Types.freeship.structureBlocks", "4,5,14,15,16,17,19,20,21,22,23,24,25,26,27,28,30,35,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,79,80,81,82,84,85,86,87,88,89,91,92,93,94,95,96,98,101,102,106,107,108,109,112,113,114,118,121,123,124,125,126,129,131,132,133,134,135,136,139,143,144,147,148,149,150,151,152,153,154,155,156,157,158,159,160,162,163,164,165,166,167,168,169,170,172,173,174,179,183,184,185,186,187,188,189,190,191,192,251,0");
+				CraftConfig.set("Types.freeship.forbiddenBlocks", "29,33,416");
+				CraftConfig.set("Types.freeship.driveCommand", "sail");
+				CraftConfig.set("Types.freeship.canNavigate", "true");
+				CraftConfig.set("Types.freeship.minBlocks", "20");
+				CraftConfig.set("Types.freeship.maxBlocks", "50000");
+				CraftConfig.set("Types.freeship.maxSpeed", "6");
+				CraftConfig.set("Types.freeship.doesCruise", "true");
+				CraftConfig.set("Types.freeship.maxEngineSpeed", "8");
+				CraftConfig.set("Types.freeship.maxForwardGear", "2");
+				CraftConfig.set("Types.freeship.maxReverseGear", "-2");
+				CraftConfig.set("Types.freeship.discount", "100");
+				CraftConfig.set("Types.freeship.adminBuild", "true");
+				//Submarine
+				CraftConfig.set("Types.submarine.structureBlocks", "4,5,14,15,16,17,19,20,21,22,23,24,25,26,27,28,30,35,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,79,80,81,82,84,85,86,87,88,89,91,92,93,94,95,96,98,101,102,106,107,108,109,112,113,114,118,121,123,124,125,126,129,131,132,133,134,135,136,139,143,144,147,148,149,150,151,152,153,154,155,156,157,158,159,160,162,163,164,165,166,167,168,169,170,172,173,174,179,183,184,185,186,187,188,189,190,191,192,251,0");
+				CraftConfig.set("Types.submarine.forbiddenBlocks", "29,33,416");
+				CraftConfig.set("Types.submarine.driveCommand", "dive");
+				CraftConfig.set("Types.submarine.canDive", "true");
+				CraftConfig.set("Types.submarine.minBlocks", "20");
+				CraftConfig.set("Types.submarine.maxBlocks", "50000");
+				CraftConfig.set("Types.submarine.maxSpeed", "3");
+				CraftConfig.set("Types.submarine.doesCruise", "true");
+				CraftConfig.set("Types.submarine.maxEngineSpeed", "6");
+				CraftConfig.set("Types.submarine.maxSubmergedSpeed", "3");
+				CraftConfig.set("Types.submarine.maxForwardGear", "2");
+				CraftConfig.set("Types.submarine.maxReverseGear", "-2");
+				//Aircraft
+				CraftConfig.set("Types.aircraft.structureBlocks", "4,5,14,15,16,17,20,21,22,23,24,25,26,27,28,30,35,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,79,80,81,82,84,85,86,87,88,89,91,92,93,94,95,96,98,101,102,106,107,108,109,112,113,114,118,121,123,124,125,126,129,131,132,133,134,135,136,139,143,144,147,148,149,150,151,152,153,154,155,156,157,158,159,160,162,163,164,165,166,167,168,169,170,172,173,174,179,183,184,185,186,187,188,189,190,191,192,0");
+				CraftConfig.set("Types.aircraft.forbiddenBlocks", "29,33,251,416");
+				CraftConfig.set("Types.aircraft.driveCommand", "pilot");
+				CraftConfig.set("Types.aircraft.canFly", "true");
+				CraftConfig.set("Types.aircraft.minBlocks", "20");
+				CraftConfig.set("Types.aircraft.maxBlocks", "20000");
+				CraftConfig.set("Types.aircraft.maxSpeed", "20");
+				CraftConfig.set("Types.aircraft.doesCruise", "true");
+				CraftConfig.set("Types.aircraft.maxEngineSpeed", "8");
+				CraftConfig.set("Types.aircraft.maxForwardGear", "3");
+				CraftConfig.set("Types.aircraft.maxReverseGear", "-2");
+				
+				CraftConfig.set("Types.helicopter.structureBlocks", "4,5,14,15,16,17,20,21,22,23,24,25,26,27,28,30,35,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,79,80,81,82,84,85,86,87,88,89,91,92,93,94,95,96,98,101,102,106,107,108,109,112,113,114,118,121,123,124,125,126,129,131,132,133,134,135,136,139,143,144,147,148,149,150,151,152,153,154,155,156,157,158,159,160,162,163,164,165,166,167,168,169,170,172,173,174,183,184,185,186,187,188,189,190,191,192,0");
+				CraftConfig.set("Types.helicopter.forbiddenBlocks", "29,33,251,416");
+				CraftConfig.set("Types.helicopter.driveCommand", "pilot");
+				CraftConfig.set("Types.helicopter.canFly", "true");
+				CraftConfig.set("Types.helicopter.minBlocks", "20");
+				CraftConfig.set("Types.helicopter.maxBlocks", "20000");
+				CraftConfig.set("Types.helicopter.maxSpeed", "5");
+				CraftConfig.set("Types.helicopter.doesCruise", "false");
+				CraftConfig.set("Types.helicopter.maxForwardGear", "3");
+				CraftConfig.set("Types.helicopter.maxReverseGear", "-2");
+				
+				CraftConfig.set("Types.tank.structureBlocks", "4,5,14,15,16,17,20,21,22,23,24,25,26,27,28,30,35,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,79,80,81,82,84,85,86,87,88,89,91,92,93,94,95,96,98,101,102,106,107,108,109,112,113,114,118,121,123,124,125,126,129,131,132,133,134,135,136,139,143,144,147,148,149,150,151,152,153,154,155,156,157,158,159,160,162,163,164,165,166,167,168,169,170,172,173,174,179,183,184,185,186,187,188,189,190,191,192,251,0");
+				CraftConfig.set("Types.tank.forbiddenBlocks", "29,33,416");
+				CraftConfig.set("Types.tank.driveCommand", "drive");
+				CraftConfig.set("Types.tank.canNavigate", "false");
+				CraftConfig.set("Types.tank.isTerrestrial", "true");
+				CraftConfig.set("Types.tank.obeysGravity", "true");
+				CraftConfig.set("Types.tank.minBlocks", "20");
+				CraftConfig.set("Types.tank.maxBlocks", "10000");
+				CraftConfig.set("Types.tank.maxSpeed", "3");
+				CraftConfig.set("Types.tank.doesCruise", "true");
+				CraftConfig.set("Types.tank.maxEngineSpeed", "5");
+				CraftConfig.set("Types.tank.maxForwardGear", "3");
+				CraftConfig.set("Types.tank.maxReverseGear", "-2");
 
+				CraftConfig.save(CraftFile);
+			} catch(IOException e) {
+				System.out.println("Could not create the types.yml file!");
+			}
+		}
+		loadTypes();
+	}
+	
+	public static FileConfiguration getCraftConfig () {
+		return CraftConfig;
+	}
+	
+	public static void saveCraftConfig() {
 		try {
-			BufferedWriter writer = new BufferedWriter(
-					new FileWriter(craftFile));
-
-			writeAttribute(writer, "driveCommand", craftType.driveCommand,
-					force);
-			writeAttribute(writer, "minBlocks", craftType.minBlocks, true);
-			writeAttribute(writer, "maxBlocks", craftType.maxBlocks, force);
-
-			// list of blocks that make the structure of the craft
-			if (craftType.structureBlocks != null) {
-				String line = "structureBlocks=";
-				for (short blockId : craftType.structureBlocks) {
-
-					line += blockId + ",";
-				}
-
-				writer.write(line.substring(0, line.length() - 1));
-				writer.newLine();
-			}
-			
-			writeAttribute(writer, "maxSpeed", craftType.maxSpeed, force);
-			writeAttribute(writer, "discount", craftType.discount, force);
-			writeAttribute(writer, "adminBuild", craftType.adminBuild, force);
-			writeAttribute(writer, "digBlockId", craftType.digBlockId, force);
-			writeAttribute(writer, "digBlockDurability", craftType.digBlockDurability, force);
-			writeAttribute(writer, "canNavigate", craftType.canNavigate, force);
-			writeAttribute(writer, "isTerrestrial", craftType.isTerrestrial, force);
-			writeAttribute(writer, "canFly", craftType.canFly, force);
-			writeAttribute(writer, "canDive", craftType.canDive, force);
-			writeAttribute(writer, "canDig", craftType.canDig, force);
-			writeAttribute(writer, "obeysGravity", craftType.obeysGravity, force);
-			// writeAttribute(writer, "iceBreaker", craftType.iceBreaker);
-			writeAttribute(writer, "doesCruise", craftType.doesCruise, force);
-			writeAttribute(writer, "maxEngineSpeed", craftType.maxEngineSpeed, force);
-			writeAttribute(writer, "maxSubmergedSpeed", craftType.maxSubmergedSpeed, force);
-			writeAttribute(writer, "maxForwardGear", craftType.maxForwardGear, force);
-			writeAttribute(writer, "maxReverseGear", craftType.maxReverseGear, force);
-
-			writer.close();
-
-		} catch (IOException ex) {
+			CraftConfig.save(CraftFile);
+		} catch (IOException e) {
+			System.out.println("Could not save types.yml file");
 		}
 	}
-
-	public static void saveTypes(File dir) {		
-		for (CraftType craftType : craftTypes) {
-			saveType(dir, craftType, false);
-		}
-
-		// the template is just a file that shows all parameters
-		saveType(dir, getDefaultCraftType("template"), true);
-
+	public static void reloadCraftConfig() {
+		CraftConfig = YamlConfiguration.loadConfiguration(CraftFile);
 	}
 
-	private static void writeAttribute(BufferedWriter writer, String attribute,
-			String value, boolean force) throws IOException {
-		if ((value == null || value.trim().equals("")) && !force)
-			return;
-		writer.write(attribute + "=" + value);
-		writer.newLine();
-	}
-
-	private static void writeAttribute(BufferedWriter writer, String attribute,
-			int value, boolean force) throws IOException {
-		if (value == 0 && !force)
-			return;
-		writer.write(attribute + "=" + value);
-		writer.newLine();
-	}
-
-	private static void writeAttribute(BufferedWriter writer, String attribute,
-			boolean value, boolean force) throws IOException {
-		if (!value && !force)
-			return;
-		writer.write(attribute + "=" + value);
-		writer.newLine();
-	}
-
-	public static void loadTypes(File dir) {
-		File[] craftTypesList = dir.listFiles();
+	public static void loadTypes() {
+		List<String> list = new ArrayList<String>(CraftConfig.getConfigurationSection("Types").getKeys(false));
+		int size = list.size();
 		craftTypes.clear();
 
-		for (File craftFile : craftTypesList) {
-
-			if (craftFile.isFile() && craftFile.getName().endsWith(".txt")) {
-
-				String craftName = craftFile.getName().split("\\.")[0];
-
-				// skip the template file
-				if (craftName.equalsIgnoreCase("template"))
-					continue;
-
-				CraftType craftType = new CraftType(craftName);
+		if (size == 0) return;
+		for (String name : list) {
+			System.out.println("Found Type: " + name);
+				CraftType craftType = new CraftType(name);
 				
 				craftType.HelmControllerItem = Integer.parseInt(NavyCraft.instance.getConfig().getString("HelmID"));
 
-				try {
-					BufferedReader reader = new BufferedReader(new FileReader(
-							craftFile));
+					List<String> info = new ArrayList<String>(CraftConfig.getConfigurationSection("Types." + name).getKeys(false));
+					int s = info.size();
 
-					String line;
-					while ((line = reader.readLine()) != null) {
-
-						String[] split;
-						split = line.split("=");
-
-						if (split.length >= 2)
-							setAttribute(craftType, split[0], split[1]);
+					if (s == 0) return;
+					
+					for (String attribute : info) {
+							setAttribute(craftType, attribute, CraftConfig.getString("Types." + name + "." + attribute));
 					}
 
-					reader.close();
-
-				} catch (IOException ex) {
-			
-					System.out.println("Warning, craft type " + craftType.name + " has an invalid engine block ID. " + 
-							"Please use a block which has a facing direction (default is furnace, ID 61).");
-				}
-
 				craftTypes.add(craftType);
-			}
 		}
-
-		if(NavyCraft.instance.getConfig().getString("WriteDefaultCraft").equalsIgnoreCase("true"))
-			loadDefaultCraftTypes();
 	}
 }

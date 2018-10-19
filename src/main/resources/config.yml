@@ -1,5 +1,5 @@
 #NavyCraft Configuration File
-#Thank you to solmex for the contribution
+#Written by Solmex
 
 #Defines which worlds the plugin's weapons will funciton in.
 EnabledWorlds: WarWorld,BattleWorld,TankSpawn
@@ -35,3 +35,6 @@ StructureBlocks: 4,5,14,15,16,17,19,20,21,22,23,25,26,27,28,30,35,41,42,43,44,45
 
 #Whether or not to create the default craft type files on plugin enable.
 WriteDefaultCraft: true
+
+#Require eggs to fire aa guns?
+RequireAmmo: false
