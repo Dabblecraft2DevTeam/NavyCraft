@@ -55,7 +55,7 @@ public class NavyCraft_InventoryListener implements Listener {
     			} else {
     			p.sendMessage(ChatColor.RED + "Sorry, you are not allowed to craft this item. " + ChatColor.YELLOW + "Purchase it from the shop instead.");
     		}
-    		event.setCancelled(true);
+    		event.setCancelled(false);
     	}
  
     }
