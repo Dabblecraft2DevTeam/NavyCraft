@@ -769,7 +769,7 @@ public class Craft {
 				isNameOnBoard.put(p.getName(), true);
 				
 				if( p != newCaptain || this.type.canFly || this.type.isTerrestrial )
-				{
+				{/*
 					if( this.type.canFly )
 					{
 						if( p.getInventory().getHelmet() == null )
@@ -861,7 +861,7 @@ public class Craft {
 							p.getInventory().addItem(new ItemStack(Material.LEATHER_BOOTS,1,(short)0));
 						}
 					}
-				}
+				*/}
 			}
 		}
 		
@@ -873,7 +873,7 @@ public class Craft {
 		}
 		//captain inventory
 		if( !this.type.canFly && !this.type.isTerrestrial )
-		{
+		{/*
 			Player captain = plugin.getServer().getPlayer(this.captainName);
 			if( captain.getInventory().getHelmet() == null )
 			{
@@ -903,7 +903,7 @@ public class Craft {
 			{
 				captain.getInventory().addItem(new ItemStack(Material.GOLD_BOOTS,1,(short)0));
 			}
-		}
+		*/}
 		
 		
 		driverName = captainName;
