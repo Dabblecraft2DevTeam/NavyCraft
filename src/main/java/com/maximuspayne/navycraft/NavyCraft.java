@@ -143,6 +143,8 @@ public class NavyCraft extends JavaPlugin {
 	public void onEnable() {
 		instance = this; 
 		shutDown = false;
+		MetricsLite metrics = new MetricsLite(this);
+
 		
 		this.saveDefaultConfig();
 		
