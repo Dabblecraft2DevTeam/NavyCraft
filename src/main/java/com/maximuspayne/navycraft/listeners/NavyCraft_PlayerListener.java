@@ -1656,11 +1656,157 @@ public class NavyCraft_PlayerListener implements Listener {
 									} else {
 										player.sendMessage(ChatColor.RED + "That is not a valid shipyard sign! (Botom sign is null)");
 										return;
-									}
+									} 
 							} else {
 								player.sendMessage(ChatColor.RED + "That is not a valid shipyard sign! (Top sign is null)");
 								return;
+							} 
+							
+						} else if (split[1].equalsIgnoreCase("reward")) {
+								if (!PermissionInterface.CheckPerm(player, "navycraft.reward") && !player.isOp()) {
+									player.sendMessage(ChatColor.RED + "You do not have permission to reward plots.");
+									event.setCancelled(true);
+									return;
+								}
+								
+								if (split.length < 5) {
+									player.sendMessage(ChatColor.GOLD + "Usage - /shipyard reward <player> <type> <amount>");
+									player.sendMessage(ChatColor.YELLOW + "Example - /shipyard reward Solmex SHIP5 1");
+									event.setCancelled(true);
+									return;
+								}
+								
+								String typeString = split[3];
+								boolean isCanceled = false;
+							for (PlotType pt : Shipyard.getPlots()) {
+								if (typeString.equalsIgnoreCase(pt.name)) {
+									isCanceled = false;
+									break;
+								} else {
+									isCanceled = true;
+								}
 							}
+							if (isCanceled) {
+								player.sendMessage(ChatColor.RED + "Unknown lot type");
+								event.setCancelled(true);
+								return;
+							}
+								String playerString = split[2];
+								if (plugin.getServer().getPlayer(playerString) == null || !plugin.getServer()
+										.getPlayer(playerString).getName().equalsIgnoreCase(playerString)) {
+									player.sendMessage(ChatColor.RED + "Player not found or not online.");
+									event.setCancelled(true);
+									return;
+								}
+								
+								int rewNum = 0;
+								try {
+									rewNum = Integer.parseInt(split[4]);
+								} catch (NumberFormatException e) {
+									player.sendMessage(ChatColor.RED + "Invalid Number");
+									event.setCancelled(true);
+									return;
+								}
+								
+								if (rewNum <= 0) {
+									player.sendMessage(ChatColor.RED + "Cannot revoke plots below 0!");
+									event.setCancelled(true);
+									return;
+								}
+								String UUID = Utils.getUUIDfromPlayer(playerString);
+								if (UUID != null) {
+								player.sendMessage("placeholder");
+								} else {
+									player.sendMessage(ChatColor.RED + playerString + "has never joined the server!");
+									event.setCancelled(true);
+									return;
+								}
+							    if (rewNum == 1) {
+									player.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + Math.abs(rewNum) + ChatColor.DARK_GRAY
+											+ " - " + ChatColor.GOLD + typeString + ChatColor.DARK_GRAY + "]" + ChatColor.GREEN
+											+ " Plot rewarded to " + ChatColor.YELLOW + playerString);
+									event.setCancelled(true);
+									return;
+								} else {
+									player.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + Math.abs(rewNum) + ChatColor.DARK_GRAY
+											+ " - " + ChatColor.GOLD + typeString + ChatColor.DARK_GRAY + "]" + ChatColor.GREEN
+											+ " Plot's rewarded to " + ChatColor.YELLOW + playerString);
+									event.setCancelled(true);
+									return;
+								}
+							} else if (split[1].equalsIgnoreCase("revoke")) {
+								if (!PermissionInterface.CheckPerm(player, "navycraft.reward") && !player.isOp()) {
+									player.sendMessage(ChatColor.RED + "You do not have permission to revoke plots.");
+									event.setCancelled(true);
+									return;
+								}
+								
+								if (split.length < 5) {
+									player.sendMessage(ChatColor.GOLD + "Usage - /shipyard revoke <player> <type> <amount>");
+									player.sendMessage(ChatColor.YELLOW + "Example - /shipyard revoke Solmex SHIP5 1");
+									event.setCancelled(true);
+									return;
+								}
+								
+								String typeString = split[3];
+								boolean isCanceled = false;
+							for (PlotType pt : Shipyard.getPlots()) {
+								if (typeString.equalsIgnoreCase(pt.name)) {
+									isCanceled = false;
+									break;
+								} else {
+									isCanceled = true;
+								}
+							}
+							if (isCanceled) {
+								player.sendMessage(ChatColor.RED + "Unknown lot type");
+								event.setCancelled(true);
+								return;
+							}
+								
+								String playerString = split[2];
+								if (plugin.getServer().getPlayer(playerString) == null || !plugin.getServer()
+										.getPlayer(playerString).getName().equalsIgnoreCase(playerString)) {
+									player.sendMessage(ChatColor.RED + "Player not found or not online.");
+									event.setCancelled(true);
+									return;
+								}
+								
+								int rewNum = 0;
+								try {
+									rewNum = Math.abs(Integer.parseInt(split[4])) * -1;
+								} catch (NumberFormatException e) {
+									player.sendMessage(ChatColor.RED + "Invalid Number");
+									event.setCancelled(true);
+									return;
+								}
+								
+								if (rewNum >= 0) {
+									player.sendMessage(ChatColor.RED + "Can't use a negative number!");
+									event.setCancelled(true);
+									return;
+								}
+								String UUID = Utils.getUUIDfromPlayer(playerString);
+								if (UUID != null) {
+								player.sendMessage("placeholder");
+								} else {
+									player.sendMessage(ChatColor.RED + playerString + "has never joined the server!");
+									event.setCancelled(true);
+									return;
+								}
+							    if (rewNum == 1) {
+									player.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + Math.abs(rewNum) + ChatColor.DARK_GRAY
+											+ " - " + ChatColor.GOLD + typeString + ChatColor.DARK_GRAY + "]" + ChatColor.GREEN
+											+ " Plot revoked from " + ChatColor.YELLOW + playerString);
+									event.setCancelled(true);
+									return;
+								} else {
+									player.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + Math.abs(rewNum) + ChatColor.DARK_GRAY
+											+ " - " + ChatColor.GOLD + typeString + ChatColor.DARK_GRAY + "]" + ChatColor.GREEN
+											+ " Plot's revoked from " + ChatColor.YELLOW + playerString);
+									event.setCancelled(true);
+									return;
+								}
 						} else if (split[1].equalsIgnoreCase("list")) {
 							NavyCraft_FileListener.loadSignData();
 							NavyCraft_BlockListener.loadRewards(player.getName());
