@@ -61,6 +61,14 @@
 			<id>dmulloy2-repo</id>
 			<url>http://repo.dmulloy2.net/content/groups/public/</url>
 		</repository>
+		<repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>robomwm-repo</id>
+            <url>https://dl.bintray.com/robomwm/maven</url>
+        </repository>
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -123,5 +131,23 @@
 			<systemPath>${project.basedir}/Jars/SpigotPluginUpdater.jar</systemPath>
 			<scope>system</scope>
 		</dependency>
+			 <dependency>
+			 <groupId>com.github.ProSavage</groupId>
+ 			 <artifactId>SavageFactions</artifactId>
+ 			 <version>1.6.x-0.1.21-gbdd5473-400</version>
+			 <scope>provided</scope>
+	   </dependency>
+  	   <dependency>
+  			<groupId>com.massivecraft</groupId>
+  			<artifactId>MassiveCore</artifactId>
+  			<version>2.14.0</version>
+  			<scope>system</scope>
+  			<systemPath>${project.basedir}/jars/MassiveCore.jar</systemPath>
+   	  </dependency>
+      <dependency>
+  		    <groupId>net.coreprotect</groupId>
+    	    <artifactId>CoreProtect</artifactId>
+    	    <version>2.14.2</version>
+      </dependency>
 	</dependencies>
 </project>

@@ -93,7 +93,7 @@ public class BlocksInfo {
 		blocks[74] = new BlockInfo(74,"redstone ore", false, false, false, 331, 4, false);
 		blocks[75] = new BlockInfo(75,"redstone torch", true, true, false, false);
 		blocks[76] = new BlockInfo(76,"redstone torch", true, true, false, false);
-		blocks[77] = new BlockInfo(77,"stone button", true, true, false, new byte[] {4, 2, 5, 3});
+		blocks[77] = new BlockInfo(77,"stone button", true, true, false, false);
 		blocks[78] = new BlockInfo(78,"snow", true, true, false, 332, 1, true);
 		blocks[79] = new BlockInfo(79,"ice", false, false, false, false);
 		blocks[80] = new BlockInfo(80,"snow block", false, false, false, false);
@@ -177,6 +177,9 @@ public class BlocksInfo {
 		blocks[158] = new BlockInfo(158,"dropper", true, false, true, new byte[] {4, 2, 5, 3});
 		blocks[159] = new BlockInfo(159,"stained clay", true, false, false, false);
 		blocks[160] = new BlockInfo(160,"stained glass pane", true, false, false, false);
+		blocks[165] = new BlockInfo(165,"slime", false, false, false, false);
+		blocks[166] = new BlockInfo(166,"adminium2", false, false, false, false);
+		blocks[167] = new BlockInfo(167,"iron trapdoor", true, true, false, false);
 		blocks[168] = new BlockInfo(168,"prismarine", false, false, false, 168, 1, false);
 		blocks[169] = new BlockInfo(169,"sea lantern", false, false, false, false);
 		blocks[170] = new BlockInfo(170,"hay bale", true, false, false, false);
@@ -319,6 +322,8 @@ public class BlocksInfo {
 		blocks[150].cardinalDirections = new byte[] {2, 3, 0, 1};
 		//trapdoor
 		blocks[96].cardinalDirections = new byte[] {3, 1, 2, 0};
+		//trapdoor iron
+		blocks[167].cardinalDirections = new byte[] {3, 1, 2, 0};
 		//wall banner
 		blocks[177].cardinalDirections = new byte[] {5, 3, 4, 2};
 	}
