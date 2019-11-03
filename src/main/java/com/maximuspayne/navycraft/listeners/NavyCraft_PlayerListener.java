@@ -2103,7 +2103,7 @@ public class NavyCraft_PlayerListener implements Listener {
 
 											for (int x = startX; x <= endX; x++) {
 												for (int z = startZ; z <= endZ; z++) {
-													for (int y = startY; y <= 62; y++) {
+													for (int y = startY; y <= 63; y++) {
 														plugin.getServer().getWorld("shipyard").getBlockAt(x, y, z)
 																.setType(Material.AIR);
 
@@ -2193,7 +2193,7 @@ public class NavyCraft_PlayerListener implements Listener {
 												
 												for (int x = startX; x <= endX; x++) {
 													for (int z = startZ; z <= endZ; z++) {
-														for (int y = startY; y <= 62; y++) {
+														for (int y = startY; y <= 63; y++) {
 															plugin.getServer().getWorld("shipyard").getBlockAt(x, y, z)
 																	.setType(Material.AIR);
 															
@@ -2309,7 +2309,7 @@ public class NavyCraft_PlayerListener implements Listener {
 												}
 												for (int x = startX; x <= endX; x++) {
 													for (int z = startZ; z <= endZ; z++) {
-														for (int y = startY; y <= 62; y++) {
+														for (int y = startY; y <= 63; y++) {
 															plugin.getServer().getWorld("shipyard").getBlockAt(x, y, z)
 																	.setType(Material.AIR);
 															

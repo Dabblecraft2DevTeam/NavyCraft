@@ -825,7 +825,7 @@ public void updateCraft(int vehicleNum, int updateNum)
 											newSign.setLine(2, "refPowerMult="+refPowerMult);
 											newSign.update();
 										}else{
-											if( theBlock.getY() > 62 )
+											if( theBlock.getY() > 63)
 												theBlock.setType(Material.AIR);
 											else
 												theBlock.setType(Material.WATER);

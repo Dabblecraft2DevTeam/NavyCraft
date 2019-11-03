@@ -50,7 +50,7 @@ public class NavyCraft_InventoryListener implements Listener {
     		{
     			Player p = (Player)event.getWhoClicked();
     			if (p.isOp() && PermissionInterface.CheckPerm(p, "navycraft.craftitems")) {
-    			event.setCancelled(false);
+    			event.setCancelled(true);
     			return;
     			} else {
     			p.sendMessage(ChatColor.RED + "Sorry, you are not allowed to craft this item. " + ChatColor.YELLOW + "Purchase it from the shop instead.");

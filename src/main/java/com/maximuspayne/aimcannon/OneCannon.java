@@ -1978,7 +1978,7 @@ public class OneCannon{
 		    		
 					if( i > 15 )
 					{
-						if( torp.warhead.getY() > 62 )
+						if( torp.warhead.getY() > 63 )
 			    		{
 			    			torp.warhead.setType(Material.AIR);
 			    			torp.warhead.getRelative(torp.hdg, -1).setType(Material.AIR);
@@ -2077,7 +2077,7 @@ public class OneCannon{
 						{
 		    				if( i == 149 )
 							{
-								if( torp.warhead.getY() > 62 )
+								if( torp.warhead.getY() > 63 )
 								{
 									torp.warhead.setType(Material.AIR);
 									torp.warhead.getRelative(torp.hdg).setType(Material.AIR);
@@ -2145,7 +2145,7 @@ public class OneCannon{
 					}
 					else/// i <= 15
 					{
-						if( torp.warhead.getY() > 62 || i < 5 )
+						if( torp.warhead.getY() > 63 || i < 5 )
 						{
 							torp.warhead.setType(Material.AIR);
 							torp.warhead.getRelative(torp.hdg, -1).setType(Material.AIR);
@@ -2727,7 +2727,7 @@ public class OneCannon{
 		    		CraftMover.playWeaponSound(torp.warhead.getLocation(), Sound.ENTITY_PLAYER_BREATH, 2.0f, 0.8f);
 					if( i > 15 )
 					{
-						if( torp.warhead.getY() > 62 )
+						if( torp.warhead.getY() > 63 )
 			    		{
 			    			torp.warhead.setType(Material.AIR);
 			    			torp.warhead.getRelative(torp.hdg, -1).setType(Material.AIR);
@@ -2826,7 +2826,7 @@ public class OneCannon{
 						{
 		    				if( i == 249 )
 							{
-								if( torp.warhead.getY() > 62 )
+								if( torp.warhead.getY() > 63 )
 								{
 									torp.warhead.setType(Material.AIR);
 									torp.warhead.getRelative(torp.hdg).setType(Material.AIR);
@@ -2891,7 +2891,7 @@ public class OneCannon{
 					}
 					else/// i <= 15
 					{
-						if( torp.warhead.getY() > 62 || i < 5 )
+						if( torp.warhead.getY() > 63 || i < 5 )
 						{
 							torp.warhead.setType(Material.AIR);
 							torp.warhead.getRelative(torp.hdg, -1).setType(Material.AIR);
@@ -3464,7 +3464,7 @@ public class OneCannon{
 		    		CraftMover.playWeaponSound(torp.warhead.getLocation(), Sound.ENTITY_PLAYER_BREATH, 2.0f, 0.8f);
 					if( i > 15 )
 					{
-						if( torp.warhead.getY() > 62 )
+						if( torp.warhead.getY() > 63 )
 			    		{
 			    			torp.warhead.setType(Material.AIR);
 			    			torp.warhead.getRelative(torp.hdg, -1).setType(Material.AIR);
@@ -3588,7 +3588,7 @@ public class OneCannon{
 						{
 		    				if( i == 299 )
 							{
-								if( torp.warhead.getY() > 62 )
+								if( torp.warhead.getY() > 63 )
 								{
 									torp.warhead.setType(Material.AIR);
 									torp.warhead.getRelative(torp.hdg).setType(Material.AIR);
@@ -3694,7 +3694,7 @@ public class OneCannon{
 					}
 					else/// i <= 15
 					{
-						if( torp.warhead.getY() > 62 || i < 5 )
+						if( torp.warhead.getY() > 63 || i < 5 )
 						{
 							torp.warhead.setType(Material.AIR);
 							torp.warhead.getRelative(torp.hdg, -1).setType(Material.AIR);
@@ -4426,7 +4426,7 @@ public class OneCannon{
 		    		CraftMover.playWeaponSound(torp.warhead.getLocation(), Sound.ENTITY_PLAYER_BREATH, 2.0f, 0.8f);
 					if( i > 15 )
 					{
-						if( torp.warhead.getY() > 62 )
+						if( torp.warhead.getY() > 63 )
 			    		{
 			    			torp.warhead.setType(Material.AIR);
 			    			torp.warhead.getRelative(torp.hdg, -1).setType(Material.AIR);
@@ -4525,7 +4525,7 @@ public class OneCannon{
 						{
 		    				if( i == 149 )
 							{
-								if( torp.warhead.getY() > 62 )
+								if( torp.warhead.getY() > 63 )
 								{
 									torp.warhead.setType(Material.AIR);
 									torp.warhead.getRelative(torp.hdg).setType(Material.AIR);
@@ -4594,7 +4594,7 @@ public class OneCannon{
 					}
 					else/// i <= 15
 					{
-						if( torp.warhead.getY() > 62 || i < 5 )
+						if( torp.warhead.getY() > 63 || i < 5 )
 						{
 							torp.warhead.setType(Material.AIR);
 							torp.warhead.getRelative(torp.hdg, -1).setType(Material.AIR);
@@ -4742,7 +4742,7 @@ public class OneCannon{
 			    		CraftMover.playWeaponSound(torp.warhead.getLocation(), Sound.ENTITY_PLAYER_BREATH, 2.0f, 0.8f);
 						if( i > 15 )
 						{
-							if( ( torp.warhead.getY() > 58 && torp.torpRotation == 2) || ( torp.warhead.getY() > 62 && torp.torpRotation != 2 ))
+							if( ( torp.warhead.getY() > 58 && torp.torpRotation == 2) || ( torp.warhead.getY() > 63 && torp.torpRotation != 2 ))
 				    		{
 				    			torp.warhead.setType(Material.AIR);
 				    			torp.warhead.getRelative(torp.hdg, -1).setType(Material.AIR);
@@ -4758,7 +4758,7 @@ public class OneCannon{
 							
 							if (torp.torpRotation == 4) {
 						    	NavyCraft.instance.DebugMessage("Running block fix", 3);
-								if( torp.warhead.getY() > 62 )
+								if( torp.warhead.getY() > 63 )
 					    		{
 					    			torp.warhead.setType(Material.AIR);
 					    			torp.warhead.getRelative(BlockFace.UP, -1).setType(Material.AIR);
@@ -4804,7 +4804,7 @@ public class OneCannon{
 							{
 			    				if( i == 500 )
 								{
-									if( torp.warhead.getY() > 62 )
+									if( torp.warhead.getY() > 63 )
 									{
 										torp.warhead.setType(Material.AIR);
 										torp.warhead.getRelative(torp.hdg).setType(Material.AIR);
@@ -4871,7 +4871,7 @@ public class OneCannon{
 						}
 						else/// i <= 15
 						{
-							if( torp.warhead.getY() > 62 || i < 5 )
+							if( torp.warhead.getY() > 63 || i < 5 )
 							{
 								torp.warhead.setType(Material.AIR);
 								torp.warhead.getRelative(BlockFace.UP, -1).setType(Material.AIR);
@@ -5473,7 +5473,7 @@ public class OneCannon{
 		    		CraftMover.playWeaponSound(torp.warhead.getLocation(), Sound.ENTITY_PLAYER_BREATH, 2.0f, 0.8f);
 					if( i > 15 )
 					{
-						if( torp.warhead.getY() > 62 )
+						if( torp.warhead.getY() > 63 )
 			    		{
 			    			torp.warhead.setType(Material.AIR);
 			    			torp.warhead.getRelative(torp.hdg, -1).setType(Material.AIR);
@@ -5571,7 +5571,7 @@ public class OneCannon{
 						{
 		    				if( i == 249 )
 							{
-								if( torp.warhead.getY() > 62 )
+								if( torp.warhead.getY() > 63 )
 								{
 									torp.warhead.setType(Material.AIR);
 									torp.warhead.getRelative(torp.hdg).setType(Material.AIR);
@@ -5636,7 +5636,7 @@ public class OneCannon{
 					}
 					else/// i <= 15
 					{
-						if( torp.warhead.getY() > 62 || i < 5 )
+						if( torp.warhead.getY() > 63 || i < 5 )
 						{
 							torp.warhead.setType(Material.AIR);
 							torp.warhead.getRelative(torp.hdg, -1).setType(Material.AIR);
@@ -5785,7 +5785,7 @@ public class OneCannon{
     				    		CraftMover.playWeaponSound(torp.warhead.getLocation(), Sound.ENTITY_PLAYER_BREATH, 2.0f, 0.8f);
     							if( i > 15 )
     							{
-    								if( ( torp.warhead.getY() > 58 && torp.torpRotation == 2) || ( torp.warhead.getY() > 62 && torp.torpRotation != 2 ))
+    								if( ( torp.warhead.getY() > 58 && torp.torpRotation == 2) || ( torp.warhead.getY() > 63 && torp.torpRotation != 2 ))
     					    		{
     					    			torp.warhead.setType(Material.AIR);
     					    			torp.warhead.getRelative(torp.hdg, -1).setType(Material.AIR);
@@ -5801,7 +5801,7 @@ public class OneCannon{
     								
     								if (torp.torpRotation == 4) {
     							    	NavyCraft.instance.DebugMessage("Running block fix", 3);
-    									if( torp.warhead.getY() > 62 )
+    									if( torp.warhead.getY() > 63 )
     						    		{
     						    			torp.warhead.setType(Material.AIR);
     						    			torp.warhead.getRelative(BlockFace.UP, -1).setType(Material.AIR);
@@ -5914,7 +5914,7 @@ public class OneCannon{
     								{
     				    				if( i == 500 )
     									{
-    										if( torp.warhead.getY() > 62 )
+    										if( torp.warhead.getY() > 63 )
     										{
     											torp.warhead.setType(Material.AIR);
     											torp.warhead.getRelative(torp.hdg).setType(Material.AIR);
@@ -5981,7 +5981,7 @@ public class OneCannon{
     							}
     							else/// i <= 15
     							{
-    								if( torp.warhead.getY() > 62 || i < 5 )
+    								if( torp.warhead.getY() > 63 || i < 5 )
     								{
     									torp.warhead.setType(Material.AIR);
     									torp.warhead.getRelative(BlockFace.UP, -1).setType(Material.AIR);

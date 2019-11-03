@@ -1608,7 +1608,7 @@ public class CraftMover {
 
 						} else if (blockId == 9) {
 
-							if (newBlock.getY() > 62) {
+							if (newBlock.getY() > 63) {
 								newBlock.setTypeId(0);
 							} else {
 								if (craftBlockId == 0) {
@@ -1622,7 +1622,7 @@ public class CraftMover {
 								}
 							}
 						} else if (blockId == 8) {
-							if (newBlock.getY() > 62) {
+							if (newBlock.getY() > 63) {
 								newBlock.setTypeId(0);
 							} else {
 								if (craftBlockId == 0) {
@@ -1775,7 +1775,7 @@ public class CraftMover {
 								craft.weightCurrent -= Craft.blockWeight(craftBlockId);
 
 								// air, water, or lava
-								if ((craft.waterType != 0) && ((craft.minY + y) <= 62)) {
+								if ((craft.waterType != 0) && ((craft.minY + y) <= 63)) {
 									craft.matrix[x][y][z] = 0;
 								} else {
 									craft.matrix[x][y][z] = 0; // make a hole in the craft
