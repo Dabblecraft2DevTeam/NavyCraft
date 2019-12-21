@@ -1,5 +1,4 @@
 #NavyCraft Configuration File
-#Written by Solmex
 
 #Defines which worlds the plugin's weapons will funciton in.
 EnabledWorlds: WarWorld,BattleWorld,TankSpawn
