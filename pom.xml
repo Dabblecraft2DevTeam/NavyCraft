@@ -69,6 +69,10 @@
             <id>robomwm-repo</id>
             <url>https://dl.bintray.com/robomwm/maven</url>
         </repository>
+        <repository>
+ 			<id>illyria</id>
+ 			<url>https://nexus.illyria.io/repository/maven-public/</url>        
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -131,12 +135,11 @@
 			<systemPath>${project.basedir}/Jars/SpigotPluginUpdater.jar</systemPath>
 			<scope>system</scope>
 		</dependency>
-			 <dependency>
-			 <groupId>com.github.ProSavage</groupId>
- 			 <artifactId>SavageFactions</artifactId>
- 			 <version>1.6.x-0.1.21-gbdd5473-400</version>
-			 <scope>provided</scope>
-	   </dependency>
+		<dependency>
+ 			<groupId>com.massivecraft</groupId>
+ 			<artifactId>SavageFactions</artifactId>
+ 			<version>1.6.9.5-U0.2.1-RC-1.6.2-RC-2.5-RC-6</version>
+		</dependency>
   	   <dependency>
   			<groupId>com.massivecraft</groupId>
   			<artifactId>MassiveCore</artifactId>

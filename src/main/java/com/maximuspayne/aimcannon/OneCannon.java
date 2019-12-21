@@ -7724,7 +7724,7 @@ public class OneCannon{
 			    	ammunition = 10;
 			    	initAmmo = ammunition;
 			    }
-			} else if(b.getRelative(BlockFace.NORTH, 1).getType() == Material.IRON_BLOCK && b.getRelative(BlockFace.DOWN, 1).getType() == Material.LIGHT_BLUE_GLAZED_TERRACOTTA)
+			} else if(b.getRelative(BlockFace.NORTH, 1).getType() == Material.IRON_BLOCK && b.getRelative(BlockFace.DOWN, 1).getType() == Material.STRUCTURE_BLOCK)
 		{
 			direction = BlockFace.EAST;
 			cannonType = 20;
@@ -7733,7 +7733,7 @@ public class OneCannon{
 				ammunition = 1;
 				initAmmo = ammunition;
 			}
-		}else if(b.getRelative(BlockFace.SOUTH, 1).getType() == Material.IRON_BLOCK && b.getRelative(BlockFace.DOWN, 1).getType() == Material.LIGHT_BLUE_GLAZED_TERRACOTTA)
+		}else if(b.getRelative(BlockFace.SOUTH, 1).getType() == Material.IRON_BLOCK && b.getRelative(BlockFace.DOWN, 1).getType() == Material.STRUCTURE_BLOCK)
 		{
 			direction = BlockFace.WEST;
 			cannonType = 20;
@@ -7742,7 +7742,7 @@ public class OneCannon{
 				ammunition = 1;
 				initAmmo = ammunition;
 			}
-		}else if(b.getRelative(BlockFace.EAST, 1).getType() == Material.IRON_BLOCK && b.getRelative(BlockFace.DOWN, 1).getType() == Material.LIGHT_BLUE_GLAZED_TERRACOTTA)
+		}else if(b.getRelative(BlockFace.EAST, 1).getType() == Material.IRON_BLOCK && b.getRelative(BlockFace.DOWN, 1).getType() == Material.STRUCTURE_BLOCK)
 		{
 			direction = BlockFace.SOUTH;
 			cannonType = 20;
@@ -7751,7 +7751,7 @@ public class OneCannon{
 				ammunition = 1;
 				initAmmo = ammunition;
 			}
-		}else if(b.getRelative(BlockFace.WEST, 1).getType() == Material.IRON_BLOCK && b.getRelative(BlockFace.DOWN, 1).getType() == Material.LIGHT_BLUE_GLAZED_TERRACOTTA)
+		}else if(b.getRelative(BlockFace.WEST, 1).getType() == Material.IRON_BLOCK && b.getRelative(BlockFace.DOWN, 1).getType() == Material.STRUCTURE_BLOCK)
 		{
 			direction = BlockFace.NORTH;
 			cannonType = 20;
