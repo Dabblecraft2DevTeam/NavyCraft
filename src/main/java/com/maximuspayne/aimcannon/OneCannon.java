@@ -8226,7 +8226,7 @@ public class OneCannon{
     		turnCannonLayer(right, p, 1);
     		turnCannonLayer(right, p, 2);
     	}
-    	if ( cannonType == 3 || cannonType == 7 || cannonType == 8 || cannonType == 11 || cannonType == 12 ) {
+    	if ( cannonType == 3 || cannonType == 7 || cannonType == 8 || cannonType == 11 || cannonType == 12 || cannonType == 13 ) {
     		turnTorpedoLayer(right, p, 1);
         	turnTorpedoLayer(right, p, 0);
     	} else {
@@ -8380,17 +8380,17 @@ public class OneCannon{
 	public void turnTorpedoLayer(Boolean right, Player p, int offsetY) {
 		// Get data
 		if (Utils.CheckEnabledWorld(p.getLocation())) {
-		int[][] arr = new int[9][9];
-		byte[][] arrb = new byte[9][9];
-		for (int x = 0; x < 9; x++) {
-		    for (int z = 0; z < 9; z++) {
-			arr[x][z] = loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).getTypeId();
-			arrb[x][z] = loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).getData();
+		int[][] arr = new int[12][12];
+		byte[][] arrb = new byte[12][12];
+		for (int x = 0; x < 12; x++) {
+		    for (int z = 0; z < 12; z++) {
+			arr[x][z] = loc.getBlock().getRelative(x - 5, 0, z - 5).getRelative(BlockFace.UP, offsetY).getTypeId();
+			arrb[x][z] = loc.getBlock().getRelative(x - 5, 0, z - 5).getRelative(BlockFace.UP, offsetY).getData();
 		    }
 		}
 	
-		int[][] arro = new int[9][9];
-		byte[][] arrbo = new byte[9][9];
+		int[][] arro = new int[12][12];
+		byte[][] arrbo = new byte[12][12];
 		// Rotate
 		if (right) {
 		    arro = rotateLeft(arr);
@@ -8401,51 +8401,51 @@ public class OneCannon{
 		}
 	
 		// Cleanup Cannon (support blocks first)
-		for (int x = 0; x < 9; x++) {
-		    for (int z = 0; z < 9; z++) {
-			if (BlocksInfo.needsSupport(loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).getTypeId())) {
-			    loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(0, (byte) 0, false);
+		for (int x = 0; x < 12; x++) {
+		    for (int z = 0; z < 12; z++) {
+			if (BlocksInfo.needsSupport(loc.getBlock().getRelative(x - 5, 0, z - 5).getRelative(BlockFace.UP, offsetY).getTypeId())) {
+			    loc.getBlock().getRelative(x - 5, 0, z - 5).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(0, (byte) 0, false);
 				}
 		    }
 		}
 	
 		// Cleanup Rest
-		for (int x = 0; x < 9; x++) {
-		    for (int z = 0; z < 9; z++) {
-		    	if( !(x-4==0 && z-4==0 && offsetY==0) )
-		    		loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(0, (byte) 0, false);
+		for (int x = 0; x < 12; x++) {
+		    for (int z = 0; z < 12; z++) {
+		    	if( !(x-5==0 && z-5==0 && offsetY==0) )
+		    		loc.getBlock().getRelative(x - 5, 0, z - 5).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(0, (byte) 0, false);
 		    }
 		}
 		
 		
 		Craft testCraft = Craft.getCraft(loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
 		// Place cannon
-		for (int x = 0; x < 9; x++) {
-		    for (int z = 0; z < 9; z++) {
+		for (int x = 0; x < 12; x++) {
+		    for (int z = 0; z < 12; z++) {
 			if (!BlocksInfo.needsSupport(arro[x][z])) 
 			{
 				if(arro[x][z] != -1 && arro[x][z] != 52 && arro[x][z] != 34 && arro[x][z] != 36 )
 					loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(arro[x][z], arrbo[x][z], false);
 			    if( testCraft != null )
 			    {
-			    	testCraft.addBlock(loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY), true);
+			    	testCraft.addBlock(loc.getBlock().getRelative(x - 5, 0, z - 5).getRelative(BlockFace.UP, offsetY), true);
 			    }
 				
 			}else if( (arro[x][z] == 23) )
 			{
-				loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).setData(arrbo[x][z]);
+				loc.getBlock().getRelative(x - 5, 0, z - 5).getRelative(BlockFace.UP, offsetY).setData(arrbo[x][z]);
 		    }
 		    }
 		}
 	
 		// Place rest
-		for (int x = 0; x < 9; x++) {
-		    for (int z = 0; z < 9; z++) {
+		for (int x = 0; x < 12; x++) {
+		    for (int z = 0; z < 12; z++) {
 				if (BlocksInfo.needsSupport(arro[x][z]) && arro[x][z] != 63 && arro[x][z] != 68 && arro[x][z] != 65) {
 			    loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY).setTypeIdAndData(arro[x][z], arrbo[x][z], false);
 			    if( testCraft != null )
 			    {
-			    	testCraft.addBlock(loc.getBlock().getRelative(x - 4, 0, z - 4).getRelative(BlockFace.UP, offsetY), true);
+			    	testCraft.addBlock(loc.getBlock().getRelative(x - 5, 0, z - 5).getRelative(BlockFace.UP, offsetY), true);
 			    }
 			}
 		    }
@@ -8513,7 +8513,17 @@ public class OneCannon{
 			
 			
 			if( cannonTurnCounter < 4 && ((loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,1).getTypeId() == 5)
-					|| ( cannonType == 6 && loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,2).getTypeId() == 5)))
+					|| ( cannonType == 8 && loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,2).getTypeId() == 5)))
+			if( cannonTurnCounter < 4 && ((loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,1).getTypeId() == 5)
+					|| ( cannonType == 7 && loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,2).getTypeId() == 5)))
+			if( cannonTurnCounter < 4 && ((loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,1).getTypeId() == 5)
+					|| ( cannonType == 11 && loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,2).getTypeId() == 5)))
+			if( cannonTurnCounter < 4 && ((loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,1).getTypeId() == 5)
+					|| ( cannonType == 12 && loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,2).getTypeId() == 5)))
+			if( cannonTurnCounter < 4 && ((loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,1).getTypeId() == 5)
+					|| ( cannonType == 3 && loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,2).getTypeId() == 5)))
+			if( cannonTurnCounter < 4 && ((loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,1).getTypeId() == 5)
+					|| ( cannonType == 13 && loc.getBlock().getRelative(direction, 1).getRelative(BlockFace.DOWN,2).getTypeId() == 5)))
 			{
 				cannonTurnCounter++;
 				turnCannon(right, p);

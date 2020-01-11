@@ -240,14 +240,14 @@ public class NavyCraft extends JavaPlugin {
 		for (FPlayer player : faction.getFPlayers()) {
 			if (player.getLastLoginTime() > System.currentTimeMillis() - 3600000) {
 				allowed = true;
-				break;
+			break;
 			}
 		}
 		if (!faction.isWilderness() && !allowed)
 			return;
 		System.out.println("Faction: " + faction.getTag() + " Allowed explosion: " + allowed);
 
-		//HashMap<String, org.bukkit.Chunk> protectedChunks = new HashMap<>();
+		HashMap<String, org.bukkit.Chunk> protectedChunks = new HashMap<>();
 
 		short[][][] powerMatrix;
 		powerMatrix = new short[explosionRadius * 2 + 1][explosionRadius * 2 + 1][explosionRadius * 2 + 1];

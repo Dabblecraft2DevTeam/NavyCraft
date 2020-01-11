@@ -3097,21 +3097,22 @@ public class NavyCraft_BlockListener implements Listener {
 				}
 			}
 
-			FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
-			if (fPlayer != null) {
-				fPlayer.alterPower(cash / 12);
-				player.sendMessage(ChatColor.GRAY + "Your were rewarded with " + ChatColor.GREEN + cash / 12 + ChatColor.GRAY + " power points.");
+			//FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+			//if (fPlayer != null) {
+				//fPlayer.alterPower(cash / 12);
+				//player.sendMessage(ChatColor.GRAY + "Your were rewarded with " + ChatColor.GREEN + cash / 12 + ChatColor.GRAY + " power points.");
 			}
 
+			ChatColor rewardedExp = null;
 			player.sendMessage(ChatColor.GRAY + "You were rewarded with " + ChatColor.GREEN + rewardedExp + ChatColor.GRAY + " rank points.");
 			player.sendMessage(ChatColor.GRAY + "You now have " + ChatColor.WHITE + newExp + ChatColor.GRAY + " rank points.");
 
 			checkRankWorld(player, newExp, player.getWorld());
 			NavyCraft_FileListener.saveExperience(player.getName());
-		} else {
+		//} else {
 			player.sendMessage("Sorry, but you weren't rewarded since you are in a testing world!");
 		}
-	}
+	//}
 
 	public static void rewardExpCraft(int newExp, Craft craft) {
 		int playerNewExp = newExp;
@@ -3144,10 +3145,10 @@ public class NavyCraft_BlockListener implements Listener {
 					e.printStackTrace();
 				}
 
-				FPlayer fPlayer = FPlayers.getInstance().getByPlayer(p);
-				if (fPlayer != null) {
-				fPlayer.alterPower(cash/12);
-				p.sendMessage(ChatColor.GRAY + "Your were rewarded with " + ChatColor.GREEN + cash/12 + ChatColor.GRAY + " power points.");
+//				FPlayer fPlayer = FPlayers.getInstance().getByPlayer(p);
+//				if (fPlayer != null) {
+//				fPlayer.alterPower(cash/12);
+//				p.sendMessage(ChatColor.GRAY + "Your were rewarded with " + ChatColor.GREEN + cash/12 + ChatColor.GRAY + " power points.");
 				}
 
 				p.sendMessage(ChatColor.GRAY + "You were rewarded with " + ChatColor.GREEN + newExp + ChatColor.GRAY + " rank points.");
@@ -3158,7 +3159,7 @@ public class NavyCraft_BlockListener implements Listener {
 				}
 		}
 		}
-	}
+	//}
 
 	public static void setExpPlayer(int newExp, String p) {
 		NavyCraft.playerExp.put(p, newExp);
