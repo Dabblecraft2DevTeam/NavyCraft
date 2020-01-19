@@ -9,4 +9,4 @@ Disscuss the project here: https://discord.gg/ERFteaZ
 
 # Notice:
 The NavyCraft plugin and source code is owned by Maximuspayne. However Dabblecraft Inc takes ownership of code that is Written by Dabblecraft Inc. All disputes will be dealt with by both Dabblecraft Inc and Maximuspayne. This source code is provided free of charge and will **REMAIN** Open Source. This Source Code is licensed with permission by the main code developer and author.
-Refer to the code [License](/blob/Dev/LICENSE) and [License terms Notice](/blob/Dev/NOTICE.md
+Refer to the code [License](/Dev/LICENSE) and [License terms Notice](Dev/NOTICE.md)
