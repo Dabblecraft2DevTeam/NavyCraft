@@ -7,7 +7,6 @@ VERSION 3.0 and later are supported for security updates currently.
 | Version | Supported          |
 | ------- | ------------------ |
 | 3.0 >   | :white_check_mark: |
-| ------- | ------------------ |
 | 4.0 >   | :white_check_mark: |
 
 ## Reporting a Vulnerability
