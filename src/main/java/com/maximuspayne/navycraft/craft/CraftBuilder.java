@@ -1,19 +1,18 @@
 package com.maximuspayne.navycraft.craft;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
+
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.block.*;
+import org.bukkit.entity.Player;
+
 import com.maximuspayne.navycraft.NavyCraft;
 import com.maximuspayne.navycraft.blocks.BlockLoc;
 import com.maximuspayne.navycraft.blocks.BlocksInfo;
 import com.maximuspayne.navycraft.blocks.DataBlock;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Stack;
 
 /**
  * NavyCraft craft builder
@@ -293,9 +292,9 @@ public class CraftBuilder {
 
 			//start with the player's head
 			
-			blocksStack.push(new BlockLoc((int)Math.floor(craft.signLoc.getX()) - craft.minX,
-					(int)Math.floor(craft.signLoc.getY() + 1 - craft.minY),
-					(int)Math.floor(craft.signLoc.getZ()) - craft.minZ));
+			blocksStack.push(new BlockLoc((int)Math.floor(NavyCraft.instance.getServer().getPlayer(craft.captainName).getLocation().getX()) - craft.minX,
+					(int)Math.floor(NavyCraft.instance.getServer().getPlayer(craft.captainName).getLocation().getY() + 1 - craft.minY),
+					(int)Math.floor(NavyCraft.instance.getServer().getPlayer(craft.captainName).getLocation().getZ()) - craft.minZ));
 
 			//detect all connected empty blocks
 			do{
@@ -450,16 +449,9 @@ public class CraftBuilder {
 		//location have already been visited
 		if(blockType != null) return;
 
-		if (craft.captainName != null) {
-			FPlayer fplayer = FPlayers.getInstance().getByPlayer(NavyCraft.instance.getServer().getPlayer(craft.captainName));
-
-			if (craft.type.isBase && (NavyCraft.checkFactionLand(craft.world.getBlockAt(x, y, z).getLocation()) == null || !NavyCraft.checkFactionLand(craft.world.getBlockAt(x, y, z).getLocation()).getFPlayers().contains(fplayer)))
-				return;
-		}
-		
 		blockType = new Short((short) craft.world.getBlockAt(x, y, z).getTypeId());
 		int BlockData = craft.world.getBlockAt(x, y, z).getData();
-		
+
 		//check for fobidden blocks
 		if(craft.type.forbiddenBlocks != null && craft.type.forbiddenBlocks.length > 0 && waitStopMakingThatCraft == false) {
 			for(int i = 0; i < craft.type.forbiddenBlocks.length; i++) {
@@ -718,7 +710,7 @@ public class CraftBuilder {
 						return false;
 					}
 				}
-				if (craft.captainName != null) {
+				{
 					Player captain = NavyCraft.instance.getServer().getPlayer(craft.captainName);
 					craft.buildCrew(captain, false);
 					if( craft.customName != null )

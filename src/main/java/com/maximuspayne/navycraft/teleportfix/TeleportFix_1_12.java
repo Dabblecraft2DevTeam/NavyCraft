@@ -1,20 +1,29 @@
 package com.maximuspayne.navycraft.teleportfix;
 
-import com.maximuspayne.navycraft.craft.Craft;
-import net.minecraft.server.v1_12_R1.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.server.v1_12_R1.PacketPlayOutMapChunk;
+import net.minecraft.server.v1_12_R1.PlayerConnection;
+import net.minecraft.server.v1_12_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.EnumSkyBlock;
+import net.minecraft.server.v1_12_R1.EntityHuman;
+import net.minecraft.server.v1_12_R1.EntityTracker;
+import net.minecraft.server.v1_12_R1.EntityTrackerEntry;
+import net.minecraft.server.v1_12_R1.WorldServer;
+
+import org.bukkit.craftbukkit.v1_12_R1.CraftChunk;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_12_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.maximuspayne.navycraft.craft.Craft;
  
 public class TeleportFix_1_12 implements Listener {
 	
@@ -36,15 +45,12 @@ public class TeleportFix_1_12 implements Listener {
 		EntityTracker tracker = worldServer.tracker;
 		EntityTrackerEntry entry = (EntityTrackerEntry) tracker.trackedEntities
 				.get(entity.getEntityId());
-		if (observers != null) {
-			List<EntityHuman> nmsPlayers = getNmsPlayers(observers);
-
-			// Force Minecraft to resend packets to the affected clients
-			if (nmsPlayers != null && entry.trackedPlayers != null && !entry.trackedPlayers.isEmpty()) {
-				entry.trackedPlayers.removeAll(nmsPlayers);
-				entry.scanPlayers(nmsPlayers);
-			}
-		}
+ 
+		List<EntityHuman> nmsPlayers = getNmsPlayers(observers);
+ 
+		// Force Minecraft to resend packets to the affected clients
+		entry.trackedPlayers.removeAll(nmsPlayers);
+		entry.scanPlayers(nmsPlayers);
 	}
  
 	private static List<EntityHuman> getNmsPlayers(List<Player> players) {

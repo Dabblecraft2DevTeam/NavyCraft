@@ -3,11 +3,6 @@ package com.maximuspayne.aimcannon;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Material;
-
-import com.maximuspayne.navycraft.NavyCraft;
-import com.maximuspayne.navycraft.craft.Craft;
-
 
 
 
@@ -22,4 +17,5 @@ public class AimCannon{
 	public static List<Weapon> getWeapons() {
 		return weapons;
 	}
+
 }

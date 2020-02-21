@@ -1,24 +1,24 @@
 package com.maximuspayne.navycraft.craft;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
+
 import com.maximuspayne.aimcannon.AimCannon;
 import com.maximuspayne.aimcannon.OneCannon;
 import com.maximuspayne.navycraft.NavyCraft;
 import com.maximuspayne.navycraft.Pump;
 import com.maximuspayne.navycraft.blocks.BlocksInfo;
 import com.maximuspayne.navycraft.blocks.DataBlock;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
 @SuppressWarnings({"deprecation"})
 public class CraftRotator {
@@ -77,7 +77,7 @@ public class CraftRotator {
 
 		//iceBreaker can go through ice :)
 		if(blockId == 79 && (craft.type.canNavigate || craft.type.canDive) )
-            return craft.waterType == 8;
+			if(craft.waterType == 8) return true;
 
 		return false;
 	}
@@ -241,7 +241,7 @@ public class CraftRotator {
 		}
 
 		//new matrix
-        short[][][] newMatrix = new short[newSize.getBlockX()][newSize.getBlockY()][newSize.getBlockZ()];
+		short newMatrix[][][] = new short[newSize.getBlockX()][newSize.getBlockY()][newSize.getBlockZ()];
 
 		
 		//rotate matrix
@@ -309,7 +309,7 @@ public class CraftRotator {
 
 	
 	public void turn(int dr) {
-		
+
 		if( craft.waitTorpLoading > 0 )
 		{
 			if( craft.driverName != null )
@@ -378,7 +378,7 @@ public class CraftRotator {
 			NavyCraft.instance.DebugMessage("teleporting " + entPreLoc.get(e), 2);
 				//craft.player.sendMessage("tp coord=" + (double)(entPreLoc.get(e).getX() + craft.minX + craft.offX + 0.5) + "," + (double)(entPreLoc.get(e).getZ() + craft.minZ + craft.offZ + 0.5) );
 
-            e.teleport(new Location(craft.world, (entPreLoc.get(e).getX() + craft.minX + craft.offX + 0.5), entPreLoc.get(e).getY(), (entPreLoc.get(e).getZ() + craft.minZ + craft.offZ + 0.5), e.getLocation().getYaw(), e.getLocation().getPitch()));
+			e.teleport(new Location(craft.world, (double)(entPreLoc.get(e).getX() + craft.minX + craft.offX + 0.5), entPreLoc.get(e).getY(), (double)(entPreLoc.get(e).getZ() + craft.minZ + craft.offZ + 0.5), e.getLocation().getYaw(), e.getLocation().getPitch() ));
 		}
 
 		craft.rotation += dr;
@@ -418,7 +418,7 @@ public class CraftRotator {
 
 		//new matrix
 
-        short[][][] newMatrix = new short[newSize.getBlockX()][newSize.getBlockY()][newSize.getBlockZ()];
+		short newMatrix[][][] = new short[newSize.getBlockX()][newSize.getBlockY()][newSize.getBlockZ()];
 
 		//store data blocks
 		cm.storeDataBlocks();
@@ -468,7 +468,7 @@ public class CraftRotator {
 								Location cannonLoc = new Location(craft.world, dataBlock.x + craft.minX, dataBlock.y + craft.minY, dataBlock.z + craft.minZ);
 								for (OneCannon onec : AimCannon.getCannons()) 
 								{
-									if (onec.isThisCannon(cannonLoc, false)) 
+									if (onec.isThisCannon(cannonLoc, false, false)) 
 									{
 										cannonLocs.put(new Location(craft.world,x, y, z),cannonLoc);
 									}
@@ -638,7 +638,7 @@ public class CraftRotator {
 			}
 		}
 
-		restoreDataBlocks(0, 0, 0, dr);
+		restoreDataBlocks(0, 0, 0);
 		cm.restoreComplexBlocks(0, 0, 0);
 	}
 
@@ -901,45 +901,16 @@ public class CraftRotator {
 		
 		if (block.setTypeId(id) == false) {
 			if(craft.world.getBlockAt(block.getLocation()).setTypeId(id) == false)
-				System.out.println("Could not set block of type " + block.getTypeId() +
-                        " to type " + id + ". I tried to fix it, but I couldn't. - CRAFT ROTATOR");
+				System.out.println("Could not set block of type " + block.getTypeId() + 
+						" to type " + id + ". I tried to fix it, but I couldn't.");
 			else
 				System.out.println("I hope to whatever God you believe in that this fix worked.");
 		}
 	}
-
-	public BlockFace rotateBlockFace(BlockFace oldBlockFace, int dr) {
-		BlockFace newBlockFace = oldBlockFace;
-		if (oldBlockFace == BlockFace.NORTH) {
-			if (dr == 90)
-				newBlockFace = BlockFace.EAST;
-			if (dr == 270)
-				newBlockFace = BlockFace.WEST;
-		}
-		if (oldBlockFace == BlockFace.SOUTH) {
-			if (dr == 90)
-				newBlockFace = BlockFace.WEST;
-			if (dr == 270)
-				newBlockFace = BlockFace.EAST;
-		}
-		if (oldBlockFace == BlockFace.EAST) {
-			if (dr == 90)
-				newBlockFace = BlockFace.SOUTH;
-			if (dr == 270)
-				newBlockFace = BlockFace.NORTH;
-		}
-		if (oldBlockFace == BlockFace.WEST) {
-			if (dr == 90)
-				newBlockFace = BlockFace.NORTH;
-			if (dr == 270)
-				newBlockFace = BlockFace.SOUTH;
-		}
-			return newBlockFace;
-	}
 	
 	
 	
-	public void restoreDataBlocks(int dx, int dy, int dz, int dr) {
+	public void restoreDataBlocks(int dx, int dy, int dz) {
 		Block block;
 		
 		for (DataBlock dataBlock : craft.dataBlocks) {
@@ -972,46 +943,30 @@ public class CraftRotator {
 						}
 					}
 				}
-				craft.weaponsList.clear();
-				if (theBlock.getTypeId() == 23 || theBlock.getTypeId() == 158) { //move cannons
-					boolean stopSearch = false;
-					for (OneCannon onec : AimCannon.getCannons()) {
-						if (onec.isThisCannon(theBlock.getLocation(), false)) {
-							stopSearch = true;
-							onec.setDirection(rotateBlockFace(onec.getDirection(), dr));
-							if (!craft.weaponsList.contains(onec)) {
-								craft.weaponsList.add(onec);
-							}
-							if (craft.isAICraft && !onec.isCharged())
-								onec.Charge(null, true);
-							if (craft.sinking || craft.isDestroying)
-								AimCannon.cannons.remove(onec);
-						}
-					}
-
-					if (!stopSearch) {
-						OneCannon oc = new OneCannon(theBlock.getLocation(), NavyCraft.instance);
-						boolean oldCannonFound = false;
-						if (oc.isValidCannon(theBlock)) {
-							for (OneCannon onec : AimCannon.getCannons()) {
-								oldCannonFound = onec.isThisCannon(new Location(craft.world, dataBlock.x + craft.minX, dataBlock.y + craft.minY, dataBlock.z + craft.minZ), true);
-								if (oldCannonFound) {
+				
+				if( theBlock.getTypeId() == 23 || theBlock.getTypeId() == 158 ) //cannon block
+				{
+					OneCannon oc = new OneCannon(theBlock.getLocation(), NavyCraft.instance);
+					if ((oc.isValidCannon(theBlock, false) && theBlock.getTypeId() == 23) || (oc.isValidCannon(theBlock, true) && theBlock.getTypeId() == 158)) 
+					{
+						for (OneCannon onec : AimCannon.getCannons()) 
+						{
+							Location testLoc = new Location(craft.world, dataBlock.x,dataBlock.y,dataBlock.z);
+							if( cannonLocs.containsKey(testLoc) )
+							{
+								boolean oldCannonFound = onec.isThisCannon(cannonLocs.get(testLoc), true, false);
+								boolean oldCannonFound2 = onec.isThisCannon(cannonLocs.get(testLoc), true, true);
+								if(oldCannonFound || oldCannonFound2) 
+								{
 									Location newLoc = theBlock.getLocation();
 									onec.setLocation(newLoc);
-									onec.setDirection(rotateBlockFace(onec.getDirection(), dr));
-									if (!craft.weaponsList.contains(onec)) {
-										craft.weaponsList.add(onec);
-									}
+									cannonLocs.remove(testLoc);
 								}
 							}
-							if (craft.isAICraft && oc.isCharged())
-								oc.Charge(null, true);
-							if (craft.sinking || craft.isDestroying)
-								AimCannon.cannons.remove(oc);
 						}
 					}
 				}
-				theBlock.setData((byte) dataBlock.data);
+				theBlock.setData((byte)dataBlock.data);
 			}
 		}
 	}

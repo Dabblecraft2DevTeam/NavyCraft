@@ -25,7 +25,7 @@ public class ciwsFire extends BukkitRunnable
    {
 		Egg newEgg = player.launchProjectile(Egg.class);
 		newEgg.setVelocity(newEgg.getVelocity().multiply(2.0f));
-		NavyCraft.explosiveEggsList.add(new explosiveEgg(newEgg, -1.5));
+		NavyCraft.explosiveEggsList.add(newEgg);
 		player.getWorld().playEffect(player.getLocation(), Effect.SMOKE, 0);
 		CraftMover.playWeaponSound(player.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, 5.0f,1.70f);	
    }
@@ -69,8 +69,6 @@ public static void fireCIWS(Player player)
 								newLoc.setDirection(playerLookDirection.normalize());
 								break;
 							}
-						} else {
-							change = false;
 						}
 					}
 					if (change)

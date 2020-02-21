@@ -45,7 +45,6 @@ public class CraftType {
 	public boolean canDig = false;
 	public boolean obeysGravity = false;
 	public boolean isTerrestrial = false;
-	public boolean isBase = false;
 	
 	
 	public boolean doesCruise = false;
@@ -173,9 +172,6 @@ public class CraftType {
 			craftType.listenAnimation = Boolean.parseBoolean(value);
 		else if (attribute.equalsIgnoreCase("listenMovement")){
 			craftType.listenMovement = Boolean.parseBoolean(value);	
-		}
-		else if (attribute.equalsIgnoreCase("isBase")){
-			craftType.isBase = Boolean.parseBoolean(value);	
 		}
 		else if (attribute.equalsIgnoreCase("structureBlocks")) {
 			String[] split = value.split(",");

@@ -25,14 +25,14 @@ public class PermissionInterface {
 			pm.addPermission(new Permission("navycraft.signcreate"));
 			pm.addPermission(new Permission("navycraft.periscope.use"));
 			pm.addPermission(new Permission("navycraft.aa-gun.use"));
-			pm.addPermission(new Permission("navycraft.bofors.use"));
+			pm.addPermission(new Permission("navycraft.flak-gun.use"));
 			pm.addPermission(new Permission("navycraft.ciws.use"));
 			pm.addPermission(new Permission("navycraft.searchlight.use"));
 			pm.addPermission(new Permission("navycraft.volume.engine"));
 			pm.addPermission(new Permission("navycraft.volume.weapon"));
 			pm.addPermission(new Permission("navycraft.volume.other"));
 			pm.addPermission(new Permission("navycraft.volume.all"));
-			pm.addPermission(new Permission("navycraft.rview"));
+			pm.addPermission(new Permission("navycraft.expview"));
 			pm.addPermission(new Permission("navycraft.dropchance"));
 			
 			//admin permissions
@@ -56,9 +56,9 @@ public class PermissionInterface {
 			pm.addPermission(new Permission("navycraft.aunclaim"));
 			pm.addPermission(new Permission("navycraft.explode"));
 			pm.addPermission(new Permission("navycraft.explodesigns"));
-			pm.addPermission(new Permission("navycraft.rset"));
-			pm.addPermission(new Permission("navycraft.radd"));
-			pm.addPermission(new Permission("navycraft.rremove"));
+			pm.addPermission(new Permission("navycraft.expset"));
+			pm.addPermission(new Permission("navycraft.expadd"));
+			pm.addPermission(new Permission("navycraft.expremove"));
 			pm.addPermission(new Permission("navycraft.admindrive"));
 			pm.addPermission(new Permission("navycraft.takeover"));
 			pm.addPermission(new Permission("navycraft.remove"));
@@ -90,14 +90,14 @@ public class PermissionInterface {
 			pm.removePermission(new Permission("navycraft.signcreate"));
 			pm.removePermission(new Permission("navycraft.periscope.use"));
 			pm.removePermission(new Permission("navycraft.aa-gun.use"));
-			pm.removePermission(new Permission("navycraft.bofors.use"));
+			pm.removePermission(new Permission("navycraft.flak-gun.use"));
 			pm.removePermission(new Permission("navycraft.ciws.use"));
 			pm.removePermission(new Permission("navycraft.searchlight.use"));
 			pm.removePermission(new Permission("navycraft.volume.engine"));
 			pm.removePermission(new Permission("navycraft.volume.weapon"));
 			pm.removePermission(new Permission("navycraft.volume.other"));
 			pm.removePermission(new Permission("navycraft.volume.all"));
-			pm.removePermission(new Permission("navycraft.rview"));
+			pm.removePermission(new Permission("navycraft.expview"));
 			pm.removePermission(new Permission("navycraft.dropchance"));
 			//admin permissions
 			pm.removePermission(new Permission("navycraft.admin"));
@@ -120,9 +120,9 @@ public class PermissionInterface {
 			pm.removePermission(new Permission("navycraft.aunclaim"));
 			pm.removePermission(new Permission("navycraft.explode"));
 			pm.removePermission(new Permission("navycraft.explodesigns"));
-			pm.removePermission(new Permission("navycraft.rset"));
-			pm.removePermission(new Permission("navycraft.radd"));
-			pm.removePermission(new Permission("navycraft.rremove"));
+			pm.removePermission(new Permission("navycraft.expset"));
+			pm.removePermission(new Permission("navycraft.expadd"));
+			pm.removePermission(new Permission("navycraft.expremove"));
 			pm.removePermission(new Permission("navycraft.admindrive"));
 			pm.removePermission(new Permission("navycraft.takeover"));
 			pm.removePermission(new Permission("navycraft.remove"));
