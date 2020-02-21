@@ -3,8 +3,8 @@ main: com.maximuspayne.navycraft.NavyCraft
 version: ${project.version}
 authors: [Maximuspayne, Solmex, Keough99, PocketKid2, Premejo, SycoPrime, Yogoda]
 depend: [WorldGuard,WorldEdit,Essentials,PermissionsEx]
-website: https://dabblecraft.com
-description: NavyCraft - Reworked version of the Old NavyCraft plugin that was abandoned.
+website: https://dabblecraft.com/
+description: NavyCraft - A reworked an updated version.
 commands:
   navycraft:
     aliases: [nc]
