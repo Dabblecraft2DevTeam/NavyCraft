@@ -1,8 +1,10 @@
 #NavyCraft Configuration File
-#Written by Solmex
 
 #Defines which worlds the plugin's weapons will funciton in.
 EnabledWorlds: WarWorld,BattleWorld,TankSpawn
+
+#Defines which worlds weapons will have infinite ammo.
+TestWorlds: test
 
 #Defines which worlds the plugin's battles will funciton in.
 BattleWorld: BattleWorld
@@ -38,3 +40,15 @@ WriteDefaultCraft: true
 
 #Require eggs to fire aa guns?
 RequireAmmo: false
+
+#What to name schematics when all schematics save with /sy schem saveall
+Name: backup
+
+#Make weapons free?
+FreeWeapons: false
+
+#Make ships free?
+FreeVehicles: false
+
+#Make signs free?
+FreeSigns: false

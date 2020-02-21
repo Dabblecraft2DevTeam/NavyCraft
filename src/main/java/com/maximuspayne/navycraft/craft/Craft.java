@@ -1,22 +1,8 @@
 package com.maximuspayne.navycraft.craft;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.util.Vector;
-import org.bukkit.Location;
-import org.bukkit.block.*;
-import org.bukkit.entity.Item;
-
+import com.maximuspayne.aimcannon.AimCannon;
+import com.maximuspayne.aimcannon.OneCannon;
+import com.maximuspayne.aimcannon.Weapon;
 import com.maximuspayne.navycraft.NavyCraft;
 import com.maximuspayne.navycraft.Periscope;
 import com.maximuspayne.navycraft.Pump;
@@ -27,6 +13,20 @@ import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 
 /**
@@ -51,13 +51,16 @@ public class Craft {
 	public static HashMap<Player, Thread> playerAbandonTimers = new HashMap<Player, Thread>();
 	public static HashMap<Player, Craft> playerShipList = new HashMap<Player, Craft>();
 	public static HashMap<Player, ClipboardHolder> playerClipboards = new HashMap<Player, ClipboardHolder>();
-	//public static HashMap<Player, Integer> playerClipboardsCost = new HashMap<Player, Integer>();
+	public static HashMap<Player, BlockFace> playerClipboardsDirection = new HashMap<Player, BlockFace>();
 	public static HashMap<Player, Integer> playerClipboardsRank = new HashMap<Player, Integer>();
 	public static HashMap<Player, String> playerClipboardsType = new HashMap<Player, String>();
 	public static HashMap<Player, String> playerClipboardsLot = new HashMap<Player, String>();
 	
 	public static HashMap<String, CuboidClipboard> playerStoredClipboard = new HashMap<String, CuboidClipboard>();
+	
+	public ArrayList<Player> alertedPlayers = new ArrayList<Player>();
 
+	public HashMap<Craft, Integer> targetCraft = new HashMap<>();
 	
 	public static int craftIDTicker=0;
 	public int craftID;
@@ -74,22 +77,30 @@ public class Craft {
 	public ArrayList<DataBlock> complexBlocks = new ArrayList<DataBlock>();
 	//ArrayList<ArrayList<String>> signLines = new ArrayList<ArrayList<String>>();
 	
+	
+    public ArrayList<OneCannon> weaponsList = new ArrayList<OneCannon>();
+	public ArrayList<Sign> mgList = new ArrayList<>();
+	public ArrayList<Sign> firingMGList = new ArrayList<>();
+
+    public Date lastAttack;
+    public int lastHealth;
+    public String lastStatus;
+	
 	public short displacedBlocks[][][];
 	
 	public ArrayList<Entity> checkEntities;
 	
 	public int dx,dy,dz = 0 ;
+	
+	public boolean firingAll;
 
 	// size of the craft
-	public int sizeX;
-	public int sizeZ;
-	public int sizeY = 0;
+	public int sizeX, sizeZ, sizeY = 0;
 
 	// position of the craft on the map
 	public World world;
 	//int posX, posY, posZ;
-	public int centerX;
-	public int centerZ = -1;
+	public int centerX, centerZ = -1;
 	
 	public int blockCount = 0;
 	public int flyBlockCount, digBlockCount = 0;
@@ -113,6 +124,10 @@ public class Craft {
 
 	public long lastMove = System.currentTimeMillis(); // record time of the last arm
 	public long lastUpdate = System.currentTimeMillis(); // record time of the last arm
+	public HashMap<Integer, Long> lastFireControlFired = new HashMap<>();
+	public HashMap<Integer, Long> lastFireControlSet = new HashMap<>();
+
+	public HashMap<OneCannon, Long> lastCannonFired = new HashMap<>();
 	// swing
 	public boolean haveControl = true; // if the player have the control of the craft
 
@@ -185,6 +200,8 @@ public class Craft {
 	//long lastUpdate=0;
 	public boolean recentlyUpdated = false;
 	
+	public boolean turboOn = false;
+	
 	public boolean radarOn = false;
 	public long lastRadarPulse=0;
 	public boolean sonarOn = false;
@@ -192,7 +209,9 @@ public class Craft {
 	
 	public boolean leftSafeDock = false;
 	public boolean isDestroying = false;
-	
+
+	public boolean isAICraft = false;
+	public boolean isAutoCraft = false;
 	public boolean isMerchantCraft = false;
 	
 	public HashMap<Integer, Integer> tubeFiringMode = new HashMap<Integer, Integer>();  /////tubeNumber, tubeStatus...status = -2 straight, -1 periscope, 0+ for target index
@@ -203,9 +222,12 @@ public class Craft {
 	public HashMap<Integer, Boolean> tubeFiringAuto = new HashMap<Integer, Boolean>();
 	public HashMap<Integer, Integer> tubeFiringRudder = new HashMap<Integer, Integer>();
 	public HashMap<Integer, Integer> tubeFiringDisplay = new HashMap<Integer, Integer>();
+
+	public HashMap<Sign, Integer> fireControlSigns = new HashMap<>();
+	public HashMap<Integer, Integer> fireControlTargets = new HashMap<Integer, Integer>(); //firecontrol ID, targetID
 	
 	public int tubeMk1FiringMode=-2;//-2 straight, -1 periscope
-	public int tubeMk1FiringDepth = 1;
+	public int tubeMk1FiringDepth = -1;
 	public int tubeMk1FiringSpread = 0;
 	public int tubeMk1FiringDisplay = -1; //0 depth, 1 spread
 	
@@ -221,9 +243,34 @@ public class Craft {
 	
 	public boolean launcherOn=false;
 	
+	public String messageSend;
+	
+	public int messageMode=0;
+	
+	public int messageTarget = -1;
 	
 	
-	public Location lastPeriscopeLookLoc=null;
+	
+	
+	
+	public boolean adRadarOn = false;
+	public HashMap<Craft, Integer> radarTargetIDs = new HashMap<Craft, Integer>();
+	public HashMap<Integer, Craft> radarTargetIDs2 = new HashMap<Integer, Craft>();
+	public HashMap<Craft, Float> radarTargetStrength = new HashMap<Craft, Float>();
+	public Craft radarTarget;
+	public float radarTargetRng=-1;
+	public int radarTargetIndex=-1;
+	
+	public boolean dRadarOn = false;
+	public HashMap<Craft, Integer> drTargetIDs = new HashMap<Craft, Integer>();
+	public HashMap<Integer, Craft> drTargetIDs2 = new HashMap<Integer, Craft>();
+	public HashMap<Craft, Float> drTargetStrength = new HashMap<Craft, Float>();
+	public Craft drTarget;
+	public float drTargetRng=-1;
+	public int drTargetIndex=-1;
+	
+	
+	public Block lastPeriscopeBlock=null;
 	public float lastPeriscopeYaw=-9999;
 	
 	public HashMap<Integer,Integer> engineIDTypes = new HashMap<Integer, Integer>();
@@ -265,7 +312,6 @@ public class Craft {
 	
 	public int noCaptain=0;
 	
-	
 	public static HashMap<String, Craft> reboardNames = new HashMap<String, Craft>();
 	
 	public float weightStart = 0;
@@ -288,6 +334,19 @@ public class Craft {
 	
 	public float lastDisplacement=0;
 	
+	public boolean jammerOn;
+	
+	public Long jammerCooldown = System.currentTimeMillis() - 60000;
+	public Long turboCooldown = System.currentTimeMillis() - 60000;
+	public Long messageCooldown = System.currentTimeMillis() - 15000;
+	
+	public ArrayList<Weapon> activeFlares = new ArrayList<Weapon>();
+	
+	public int trackingStrength = 0;
+	
+	public int rfTube = 0;
+	public int rfMode = 0;
+	
 	//public int moveTicker = 0;
 
 	public Craft(CraftType type, Player player, String customName, float Rotation, Location signBlockLoc, Plugin p) {
@@ -303,8 +362,9 @@ public class Craft {
 		this.type = type;
 		this.name = type.name;
 		this.customName = customName;
+		if (player != null)
 		this.captainName = player.getName();
-		this.world = player.getWorld();
+		this.world = signBlockLoc.getWorld();
 		this.rotation = (int) Rotation;
 		this.signLoc = signBlockLoc;
 		plugin = p;
@@ -467,13 +527,20 @@ public class Craft {
 		matrix = null;
 		dataBlocks.clear();
 		complexBlocks.clear();
-		
+		for( OneCannon oc: weaponsList ) {
+            AimCannon.cannons.remove(oc);
+        }
 		repairClipboard = null;
 	}
 
 	// if the craft can go through this block id
 	private boolean canGoThrough(int craftBlockId, int blockId, int data) {
-
+		
+		//planes cant enter water
+		if ((blockId == 8 || blockId == 9) && type.canFly) {
+			return false;
+		}
+		
 		if( this.type.canZamboni )
 			return true;
 		
@@ -484,11 +551,9 @@ public class Craft {
 				BlocksInfo.coversGrass(blockId)) //snow cover
 			return true;
 
-		// we can't go through adminium
-		if(blockId == 7)
+		// we can't go through adminium or adminium2
+		if(blockId == 7 || blockId == 166)
 			return false;
-
-
 		
 		if (!type.canNavigate && !type.canDive){
 			return false;
@@ -610,7 +675,7 @@ public class Craft {
 		if (Math.abs(speed * dy) > 1) {
 			dy = speed * dy / 2;
 			if (Math.abs(dy) == 0  || type.canDive || type.isTerrestrial )
-				dy = (int) Math.signum(dy);
+			dy = (int) Math.signum(dy);
 		}
 		
 		if( this.type.canFly && this.type.doesCruise )
@@ -668,10 +733,7 @@ public class Craft {
 
 			Block targetBlock1 = world.getBlockAt(X, Y, Z);
 			Block targetBlock2 = world.getBlockAt(X, Y + 1, Z);
-			if (!isCraftBlock(X - minX, Y - minY, Z - minZ)
-					&& !canGoThrough(0, targetBlock1.getTypeId(), 0)
-					|| !isCraftBlock(X - minX, Y + 1 - minY, Z - minZ)
-					&& !canGoThrough(0, targetBlock2.getTypeId(), 0)) {
+			if (!isCraftBlock(X - minX, Y - minY, Z - minZ) && !canGoThrough(0, targetBlock1.getTypeId(), 0) || !isCraftBlock(X - minX, Y + 1 - minY, Z - minZ) && !canGoThrough(0, targetBlock2.getTypeId(), 0)) {
 				NavyCraft.instance.DebugMessage("Craft prevented from because...can't go through?", 4);
 				return false;
 			}
@@ -687,8 +749,7 @@ public class Craft {
 					if (!isFree(matrix[x][y][z]) && // before move : craft block
 							!isCraftBlock(x + dx, y + dy, z + dz)) { // after
 
-						Block theBlock = world.getBlockAt(minX + x + dx, minY
-								+ y + dy, minZ + z + dz);
+						Block theBlock = world.getBlockAt(minX + x + dx, minY + y + dy, minZ + z + dz);
 						int blockId = theBlock.getTypeId();
 						// int blockId = world.getBlockAt(posX + x + dx, posY +
 						// y + dy, posZ + z + dz);
@@ -769,7 +830,7 @@ public class Craft {
 				isNameOnBoard.put(p.getName(), true);
 				
 				if( p != newCaptain || this.type.canFly || this.type.isTerrestrial )
-				{/*
+				{
 					if( this.type.canFly )
 					{
 						if( p.getInventory().getHelmet() == null )
@@ -861,7 +922,7 @@ public class Craft {
 							p.getInventory().addItem(new ItemStack(Material.LEATHER_BOOTS,1,(short)0));
 						}
 					}
-				*/}
+				}
 			}
 		}
 		
@@ -873,7 +934,7 @@ public class Craft {
 		}
 		//captain inventory
 		if( !this.type.canFly && !this.type.isTerrestrial )
-		{/*
+		{
 			Player captain = plugin.getServer().getPlayer(this.captainName);
 			if( captain.getInventory().getHelmet() == null )
 			{
@@ -903,7 +964,7 @@ public class Craft {
 			{
 				captain.getInventory().addItem(new ItemStack(Material.GOLD_BOOTS,1,(short)0));
 			}
-		*/}
+		}
 		
 		
 		driverName = captainName;
@@ -1205,12 +1266,14 @@ public class Craft {
 					if( isCraftBlock(x,y,z) )
 					{
 						Block theBlock = world.getBlockAt(minX + x, minY + y, minZ + z);
+						if (theBlock.getTypeId() != 7 && theBlock.getTypeId() != 166) {
 						if( theBlock.getY() < 63 )
 						{
 							theBlock.setType(Material.WATER);
 						}else{
 							theBlock.setType(Material.AIR);
 						}
+					}
 					}
 					//TNT tnt = (TNT) theBlock.getState();
 				}
@@ -1224,7 +1287,7 @@ public class Craft {
 	//block resistance to breaking/damage....0=default(glass), 1=wood, 2=iron, 3= obsidian bedrock
 	public static int blockHardness(int blockID)
 	{
-		if(blockID == 7 || blockID == 120 || blockID == 130 || blockID == 137)
+		if(blockID == 7 || blockID == 120 || blockID == 130 || blockID == 137 || blockID == 166)
 		{
 			return 4;
 		}else if(blockID == 49 || blockID == 116 || blockID == 145)
@@ -1248,10 +1311,10 @@ public class Craft {
 				|| blockID == 128 || blockID == 159 || blockID == 172 || blockID == 134 || blockID == 135 || blockID == 136 || blockID == 138 || blockID == 143 || blockID == 146 || blockID == 147 || blockID == 148 || blockID == 154 || blockID == 158)
 		{
 			return 1;
-		}else if( blockID == 46 || blockID == 129 || blockID == 152 )
+		}else if( blockID == 46 || blockID == 129 || blockID == 152 || blockID == 170)
 		{
 			return -1;
-		}else if( blockID == 153 || blockID == 170 || blockID == 173 )
+		}else if( blockID == 153 || blockID == 165 || blockID == 173 )
 		{
 			return -2;
 		}else
@@ -1707,6 +1770,39 @@ public class Craft {
 				if( player != null )
 					player.sendMessage(ChatColor.RED + "Rudder already set. " + ChatColor.GOLD + "Look other way to cancel.");
 			}
+		}else if( order == 2 )
+		{
+			if( this.rudder == 0 || (this.rudder == -1 && turn && this.turnProgress == 0) )
+			{
+				this.rudder = -1;
+				if( turn )
+				{
+					this.turnProgress = this.type.turnRadius;
+					if( player != null )
+						player.sendMessage(ChatColor.GOLD + "Rudder Turning Left");
+				}else
+				{
+					if( player != null )
+						player.sendMessage(ChatColor.GOLD + "Rudder Left");
+				}
+			}else if( this.rudder == 1 )
+			{
+				if( this.turnProgress == 0 || this.turnProgress > this.type.turnRadius/2 )
+				{
+					this.rudder = 0;
+					this.turnProgress = 0;
+					if( player != null )
+						player.sendMessage(ChatColor.GOLD + "Rudder Centered");
+				}else
+				{
+					if( player != null )
+						player.sendMessage(ChatColor.RED + "Too late to cancel turn.");
+				}
+			}else
+			{
+				if( player != null )
+					player.sendMessage(ChatColor.RED + "Rudder already set. " + ChatColor.GOLD + "Look other way to cancel.");
+			}
 		}
 	}
 	
@@ -1750,7 +1846,7 @@ public class Craft {
 			try{
 				for( int i=0; i<24; i++)
 				{
-					sleep(5000);
+					sleep(1250);
 					if( !craft.cancelTakeoverTimer )
 						takeoverTimerUpdate(player, craft, i);
 					else
@@ -1814,6 +1910,21 @@ public class Craft {
    
    public boolean isDressed(Player p)
    {
+	   
+		    if( p.getInventory().getHelmet() != null && p.getInventory().getHelmet().getType() == Material.DIAMOND_HELMET )
+			{
+		    	if( p.getInventory().getChestplate() != null && p.getInventory().getChestplate().getType() == Material.DIAMOND_CHESTPLATE )
+				{
+		    		if( p.getInventory().getLeggings() != null && p.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS )
+					{
+		    			if( p.getInventory().getBoots() != null && p.getInventory().getBoots().getType() == Material.DIAMOND_BOOTS )
+						{
+		    				return true;
+						}	
+					}	
+				}	
+			}
+	   
 	   if( this.type.canFly )
 	   {
 		    if( p.getInventory().getHelmet() != null && p.getInventory().getHelmet().getType() == Material.CHAINMAIL_HELMET )
