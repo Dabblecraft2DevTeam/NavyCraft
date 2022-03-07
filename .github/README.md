@@ -1,3 +1,5 @@
+# PROJECT DISCONTINUED. CODE HAS BEEN ARCHIVED.
+
 # NavyCraft
 NavyCraft Plugin Mavenized version and updated
 
